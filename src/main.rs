@@ -58,9 +58,25 @@ impl Cpu6502 {
         let opcode = self.fetch_byte();
 
         match opcode {
+            // LDA
+            //
+            // Immediate
+            0xA9 => {
+                let value = self.fetch_byte();
+                self.lda(value);
+            }
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
     }
+
+    //---------------------------------------------------------
+
+    fn lda(&mut self, value: u8) {
+        self.a = value;
+        // update flags
+    }
+
+    //---------------------------------------------------------
 
     fn load_rom_from_memory(&mut self, rom: &[u8]) {
         let start = START_PC_ADDRESS as usize;
