@@ -54,6 +54,14 @@ impl Cpu6502 {
         byte
     }
 
+    fn step(&mut self) {
+        let opcode = self.fetch_byte();
+
+        match opcode {
+            _ => panic!("unknown opcode: {:02x}", opcode),
+        };
+    }
+
     fn load_rom_from_memory(&mut self, rom: &[u8]) {
         let start = START_PC_ADDRESS as usize;
         let end = start + rom.len();
@@ -112,7 +120,10 @@ impl Cpu6502 {
 
 fn main() {
     let mut cpu = Cpu6502::new();
-    let rom = [0x34u8, 0x12, 0x78, 0x56];
+    let rom = [
+        0xa9, 0x05, // LDA #5
+        0xa9, 0x00, // LDA #0
+    ];
 
     cpu.load_rom_from_memory(&rom);
     cpu.hexdump(START_PC_ADDRESS, 0x00ff);
