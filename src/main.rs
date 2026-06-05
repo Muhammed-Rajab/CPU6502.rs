@@ -79,6 +79,7 @@ fn main() {
 
     cpu.write(0x2222, 0xFF);
     cpu.write(0x2223, 0xaa);
+    cpu.write(0x2320, 0xFF);
 
     cpu.hexdump(0x2222, 0x00ff);
 }
