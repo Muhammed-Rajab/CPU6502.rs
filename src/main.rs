@@ -48,6 +48,12 @@ impl Cpu6502 {
         self.memory[addr as usize] = value;
     }
 
+    fn fetch_byte(&mut self) -> u8 {
+        let byte = self.read(self.pc);
+        self.pc += 1;
+        byte
+    }
+
     fn load_rom_from_memory(&mut self, rom: &[u8]) {
         let start = START_PC_ADDRESS as usize;
         let end = start + rom.len();
