@@ -34,11 +34,6 @@ impl Cpu6502 {
         let end = start + len;
         let aligned_end = (end + 0x000F) & !0x000F;
 
-        println!("0x{:04x}", start);
-        println!("0x{:04x}", aligned_start);
-        println!("0x{:04x}", end);
-        println!("0x{:04x}", aligned_end);
-
         // print top row showing byte alignment
         print!("      ");
         for i in 0..=15 {
@@ -56,10 +51,7 @@ impl Cpu6502 {
             }
 
             // print '-- ' if counter < start
-            if counter < start {
-                print!("-- ");
-            } else if counter > end {
-                // print '-- ' if counter >= end (NOTE: check me)
+            if counter < start || counter >= end {
                 print!("-- ");
             } else {
                 // read and print the value if counter in [start, end)
@@ -78,5 +70,5 @@ fn main() {
     cpu.write(0x2222, 0xFF);
     cpu.write(0x2223, 0xaa);
 
-    cpu.hexdump(0x2222, 0x00ff);
+    cpu.hexdump(0x2222, 0x0004);
 }
