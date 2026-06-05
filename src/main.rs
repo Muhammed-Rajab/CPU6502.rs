@@ -92,17 +92,31 @@ impl Cpu6502 {
         println!();
     }
 
-    fn load_rom_from_memory(&mut self) {
-        todo!("implement a method to load rom from memory")
+    fn load_rom_from_memory(&mut self, rom: &[u8]) {
+        /*
+         *
+         *
+         * rom = [0x34, 0x12, 0x78, 0x56]
+         *
+         * memory[START_ADDR] = 0x34
+         * memory[START_ADDR + 1] = 0x12
+         * memory[START_ADDR + 2] = 0x78
+         * memory[START_ADDR + 2] = 0x56
+         *
+         * */
+
+        // make sure rom size is within limits
+        for i in 0..rom.len() {
+            let addr: u16 = START_PC_ADDRESS + (i as u16);
+            self.memory[addr as usize] = rom[i];
+        }
     }
 }
 
 fn main() {
     let mut cpu = Cpu6502::new();
+    let rom = [0x34u8, 0x12, 0x78, 0x56];
 
-    cpu.write(0x2222, 0xFF);
-    cpu.write(0x2223, 0xaa);
-    cpu.write(0x2320, 0xFF);
-
-    cpu.hexdump(0x2222, 0x00ff);
+    cpu.load_rom_from_memory(&rom);
+    cpu.hexdump(START_PC_ADDRESS, 0x00ff);
 }
