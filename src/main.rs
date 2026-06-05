@@ -7,7 +7,7 @@
  *
  * $0000-$00FF = Zero Page (256 bytes)
  * $0100-$01FF = Stack (second page, 256 bytes)
- * $0020-$FFF9 = General memory
+ * $0200-$FFF9 = General memory
  * $FFFA-$FFFB = NMI Vector
  * $FFFC-$FFFD = Reset Vector
  * $FFFE-$FFFF = IRQ/BRK Vector
@@ -93,23 +93,14 @@ impl Cpu6502 {
     }
 
     fn load_rom_from_memory(&mut self, rom: &[u8]) {
-        /*
-         *
-         *
-         * rom = [0x34, 0x12, 0x78, 0x56]
-         *
-         * memory[START_ADDR] = 0x34
-         * memory[START_ADDR + 1] = 0x12
-         * memory[START_ADDR + 2] = 0x78
-         * memory[START_ADDR + 2] = 0x56
-         *
-         * */
+        let start = START_PC_ADDRESS as usize;
+        let end = start + rom.len();
 
-        // make sure rom size is within limits
-        for i in 0..rom.len() {
-            let addr: u16 = START_PC_ADDRESS + (i as u16);
-            self.memory[addr as usize] = rom[i];
+        if end > 65536 {
+            panic!("rom too big");
         }
+
+        self.memory[start..end].copy_from_slice(rom);
     }
 }
 
