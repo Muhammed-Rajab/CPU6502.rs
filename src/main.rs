@@ -11,7 +11,12 @@
  * $FFFA-$FFFB = NMI Vector
  * $FFFC-$FFFD = Reset Vector
  * $FFFE-$FFFF = IRQ/BRK Vector
+ *
+ * For debugging purposes, our PC starts at $0600.
  * */
+
+const START_PC_ADDRESS: u16 = 0x0600;
+
 struct Cpu6502 {
     a: u8,               // A ccumulator
     x: u8,               // X register
@@ -29,7 +34,7 @@ impl Cpu6502 {
             x: 0,
             y: 0,
             sp: 0xFD, // Reset value of SP
-            pc: 0,
+            pc: START_PC_ADDRESS,
             status: 0,
             memory: [0; 65536], // Zero initialised array
         }
@@ -85,6 +90,10 @@ impl Cpu6502 {
         }
 
         println!();
+    }
+
+    fn load_rom_from_memory(&mut self) {
+        todo!("implement a method to load rom from memory")
     }
 }
 
