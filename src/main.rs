@@ -39,12 +39,34 @@ impl Cpu6502 {
         println!("0x{:04x}", end);
         println!("0x{:04x}", aligned_end);
 
+        // print top row showing byte alignment
+        print!("      ");
+        for i in 0..=15 {
+            print!("{:02x} ", i);
+        }
+
         // print start address
         let mut counter = aligned_start;
-        print!("${:04x} ", aligned_start);
 
-        while counter != start {
-            print!("-- ");
+        while counter != aligned_end {
+            // print start if counter % 16 == 0
+            if counter % 16 == 0 {
+                print!("\n");
+                print!("${:04x} ", counter);
+            }
+
+            // print '-- ' if counter < start
+            if counter < start {
+                print!("-- ");
+            } else if counter > end {
+                // print '-- ' if counter >= end (NOTE: check me)
+                print!("-- ");
+            } else {
+                // read and print the value if counter in [start, end)
+                let byte = self.read(counter);
+                print!("{:02x} ", byte);
+            }
+
             counter += 1;
         }
     }
@@ -56,5 +78,5 @@ fn main() {
     cpu.write(0x2222, 0xFF);
     cpu.write(0x2223, 0xaa);
 
-    cpu.hexdump(0x2222, 0x22ff);
+    cpu.hexdump(0x2222, 0x00ff);
 }
