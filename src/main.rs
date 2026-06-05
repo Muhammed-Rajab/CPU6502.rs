@@ -34,9 +34,19 @@ impl Cpu6502 {
         let end = start + len;
         let aligned_end = (end + 0x000F) & !0x000F;
 
+        println!("0x{:04x}", start);
         println!("0x{:04x}", aligned_start);
         println!("0x{:04x}", end);
         println!("0x{:04x}", aligned_end);
+
+        // print start address
+        let mut counter = aligned_start;
+        print!("${:04x} ", aligned_start);
+
+        while counter != start {
+            print!("-- ");
+            counter += 1;
+        }
     }
 }
 
