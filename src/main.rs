@@ -28,7 +28,7 @@ impl Cpu6502 {
             a: 0,
             x: 0,
             y: 0,
-            sp: 0,
+            sp: 0xFD, // Reset value of SP
             pc: 0,
             status: 0,
             memory: [0; 65536], // Zero initialised array
