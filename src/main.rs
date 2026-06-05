@@ -30,10 +30,21 @@ impl Cpu6502 {
     }
 
     fn hexdump(&self, start: u16, len: u16) {
-        // TODO: output a hex dump of memory
+        let aligned_start = start & !0x000F;
+        let end = start + len;
+        let aligned_end = (end + 0x000F) & !0x000F;
+
+        println!("0x{:04x}", aligned_start);
+        println!("0x{:04x}", end);
+        println!("0x{:04x}", aligned_end);
     }
 }
 
 fn main() {
-    let cpu = Cpu6502::new();
+    let mut cpu = Cpu6502::new();
+
+    cpu.write(0x2222, 0xFF);
+    cpu.write(0x2223, 0xaa);
+
+    cpu.hexdump(0x2222, 0x22ff);
 }
