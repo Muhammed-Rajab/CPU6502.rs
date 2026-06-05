@@ -48,6 +48,17 @@ impl Cpu6502 {
         self.memory[addr as usize] = value;
     }
 
+    fn load_rom_from_memory(&mut self, rom: &[u8]) {
+        let start = START_PC_ADDRESS as usize;
+        let end = start + rom.len();
+
+        if end > 65536 {
+            panic!("rom too big");
+        }
+
+        self.memory[start..end].copy_from_slice(rom);
+    }
+
     fn hexdump(&self, start: u16, len: u16) {
         /*
          * given,
@@ -90,17 +101,6 @@ impl Cpu6502 {
         }
 
         println!();
-    }
-
-    fn load_rom_from_memory(&mut self, rom: &[u8]) {
-        let start = START_PC_ADDRESS as usize;
-        let end = start + rom.len();
-
-        if end > 65536 {
-            panic!("rom too big");
-        }
-
-        self.memory[start..end].copy_from_slice(rom);
     }
 }
 
