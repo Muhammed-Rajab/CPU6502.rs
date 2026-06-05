@@ -1,3 +1,17 @@
+/*
+ *
+ *
+ *----------------
+ * MEMORY LAYOUT |
+ *----------------
+ *
+ * $0000-$00FF = Zero Page (256 bytes)
+ * $0100-$01FF = Stack (second page, 256 bytes)
+ * $0020-$FFF9 = General memory
+ * $FFFA-$FFFB = NMI Vector
+ * $FFFC-$FFFD = Reset Vector
+ * $FFFE-$FFFF = IRQ/BRK Vector
+ * */
 struct Cpu6502 {
     a: u8,               // A ccumulator
     x: u8,               // X register
