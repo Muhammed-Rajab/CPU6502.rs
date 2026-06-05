@@ -30,8 +30,17 @@ impl Cpu6502 {
     }
 
     fn hexdump(&self, start: u16, len: u16) {
+        /*
+         * given,
+         *      start = 0x1000
+         *      len   = 10
+         * the function outputs values from 0x1000..0x1009
+         * [start, end)
+         * */
         let aligned_start = start & !0x000F;
-        let end = start + len;
+        let end = start
+            .checked_add(len)
+            .expect("hexdump range exceeds address space");
         let aligned_end = (end + 0x000F) & !0x000F;
 
         // print top row showing byte alignment
@@ -39,28 +48,27 @@ impl Cpu6502 {
         for i in 0..=15 {
             print!("{:02x} ", i);
         }
+        println!();
 
-        // print start address
-        let mut counter = aligned_start;
-
-        while counter != aligned_end {
-            // print start if counter % 16 == 0
-            if counter % 16 == 0 {
+        // dump memory
+        for addr in aligned_start..aligned_end {
+            // print start if addr % 16 == 0
+            if (addr & 0x000F) == 0 {
                 print!("\n");
-                print!("${:04x} ", counter);
+                print!("${:04x} ", addr);
             }
 
-            // print '-- ' if counter < start
-            if counter < start || counter >= end {
+            // print '-- ' if addr < start
+            if addr < start || addr >= end {
                 print!("-- ");
             } else {
-                // read and print the value if counter in [start, end)
-                let byte = self.read(counter);
+                // read and print the value if addr in [start, end)
+                let byte = self.read(addr);
                 print!("{:02x} ", byte);
             }
-
-            counter += 1;
         }
+
+        println!();
     }
 }
 
@@ -70,5 +78,5 @@ fn main() {
     cpu.write(0x2222, 0xFF);
     cpu.write(0x2223, 0xaa);
 
-    cpu.hexdump(0x2222, 0x0004);
+    cpu.hexdump(0x2222, 0x00ff);
 }
