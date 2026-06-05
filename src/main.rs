@@ -36,7 +36,9 @@ impl Cpu6502 {
          *      len   = 10
          * the function outputs values from 0x1000..0x1009
          * [start, end)
-         * */
+         *
+         * TODO: ASCII output
+         */
         let aligned_start = start & !0x000F;
         let end = start
             .checked_add(len)
