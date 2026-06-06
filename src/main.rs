@@ -84,6 +84,10 @@ enum Flag {
     Negative = 1 << 7,
 }
 
+//-----------------------------------------------
+// CONSTRUCTOR                                  |
+//-----------------------------------------------
+
 impl Cpu6502 {
     fn new() -> Self {
         Self {
@@ -96,7 +100,13 @@ impl Cpu6502 {
             memory: [0; 65536], // Zero initialised array
         }
     }
+}
 
+//-----------------------------------------------
+// MEMORY                                       |
+//-----------------------------------------------
+
+impl Cpu6502 {
     fn read(&self, addr: u16) -> u8 {
         self.memory[addr as usize]
     }
@@ -110,7 +120,13 @@ impl Cpu6502 {
         self.pc += 1;
         byte
     }
+}
 
+//-----------------------------------------------
+// FLAGS                                        |
+//-----------------------------------------------
+
+impl Cpu6502 {
     fn set_flag(&mut self, flag: Flag, value: bool) {
         if value {
             self.status |= flag as u8;
@@ -122,7 +138,24 @@ impl Cpu6502 {
     fn get_flag(&mut self, flag: Flag) -> bool {
         (self.status & (flag as u8)) != 0
     }
+}
 
+//-----------------------------------------------
+// INSTRUCTIONS                                 |
+//-----------------------------------------------
+
+impl Cpu6502 {
+    fn lda(&mut self, value: u8) {
+        self.a = value;
+        // update flags
+    }
+}
+
+//-----------------------------------------------
+// OPERATION                                    |
+//-----------------------------------------------
+
+impl Cpu6502 {
     fn step(&mut self) {
         let opcode = self.fetch_byte();
 
@@ -137,16 +170,13 @@ impl Cpu6502 {
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
     }
+}
 
-    //---------------------------------------------------------
+//-----------------------------------------------
+// LOAD                                         |
+//-----------------------------------------------
 
-    fn lda(&mut self, value: u8) {
-        self.a = value;
-        // update flags
-    }
-
-    //---------------------------------------------------------
-
+impl Cpu6502 {
     fn load_rom_from_memory(&mut self, rom: &[u8]) {
         let start = START_PC_ADDRESS as usize;
         let end = start + rom.len();
@@ -157,7 +187,13 @@ impl Cpu6502 {
 
         self.memory[start..end].copy_from_slice(rom);
     }
+}
 
+//-----------------------------------------------
+// DEBUG                                        |
+//-----------------------------------------------
+
+impl Cpu6502 {
     fn hexdump(&self, start: u16, len: u16) {
         /*
          * given,
