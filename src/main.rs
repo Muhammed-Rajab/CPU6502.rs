@@ -8,6 +8,42 @@
  * - - - -  - - - -
  * N V 1 B  D I Z C
  *
+ * Carry (C) -> Set if last operation an overflow from
+ *              bit 7 of the result (like in `ADC`) or an
+ *              underflow (like in `SBC`).
+ *
+ *              Arithmetic, comparison, and logical shifts.
+ *
+ *              Explicitly set using the `SEC` instruction and
+ *              cleared with `CLC` instruction.
+ *
+ * Zero (Z) -> Set if the result of last operation was zero.
+ *
+ * Interrupt Disable (I) -> Set if `SEI` instruction was executed.
+ *                          When set, the processor will not
+ *                          respond to interrupts from devices until
+ *                          it is cleared by `CLI` instruction.
+ *
+ * Decimal Mode (D) -> When set, the processor obeys Binary Coded Decimal
+ *                      arithmetic during addition and subtraction (not sure
+ *                      what that means, lol). Can be set using `SED` and
+ *                      cleared with `CLD`.
+ *
+ * Break (B) -> Set when BRK instruction has been executed and an interrupt
+ *              has been generated to process it.
+ *
+ * Overflow (V) -> Set during arithmetic operations if the results has yielded
+ *                  an invalid 2's complement result (eg: adding positives and
+ *                  end up getting negative, 64 + 64 = -128
+ *
+ *                  Can't trigger overflow if two numbers you are adding have
+ *                  different signs.
+ *
+ *                  Carry is for unsigned.
+ *                  Overflow is for signed.
+ *
+ * Negative (N) -> Set if the result of the last operation had bit 7 set to one.
+ *
  *----------------
  * MEMORY LAYOUT |
  *----------------
@@ -19,6 +55,7 @@
  * $FFFC-$FFFD = Reset Vector
  * $FFFE-$FFFF = IRQ/BRK Vector
  *
+ * Not sure why, but SP starts at $FD, not $FF
  * For debugging purposes, our PC starts at $0600.
  * */
 
@@ -34,18 +71,18 @@ struct Cpu6502 {
     memory: [u8; 65536], // Memory
 }
 
+#[repr(u8)]
+#[derive(Copy, Clone)]
 enum Flag {
-    Carry = 1,
+    Carry = 1 << 0,
+    Zero = 1 << 1,
+    Interrupt = 1 << 2,
+    Decimal = 1 << 3,
+    Break = 1 << 4,
+    Unused = 1 << 5,
+    Overflow = 1 << 6,
+    Negative = 1 << 7,
 }
-
-const FLAG_CARRY: u8 = 1 << 0;
-const FLAG_ZERO: u8 = 1 << 1;
-const FLAG_INTERRUPT: u8 = 1 << 2;
-const FLAG_DECIMAL: u8 = 1 << 3;
-const FLAG_BREAK: u8 = 1 << 4;
-const FLAG_UNUSED: u8 = 1 << 5;
-const FLAG_OVERFLOW: u8 = 1 << 6;
-const FLAG_NEGATIVE: u8 = 1 << 7;
 
 impl Cpu6502 {
     fn new() -> Self {
@@ -74,16 +111,16 @@ impl Cpu6502 {
         byte
     }
 
-    fn set_flag(&mut self, flag: u8, value: bool) {
+    fn set_flag(&mut self, flag: Flag, value: bool) {
         if value {
-            self.status |= flag;
+            self.status |= flag as u8;
         } else {
-            self.status &= !flag;
+            self.status &= !(flag as u8);
         }
     }
 
-    fn get_flag(&mut self, flag: u8) -> bool {
-        (self.status & flag) != 0
+    fn get_flag(&mut self, flag: Flag) -> bool {
+        (self.status & (flag as u8)) != 0
     }
 
     fn step(&mut self) {
