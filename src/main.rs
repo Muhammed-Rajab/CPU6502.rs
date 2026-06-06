@@ -296,6 +296,38 @@ mod tests {
         // all flags are cleared except unused
         assert_eq!(cpu.status, 0x20);
     }
+
+    #[test]
+    fn lda_test() {
+        let mut cpu = Cpu6502::new();
+
+        // Immediate Mode
+        let immediate_rom = [
+            0xA9u8, 0x10, // LDA #$10
+            0xA9, 0x00, // LDA #$00
+            0xA9, 0xFF, // LDA #$FF
+        ];
+
+        cpu.load_rom_from_memory(&immediate_rom);
+
+        // 1st LDA
+        cpu.step();
+        assert_eq!(0x10, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        // 2nd LDA
+        cpu.step();
+        assert_eq!(0x00, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        // 3rd LDA
+        cpu.step();
+        assert_eq!(0xFF, cpu.a);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
 }
 
 fn main() {
