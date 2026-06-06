@@ -264,6 +264,26 @@ impl Cpu6502 {
                 self.sta(addr);
             }
 
+            //------
+            // STX |
+            //------
+
+            // Absolute
+            0x8E => {
+                // $1234 in memory -> $34 $12
+                let low = self.fetch_byte() as u16;
+                let high = self.fetch_byte() as u16;
+                let addr = (high << 8) | low;
+                self.stx(addr);
+            }
+
+            // Zero Page
+            0x86 => {
+                // $00-$ff
+                let addr = self.fetch_byte() as u16;
+                self.stx(addr);
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
