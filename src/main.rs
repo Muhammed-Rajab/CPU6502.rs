@@ -1,5 +1,12 @@
 /*
  *
+ *---------------
+ * STATUS FLAGS |
+ *---------------
+ *
+ * 7 6 5 4  3 2 1 0
+ * - - - -  - - - -
+ * N V 1 B  D I Z C
  *
  *----------------
  * MEMORY LAYOUT |
@@ -27,11 +34,6 @@ struct Cpu6502 {
     memory: [u8; 65536], // Memory
 }
 
-/*
- * 7 6 5 4  3 2 1 0
- * - - - -  - - - -
- * N V 1 B  D I Z C
- * */
 const FLAG_CARRY: u8 = 1 << 0;
 const FLAG_ZERO: u8 = 1 << 1;
 const FLAG_INTERRUPT_DISABLE: u8 = 1 << 2;
