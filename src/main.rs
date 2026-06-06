@@ -201,6 +201,14 @@ impl Cpu6502 {
     fn stx(&mut self, addr: u16) {
         self.memory[addr as usize] = self.x;
     }
+
+    /*
+     * Stores the contents of Y to memory[addr]
+     * No flags affected.
+     */
+    fn sty(&mut self, addr: u16) {
+        self.memory[addr as usize] = self.y;
+    }
 }
 
 //-----------------------------------------------
