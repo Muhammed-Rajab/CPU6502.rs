@@ -246,12 +246,7 @@ impl Cpu6502 {
                 let low = self.fetch_byte() as u16;
                 let high = self.fetch_byte() as u16;
                 let addr = (high << 8) | low;
-                /*
-                 *
-                 * high = 00000000 00000001
-                 * low  = 00000000 10000001
-                 * (high << 8) | low
-                 * */
+                self.sta(addr);
             }
 
             // Default
