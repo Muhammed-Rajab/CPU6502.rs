@@ -166,6 +166,11 @@ impl Cpu6502 {
         self.x = value;
         self.update_zn(self.x);
     }
+
+    fn ldy(&mut self, value: u8) {
+        self.y = value;
+        self.update_zn(self.y);
+    }
 }
 
 //-----------------------------------------------
@@ -197,6 +202,16 @@ impl Cpu6502 {
             0xA2 => {
                 let value = self.fetch_byte();
                 self.ldx(value);
+            }
+
+            //------
+            // LDY |
+            //------
+
+            // Immediate
+            0xA0 => {
+                let value = self.fetch_byte();
+                self.ldy(value);
             }
 
             // Default
@@ -372,6 +387,38 @@ mod tests {
         // 3rd LDX
         cpu.step();
         assert_eq!(0xFF, cpu.x);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn ldy_test() {
+        let mut cpu = Cpu6502::new();
+
+        // Immediate Mode
+        let immediate_rom = [
+            0xA0u8, 0x10, // LDY #$10
+            0xA0, 0x00, // LDY #$00
+            0xA0, 0xFF, // LDY #$FF
+        ];
+
+        cpu.load_rom_from_memory(&immediate_rom);
+
+        // 1st LDY
+        cpu.step();
+        assert_eq!(0x10, cpu.y);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        // 2nd LDY
+        cpu.step();
+        assert_eq!(0x00, cpu.y);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        // 3rd LDY
+        cpu.step();
+        assert_eq!(0xFF, cpu.y);
         assert_eq!(true, cpu.get_flag(Flag::Negative));
         assert_eq!(false, cpu.get_flag(Flag::Zero));
     }
