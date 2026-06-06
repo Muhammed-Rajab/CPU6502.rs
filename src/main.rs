@@ -162,11 +162,19 @@ impl Cpu6502 {
         self.update_zn(self.a);
     }
 
+    /*
+     * Loads a byte of memory into X.
+     * Sets the N and Z flags as appropriate.
+     */
     fn ldx(&mut self, value: u8) {
         self.x = value;
         self.update_zn(self.x);
     }
 
+    /*
+     * Loads a byte of memory into Y.
+     * Sets the N and Z flags as appropriate.
+     */
     fn ldy(&mut self, value: u8) {
         self.y = value;
         self.update_zn(self.y);
