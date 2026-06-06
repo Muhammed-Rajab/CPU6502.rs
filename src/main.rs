@@ -460,9 +460,8 @@ mod tests {
 
     #[test]
     fn sta_test() {
-        let mut cpu = Cpu6502::new();
-
         // Absolute Mode
+        let mut cpu = Cpu6502::new();
         let absolute_rom = [
             0xA9, 0x42, //  LDA #$42
             0x8Du8, 0x34, 0x12, // STA $1234
