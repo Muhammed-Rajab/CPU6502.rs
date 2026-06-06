@@ -1,5 +1,11 @@
 /*
  *
+ *-----------------
+ * SPECIFICATIONS |
+ *-----------------
+ *
+ * 8-bit little endian
+ *
  *---------------
  * STATUS FLAGS |
  *---------------
@@ -230,6 +236,13 @@ impl Cpu6502 {
                 self.ldy(value);
             }
 
+            //------
+            // STA |
+            //------
+
+            // Absolute
+            0x8D => {}
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
@@ -446,7 +459,8 @@ fn main() {
         0xa9, 0x05, // LDA #5
         0xa9, 0x00, // LDA #0
     ];
-
     cpu.load_rom_from_memory(&rom);
+
+    cpu.step(); // to stop all those fucking warnings.
     cpu.hexdump(START_PC_ADDRESS, 0x00ff);
 }
