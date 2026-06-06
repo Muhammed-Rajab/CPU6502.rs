@@ -34,12 +34,16 @@ struct Cpu6502 {
     memory: [u8; 65536], // Memory
 }
 
+enum Flag {
+    Carry = 1,
+}
+
 const FLAG_CARRY: u8 = 1 << 0;
 const FLAG_ZERO: u8 = 1 << 1;
-const FLAG_INTERRUPT_DISABLE: u8 = 1 << 2;
+const FLAG_INTERRUPT: u8 = 1 << 2;
 const FLAG_DECIMAL: u8 = 1 << 3;
-const FLAG_B: u8 = 1 << 4;
-// 5th bit is always pushed 1
+const FLAG_BREAK: u8 = 1 << 4;
+const FLAG_UNUSED: u8 = 1 << 5;
 const FLAG_OVERFLOW: u8 = 1 << 6;
 const FLAG_NEGATIVE: u8 = 1 << 7;
 
