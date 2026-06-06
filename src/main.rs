@@ -94,10 +94,10 @@ impl Cpu6502 {
             a: 0,
             x: 0,
             y: 0,
-            sp: 0xFD, // Reset value of SP
-            pc: START_PC_ADDRESS,
-            status: 0,
-            memory: [0; 65536], // Zero initialised array
+            sp: 0xFD,                   // Reset value of SP
+            pc: START_PC_ADDRESS,       // Should be loaded from Reset Vector
+            status: Flag::Unused as u8, // By default, it's on.
+            memory: [0; 65536],         // Zero initialised array
         }
     }
 }
@@ -133,6 +133,9 @@ impl Cpu6502 {
         } else {
             self.status &= !(flag as u8);
         }
+
+        // Always set
+        self.status |= Flag::Unused as u8;
     }
 
     fn get_flag(&mut self, flag: Flag) -> bool {
@@ -249,9 +252,7 @@ mod tests {
 
     #[test]
     fn flag_set_clear_test() {
-        let cpu = Cpu6502::new();
-
-        todo!("write test, mf.");
+        let mut cpu = Cpu6502::new();
     }
 }
 
