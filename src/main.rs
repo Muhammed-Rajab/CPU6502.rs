@@ -171,6 +171,8 @@ impl Cpu6502 {
     fn step(&mut self) {
         let opcode = self.fetch_byte();
 
+        println!("PC=${:04X}, OPCODE=${:02X}", self.pc, opcode);
+
         match opcode {
             //------
             // LDA |
