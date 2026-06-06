@@ -179,6 +179,14 @@ impl Cpu6502 {
         self.y = value;
         self.update_zn(self.y);
     }
+
+    /*
+     * Stores the contents of A to memory[addr]
+     * No flags affected.
+     */
+    fn sta(&mut self, addr: u16) {
+        self.memory[addr as usize] = self.a;
+    }
 }
 
 //-----------------------------------------------
