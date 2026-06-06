@@ -249,6 +249,13 @@ impl Cpu6502 {
                 self.sta(addr);
             }
 
+            // Zero Page
+            0x85 => {
+                // $00-$ff
+                let addr = self.fetch_byte() as u16;
+                self.sta(addr);
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
@@ -472,8 +479,21 @@ mod tests {
         // 1st STA
         cpu.step();
         cpu.step();
-        assert_eq!(cpu.a, 0x42);
         assert_eq!(cpu.read(0x1234), 0x42);
+
+        // Zero Page Mode
+        let mut cpu = Cpu6502::new();
+        let zero_page_rom = [
+            0xA9, 0x42, //  LDA #$42
+            0x85u8, 0xff, // STA $ff
+        ];
+
+        cpu.load_rom_from_memory(&zero_page_rom);
+
+        // 1st STA
+        cpu.step();
+        cpu.step();
+        assert_eq!(cpu.read(0xff), 0x42);
     }
 }
 
