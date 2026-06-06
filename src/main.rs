@@ -248,11 +248,40 @@ impl Cpu6502 {
 
 #[cfg(test)]
 mod tests {
+
+    use std::ptr::eq;
+
     use super::*;
 
     #[test]
     fn flag_set_clear_test() {
         let mut cpu = Cpu6502::new();
+
+        // by default, unused flag must be set
+        assert!(cpu.get_flag(Flag::Unused));
+
+        cpu.set_flag(Flag::Carry, true);
+        cpu.set_flag(Flag::Zero, true);
+        cpu.set_flag(Flag::Interrupt, true);
+        cpu.set_flag(Flag::Decimal, true);
+        cpu.set_flag(Flag::Break, true);
+        cpu.set_flag(Flag::Overflow, true);
+        cpu.set_flag(Flag::Negative, true);
+
+        // all flags are set now
+        assert_eq!(cpu.status, 0xFF);
+
+        cpu.set_flag(Flag::Carry, false);
+        cpu.set_flag(Flag::Zero, false);
+        cpu.set_flag(Flag::Interrupt, false);
+        cpu.set_flag(Flag::Decimal, false);
+        cpu.set_flag(Flag::Break, false);
+        cpu.set_flag(Flag::Unused, false); // has no effect
+        cpu.set_flag(Flag::Overflow, false);
+        cpu.set_flag(Flag::Negative, false);
+
+        // all flags are cleared except unused
+        assert_eq!(cpu.status, 0x20);
     }
 }
 
