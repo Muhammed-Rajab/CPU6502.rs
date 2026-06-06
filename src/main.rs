@@ -239,6 +239,22 @@ impl Cpu6502 {
     }
 }
 
+//-----------------------------------------------
+// TESTS                                        |
+//-----------------------------------------------
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn flag_set_clear_test() {
+        let cpu = Cpu6502::new();
+
+        todo!("write test, mf.");
+    }
+}
+
 fn main() {
     let mut cpu = Cpu6502::new();
     let rom = [
