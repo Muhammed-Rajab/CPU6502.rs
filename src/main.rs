@@ -27,6 +27,20 @@ struct Cpu6502 {
     memory: [u8; 65536], // Memory
 }
 
+/*
+ * 7 6 5 4  3 2 1 0
+ * - - - -  - - - -
+ * N V 1 B  D I Z C
+ * */
+const FLAG_CARRY: u8 = 1 << 0;
+const FLAG_ZERO: u8 = 1 << 1;
+const FLAG_INTERRUPT_DISABLE: u8 = 1 << 2;
+const FLAG_DECIMAL: u8 = 1 << 3;
+const FLAG_B: u8 = 1 << 4;
+// 5th bit is always pushed 1
+const FLAG_OVERFLOW: u8 = 1 << 6;
+const FLAG_NEGATIVE: u8 = 1 << 7;
+
 impl Cpu6502 {
     fn new() -> Self {
         Self {
@@ -52,6 +66,18 @@ impl Cpu6502 {
         let byte = self.read(self.pc);
         self.pc += 1;
         byte
+    }
+
+    fn set_flag(&mut self, flag: u8, value: bool) {
+        if value {
+            self.status |= flag;
+        } else {
+            self.status &= !flag;
+        }
+    }
+
+    fn get_flag(&mut self, flag: u8) -> bool {
+        (self.status & flag) != 0
     }
 
     fn step(&mut self) {
