@@ -457,6 +457,25 @@ mod tests {
         assert_eq!(true, cpu.get_flag(Flag::Negative));
         assert_eq!(false, cpu.get_flag(Flag::Zero));
     }
+
+    #[test]
+    fn sta_test() {
+        let mut cpu = Cpu6502::new();
+
+        // Absolute Mode
+        let absolute_rom = [
+            0xA9, 0x42, //  LDA #$42
+            0x8Du8, 0x34, 0x12, // STA $1234
+        ];
+
+        cpu.load_rom_from_memory(&absolute_rom);
+
+        // 1st STA
+        cpu.step();
+        cpu.step();
+        assert_eq!(cpu.a, 0x42);
+        assert_eq!(cpu.read(0x1234), 0x42);
+    }
 }
 
 fn main() {
