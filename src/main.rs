@@ -193,6 +193,14 @@ impl Cpu6502 {
     fn sta(&mut self, addr: u16) {
         self.memory[addr as usize] = self.a;
     }
+
+    /*
+     * Stores the contents of X to memory[addr]
+     * No flags affected.
+     */
+    fn stx(&mut self, addr: u16) {
+        self.memory[addr as usize] = self.x;
+    }
 }
 
 //-----------------------------------------------
