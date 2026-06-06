@@ -138,7 +138,7 @@ impl Cpu6502 {
         self.status |= Flag::Unused as u8;
     }
 
-    fn get_flag(&mut self, flag: Flag) -> bool {
+    fn get_flag(&self, flag: Flag) -> bool {
         (self.status & (flag as u8)) != 0
     }
 }
@@ -248,8 +248,6 @@ impl Cpu6502 {
 
 #[cfg(test)]
 mod tests {
-
-    use std::ptr::eq;
 
     use super::*;
 
