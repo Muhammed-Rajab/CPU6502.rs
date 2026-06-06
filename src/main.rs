@@ -141,6 +141,11 @@ impl Cpu6502 {
     fn get_flag(&self, flag: Flag) -> bool {
         (self.status & (flag as u8)) != 0
     }
+
+    fn update_zn(&mut self, value: u8) {
+        self.set_flag(Flag::Zero, value == 0);
+        self.set_flag(Flag::Negative, (value & 0x80) != 0);
+    }
 }
 
 //-----------------------------------------------
@@ -148,9 +153,13 @@ impl Cpu6502 {
 //-----------------------------------------------
 
 impl Cpu6502 {
+    /*
+     * Loads a byte of memory into accumulator.
+     * Sets the N and Z flags as appropriate.
+     */
     fn lda(&mut self, value: u8) {
         self.a = value;
-        // update flags
+        self.update_zn(self.a);
     }
 }
 
@@ -163,13 +172,17 @@ impl Cpu6502 {
         let opcode = self.fetch_byte();
 
         match opcode {
-            // LDA
-            //
+            //------
+            // LDA |
+            //------
+
             // Immediate
             0xA9 => {
                 let value = self.fetch_byte();
                 self.lda(value);
             }
+
+            // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
     }
