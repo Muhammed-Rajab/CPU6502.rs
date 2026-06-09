@@ -631,6 +631,38 @@ mod tests {
         cpu.step();
         assert_eq!(cpu.read(0xff), 0x42);
     }
+
+    #[test]
+    fn tax_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA9u8, 0x0a, // LDA #$0a
+            0xAA, // TAX
+            0xA9u8, 0x00, // LDA #$00
+            0xAA, // TAX
+            0xA9u8, 0xff, // LDA #$ff
+            0xAA, // TAX
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$0a
+        cpu.step(); // TAX
+        assert_eq!(cpu.a, cpu.x);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDA #$00
+        cpu.step(); // TAX
+        assert_eq!(cpu.a, cpu.x);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDA #$ff
+        cpu.step(); // TAX
+        assert_eq!(cpu.a, cpu.x);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
 }
 
 fn main() {
