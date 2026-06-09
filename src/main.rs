@@ -62,6 +62,8 @@
  * $FFFE-$FFFF = IRQ/BRK Vector
  *
  * SP starts at $FF, and decreases when pushed into and vice versa.
+ * SP wraps since it's an 8-bit register. PHA at SP=$00 stores value of A to $00 and decreases
+ * it by one, wrapping it, resulting in SP=$FF.
  * For debugging purposes, our PC starts at $0600.
  * */
 
@@ -942,10 +944,8 @@ mod tests {
 
         cpu.step(); // LDA #$aa
         cpu.step(); // PHA
-        // check for
-        //      1. sp
-        //      2. value at address
         assert_eq!(cpu.sp, 0xFE);
+        assert_eq!(cpu.peek_stack(), 0xaa);
     }
 }
 
