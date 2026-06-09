@@ -17,7 +17,7 @@ and learn the basics of assembly by writing programs for it.
     - TAX           [X]
     - TAY           [X]
     - TXA           [X]
-    - TYA           [ ]
+    - TYA           [X]
     - TSX           [ ]
     - TXS           [ ]
     - PHA           [ ]
