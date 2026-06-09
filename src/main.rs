@@ -435,6 +435,15 @@ impl Cpu6502 {
                 self.txs();
             }
 
+            //------
+            // PHA |
+            //------
+
+            // Implied
+            0x48 => {
+                self.pha();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
