@@ -254,6 +254,15 @@ impl Cpu6502 {
         self.x = self.sp;
         self.update_zn(self.x);
     }
+
+    /*
+     * Copies the contents of X to SP
+     * Sets Z and N flag appropriately.
+     */
+    fn txs(&mut self) {
+        self.sp = self.x;
+        self.update_zn(self.sp);
+    }
 }
 
 //-----------------------------------------------
