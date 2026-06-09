@@ -311,6 +311,15 @@ impl Cpu6502 {
     fn php(&mut self) {
         self.push_to_stack(self.status);
     }
+
+    /*
+     * Pulls 8-bit value from stack and into processor status flags.
+     * The flag will take new state determined by the value.
+     * SP increases
+     */
+    fn plp(&mut self) {
+        self.status = self.pull_from_stack();
+    }
 }
 
 //-----------------------------------------------
