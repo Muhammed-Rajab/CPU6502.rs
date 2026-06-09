@@ -339,6 +339,15 @@ impl Cpu6502 {
                 self.tax();
             }
 
+            //------
+            // TAY |
+            //------
+
+            // Implied
+            0xA8 => {
+                self.tay();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
