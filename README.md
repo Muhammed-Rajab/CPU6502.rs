@@ -15,7 +15,7 @@ and learn the basics of assembly by writing programs for it.
     - STY absolute  [X]
     - STY zero page [X]
     - TAX           [X]
-    - TAY           [ ]
+    - TAY           [X]
     - TXA           [ ]
     - TYA           [ ]
     - TSX           [ ]
