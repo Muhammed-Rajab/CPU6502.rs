@@ -468,6 +468,15 @@ impl Cpu6502 {
                 self.pha();
             }
 
+            //------
+            // PLA |
+            //------
+
+            // Implied
+            0x68 => {
+                self.pla();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
