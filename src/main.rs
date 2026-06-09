@@ -286,6 +286,15 @@ impl Cpu6502 {
     fn pha(&mut self) {
         self.push_to_stack(self.a);
     }
+
+    /*
+     * Pulls 8-bit value from stack and into A.
+     * Sets Z and N flags appropriately.
+     * SP increases
+     */
+    fn pla(&mut self) {
+        todo!("implement pla")
+    }
 }
 
 //-----------------------------------------------
