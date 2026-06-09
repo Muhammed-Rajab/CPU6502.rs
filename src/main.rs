@@ -245,6 +245,15 @@ impl Cpu6502 {
         self.a = self.y;
         self.update_zn(self.a);
     }
+
+    /*
+     * Copies the contents of SP to X
+     * Sets Z and N flag appropriately.
+     */
+    fn tsx(&mut self) {
+        self.x = self.sp;
+        self.update_zn(self.x);
+    }
 }
 
 //-----------------------------------------------
