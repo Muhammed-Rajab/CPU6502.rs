@@ -1099,10 +1099,19 @@ mod tests {
     }
 
     #[test]
-    fn plp() {
+    fn plp_test() {
         let mut cpu = Cpu6502::new();
-        let implied_rom = [];
+        let implied_rom = [
+            0xA9u8, 0xff, // LDA #$ff
+            0x48, // PHA
+            0x28, // PLP
+        ];
         cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$ff
+        cpu.step(); // PHA
+        cpu.step(); // PLP
+        assert_eq!(cpu.status, 0xFF);
     }
 }
 
