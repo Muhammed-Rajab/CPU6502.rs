@@ -23,7 +23,7 @@ and learn the basics of assembly by writing programs for it.
     - PHA           [X]
     - PLA           [X]
     - PHP           [X]
-    - PLP           [ ]
+    - PLP           [X]
     - INX           [ ]
     - INY           [ ]
     - DEX           [ ]
