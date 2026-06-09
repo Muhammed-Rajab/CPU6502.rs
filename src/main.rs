@@ -321,6 +321,15 @@ impl Cpu6502 {
                 self.sty(addr);
             }
 
+            //------
+            // TAX |
+            //------
+
+            // Implied
+            0xAA => {
+                self.tax();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
