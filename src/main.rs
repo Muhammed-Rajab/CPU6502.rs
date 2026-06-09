@@ -126,6 +126,12 @@ impl Cpu6502 {
         self.pc += 1;
         byte
     }
+
+    fn push_to_stack(&mut self, value: u8) {
+        let addr = 0x0100u16 | (self.sp as u16);
+        self.write(addr, value);
+        self.sp -= 1;
+    }
 }
 
 //-----------------------------------------------
@@ -269,7 +275,9 @@ impl Cpu6502 {
      * No flags affected.
      * SP decreased
      */
-    fn pha(&mut self) {}
+    fn pha(&mut self) {
+        self.push_to_stack(self.a);
+    }
 }
 
 //-----------------------------------------------
@@ -926,4 +934,8 @@ fn main() {
     println!("low : {:#018b}", low);
     println!("high: {:#018b}", high);
     println!("res : {:#018b}", combined);
+
+    // stack address forming
+    let sp = 0x0100u16 | (cpu.sp as u16);
+    println!("sp: ${:04X}", sp);
 }
