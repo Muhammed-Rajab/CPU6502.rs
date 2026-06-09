@@ -504,6 +504,15 @@ impl Cpu6502 {
                 self.php();
             }
 
+            //------
+            // PLP |
+            //------
+
+            // Implied
+            0x28 => {
+                self.plp();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
