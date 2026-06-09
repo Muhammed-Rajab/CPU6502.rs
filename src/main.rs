@@ -853,6 +853,8 @@ mod tests {
     #[test]
     fn tsx_test() {
         let mut cpu = Cpu6502::new();
+
+        // WARN: needs more test
         let implied_rom = [
             0xBA, // TSX
         ];
