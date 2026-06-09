@@ -299,7 +299,8 @@ impl Cpu6502 {
      * SP increases
      */
     fn pla(&mut self) {
-        todo!("implement pla")
+        self.a = self.pull_from_stack();
+        self.update_zn(self.a);
     }
 }
 
