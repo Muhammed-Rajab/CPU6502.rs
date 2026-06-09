@@ -209,6 +209,15 @@ impl Cpu6502 {
     fn sty(&mut self, addr: u16) {
         self.memory[addr as usize] = self.y;
     }
+
+    /*
+     * Copies the contents of A to X
+     * Sets Z and N flag appropriately.
+     */
+    fn tax(&mut self) {
+        self.x = self.a;
+        self.update_zn(self.x);
+    }
 }
 
 //-----------------------------------------------
