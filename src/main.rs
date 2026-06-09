@@ -218,6 +218,15 @@ impl Cpu6502 {
         self.x = self.a;
         self.update_zn(self.x);
     }
+
+    /*
+     * Copies the contents of A to Y
+     * Sets Z and N flag appropriately.
+     */
+    fn tay(&mut self) {
+        self.y = self.a;
+        self.update_zn(self.y);
+    }
 }
 
 //-----------------------------------------------
