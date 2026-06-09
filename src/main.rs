@@ -357,6 +357,15 @@ impl Cpu6502 {
                 self.tay();
             }
 
+            //------
+            // TXA |
+            //------
+
+            // Implied
+            0x8A => {
+                self.txa();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
