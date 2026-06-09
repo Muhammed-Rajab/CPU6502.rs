@@ -100,7 +100,7 @@ impl Cpu6502 {
             a: 0,
             x: 0,
             y: 0,
-            sp: 0xFD,                   // Reset value of SP
+            sp: 0xFF,                   // Reset value of SP
             pc: START_PC_ADDRESS,       // Should be loaded from Reset Vector
             status: Flag::Unused as u8, // By default, it's on.
             memory: [0; 65536],         // Zero initialised array
