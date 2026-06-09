@@ -281,7 +281,6 @@ impl Cpu6502 {
      */
     fn txs(&mut self) {
         self.sp = self.x;
-        self.update_zn(self.sp);
     }
 
     /*
@@ -1097,6 +1096,13 @@ mod tests {
             cpu.peek_stack(),
             (Flag::Negative as u8) | (Flag::Unused as u8) | 0
         );
+    }
+
+    #[test]
+    fn plp() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [];
+        cpu.load_rom_from_memory(&implied_rom);
     }
 }
 
