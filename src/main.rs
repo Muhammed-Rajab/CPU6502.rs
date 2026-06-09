@@ -302,6 +302,15 @@ impl Cpu6502 {
         self.a = self.pull_from_stack();
         self.update_zn(self.a);
     }
+
+    /*
+     * Pushes a copy of processor status on to the stack
+     * No flags affected.
+     * SP decreased
+     */
+    fn php(&mut self) {
+        self.push_to_stack(self.status);
+    }
 }
 
 //-----------------------------------------------
