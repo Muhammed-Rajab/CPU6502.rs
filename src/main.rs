@@ -831,6 +831,20 @@ mod tests {
         assert_eq!(true, cpu.get_flag(Flag::Negative));
         assert_eq!(false, cpu.get_flag(Flag::Zero));
     }
+
+    #[test]
+    fn tsx_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xBA, // TSX
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // TSX {x = #$FD}
+        assert_eq!(cpu.sp, cpu.x);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
 }
 
 fn main() {
