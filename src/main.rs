@@ -486,6 +486,15 @@ impl Cpu6502 {
                 self.pla();
             }
 
+            //------
+            // PHP |
+            //------
+
+            // Implied
+            0x08 => {
+                self.php();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
