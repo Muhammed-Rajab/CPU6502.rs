@@ -731,6 +731,38 @@ mod tests {
         assert_eq!(true, cpu.get_flag(Flag::Negative));
         assert_eq!(false, cpu.get_flag(Flag::Zero));
     }
+
+    #[test]
+    fn txa_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA2, 0x0a, // LDX #$0a
+            0x8a, // TXA
+            0xA2, 0x00, // LDX #$00
+            0x8a, // TXA
+            0xA2, 0xff, // LDX #$ff
+            0x8a, // TXA
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDX #$0a
+        cpu.step(); // TXA
+        assert_eq!(cpu.x, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDX #$00
+        cpu.step(); // TXA
+        assert_eq!(cpu.x, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDX #$ff
+        cpu.step(); // TXA
+        assert_eq!(cpu.x, cpu.a);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
 }
 
 fn main() {
