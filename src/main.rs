@@ -277,7 +277,7 @@ impl Cpu6502 {
 
     /*
      * Copies the contents of X to SP
-     * Sets Z and N flag appropriately.
+     * No flags affected.
      */
     fn txs(&mut self) {
         self.sp = self.x;
