@@ -411,6 +411,15 @@ impl Cpu6502 {
                 self.tsx();
             }
 
+            //------
+            // TXS |
+            //------
+
+            // Implied
+            0x9A => {
+                self.txs();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
