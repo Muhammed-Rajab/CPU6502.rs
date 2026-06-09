@@ -127,6 +127,12 @@ impl Cpu6502 {
         byte
     }
 
+    fn peek_stack(&mut self) -> u8 {
+        let top_sp = self.sp.wrapping_add(1);
+        let addr = 0x0100u16 | top_sp as u16;
+        self.read(addr)
+    }
+
     fn push_to_stack(&mut self, value: u8) {
         let addr = 0x0100u16 | (self.sp as u16);
         self.write(addr, value);
