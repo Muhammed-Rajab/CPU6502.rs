@@ -946,6 +946,11 @@ mod tests {
         cpu.step(); // PHA
         assert_eq!(cpu.sp, 0xFE);
         assert_eq!(cpu.peek_stack(), 0xaa);
+
+        cpu.step(); // LDA #$ff
+        cpu.step(); // PHA
+        assert_eq!(cpu.sp, 0xFD);
+        assert_eq!(cpu.peek_stack(), 0xff);
     }
 }
 
