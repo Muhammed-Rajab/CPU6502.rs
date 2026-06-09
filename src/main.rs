@@ -61,7 +61,7 @@
  * $FFFC-$FFFD = Reset Vector
  * $FFFE-$FFFF = IRQ/BRK Vector
  *
- * Not sure why, but SP starts at $FD, not $FF
+ * SP starts at $FF, and decreases when pushed into and vice versa.
  * For debugging purposes, our PC starts at $0600.
  * */
 
@@ -263,6 +263,13 @@ impl Cpu6502 {
         self.sp = self.x;
         self.update_zn(self.sp);
     }
+
+    /*
+     * Pushes a copy of A on to the stack
+     * No flags affected.
+     * SP decreased
+     */
+    fn pha(&mut self) {}
 }
 
 //-----------------------------------------------
