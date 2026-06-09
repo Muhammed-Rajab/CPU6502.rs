@@ -22,6 +22,8 @@ and learn the basics of assembly by writing programs for it.
     - TXS           [X]
     - PHA           [X]
     - PLA           [X]
+    - PHP           [ ]
+    - PLP           [ ]
     - INX           [ ]
     - INY           [ ]
     - DEX           [ ]
