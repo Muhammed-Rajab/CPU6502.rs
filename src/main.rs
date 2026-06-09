@@ -140,6 +140,12 @@ impl Cpu6502 {
         self.write(addr, value);
         self.sp -= 1;
     }
+
+    fn pull_from_stack(&mut self) -> u8 {
+        self.sp += 1;
+        let addr = 0x0100u16 | (self.sp as u16);
+        self.read(addr)
+    }
 }
 
 //-----------------------------------------------
