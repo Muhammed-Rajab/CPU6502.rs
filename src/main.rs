@@ -977,6 +977,51 @@ mod tests {
         assert_eq!(cpu.sp, 0xFD);
         assert_eq!(cpu.peek_stack(), 0xff);
     }
+
+    #[test]
+    fn pla_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA9u8, 0x0a, // LDA #$0a
+            0x48, // PHA
+            0xA9, 0xff, // LDA #$ff
+            0x48, // PHA
+            0xA9, 0x00, // LDA #$00
+            0x48, // PHA
+            0x68, // PLA {A=#$00, Z=1, N=0}
+            0x68, // PLA {A=#$ff, Z=0, N=1}
+            0x68, // PLA {A=#$0a, Z=0, N=0}
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$0a
+        cpu.step(); // PHA
+        cpu.step(); // LDA #$ff
+        cpu.step(); // PHA
+        cpu.step(); // LDA #$00
+        cpu.step(); // PHA
+
+        // SP at 0xFC now
+        assert_eq!(cpu.sp, 0xFC);
+
+        cpu.step(); // PLA {A=#$00, Z=1, N=0}
+        assert_eq!(cpu.sp, 0xFD);
+        assert_eq!(cpu.a, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // PLA {A=#$ff, Z=0, N=1}
+        assert_eq!(cpu.sp, 0xFE);
+        assert_eq!(cpu.a, 0xff);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+
+        cpu.step(); // PLA {A=#$0a, Z=0, N=0}
+        assert_eq!(cpu.sp, 0xFF);
+        assert_eq!(cpu.a, 0x0a);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+    }
 }
 
 fn main() {
