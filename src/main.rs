@@ -922,6 +922,25 @@ mod tests {
         assert_eq!(true, cpu.get_flag(Flag::Negative));
         assert_eq!(false, cpu.get_flag(Flag::Zero));
     }
+
+    #[test]
+    fn pha_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA9u8, 0xaa, // LDA #$aa
+            0x48, // PHA
+            0xA9u8, 0xff, // LDA #$ff
+            0x48, // PHA
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$aa
+        cpu.step(); // PHA
+        // check for
+        //      1. sp
+        //      2. value at address
+        assert_eq!(cpu.sp, 0xFE);
+    }
 }
 
 fn main() {
