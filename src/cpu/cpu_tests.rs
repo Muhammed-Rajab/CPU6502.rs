@@ -629,4 +629,38 @@ mod tests {
         assert_eq!(cpu.get_flag(Flag::Zero), false);
         assert_eq!(cpu.get_flag(Flag::Negative), true);
     }
+
+    #[test]
+    fn dey_test() {
+        let mut cpu = Cpu6502::new();
+
+        let implied_rom = [
+            0xA0u8, 0x02, // LDY #$02
+            0x88, // DEY {Y=#$01, Z=0, N=0}
+            0xA0, 0x01, // LDY #$01
+            0x88, // DEY {Y=#$00, Z=1, N=0}
+            0xA0, 0x00, // LDY #$00
+            0x88, // DEY {Y=#$FF, Z=0, N=1}
+        ];
+
+        cpu.load_program_from_memory(&implied_rom);
+
+        cpu.step(); // LDY #$02
+        cpu.step(); // DEY
+        assert_eq!(cpu.y, 0x01);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // LDY #$01
+        cpu.step(); // DEY
+        assert_eq!(cpu.y, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // LDY #$00
+        cpu.step(); // DEY
+        assert_eq!(cpu.y, 0xFF);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+    }
 }
