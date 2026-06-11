@@ -663,4 +663,22 @@ mod tests {
         assert_eq!(cpu.get_flag(Flag::Zero), false);
         assert_eq!(cpu.get_flag(Flag::Negative), true);
     }
+
+    #[test]
+    fn sec_clc_test() {
+        let mut cpu = Cpu6502::new();
+
+        let implied_rom = [
+            0x38u8, // SEC
+            0x18,   // CLC
+        ];
+
+        cpu.load_program_from_memory(&implied_rom);
+
+        cpu.step(); // SEC
+        assert_eq!(cpu.get_flag(Flag::Carry), true);
+
+        cpu.step(); // CLC
+        assert_eq!(cpu.get_flag(Flag::Carry), false);
+    }
 }
