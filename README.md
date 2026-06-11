@@ -25,7 +25,7 @@ and learn the basics of assembly by writing programs for it.
     - PHP           [X]
     - PLP           [X]
     - INX           [X]
-    - INY           [ ]
+    - INY           [X]
     - DEX           [ ]
     - DEY           [ ]
     - CLC           [ ]
