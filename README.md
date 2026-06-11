@@ -27,7 +27,7 @@ and learn the basics of assembly by writing programs for it.
     - INX           [X]
     - INY           [X]
     - DEX           [X]
-    - DEY           [ ]
+    - DEY           [X]
     - CLC           [ ]
     - SEC           [ ]
     - ADC immediate [ ]
