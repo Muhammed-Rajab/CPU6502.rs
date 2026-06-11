@@ -50,7 +50,7 @@ mod tests {
             0xA9, 0xFF, // LDA #$FF
         ];
 
-        cpu.load_rom_from_memory(&immediate_rom);
+        cpu.load_program_from_memory(&immediate_rom);
 
         // 1st LDA
         cpu.step();
@@ -82,7 +82,7 @@ mod tests {
             0xA2, 0xFF, // LDX #$FF
         ];
 
-        cpu.load_rom_from_memory(&immediate_rom);
+        cpu.load_program_from_memory(&immediate_rom);
 
         // 1st LDX
         cpu.step();
@@ -114,7 +114,7 @@ mod tests {
             0xA0, 0xFF, // LDY #$FF
         ];
 
-        cpu.load_rom_from_memory(&immediate_rom);
+        cpu.load_program_from_memory(&immediate_rom);
 
         // 1st LDY
         cpu.step();
@@ -144,7 +144,7 @@ mod tests {
             0x8Du8, 0x34, 0x12, // STA $1234
         ];
 
-        cpu.load_rom_from_memory(&absolute_rom);
+        cpu.load_program_from_memory(&absolute_rom);
 
         // 1st STA
         cpu.step();
@@ -158,7 +158,7 @@ mod tests {
             0x85u8, 0xff, // STA $ff
         ];
 
-        cpu.load_rom_from_memory(&zero_page_rom);
+        cpu.load_program_from_memory(&zero_page_rom);
 
         // 1st STA
         cpu.step();
@@ -175,7 +175,7 @@ mod tests {
             0x8Eu8, 0x34, 0x12, // STX $1234
         ];
 
-        cpu.load_rom_from_memory(&absolute_rom);
+        cpu.load_program_from_memory(&absolute_rom);
 
         // 1st STX
         cpu.step();
@@ -189,7 +189,7 @@ mod tests {
             0x86u8, 0xff, // STX $ff
         ];
 
-        cpu.load_rom_from_memory(&zero_page_rom);
+        cpu.load_program_from_memory(&zero_page_rom);
 
         // 1st STX
         cpu.step();
@@ -206,7 +206,7 @@ mod tests {
             0x8Cu8, 0x34, 0x12, // STY $1234
         ];
 
-        cpu.load_rom_from_memory(&absolute_rom);
+        cpu.load_program_from_memory(&absolute_rom);
 
         // 1st STY
         cpu.step();
@@ -220,7 +220,7 @@ mod tests {
             0x84u8, 0xff, // STY $ff
         ];
 
-        cpu.load_rom_from_memory(&zero_page_rom);
+        cpu.load_program_from_memory(&zero_page_rom);
 
         // 1st STX
         cpu.step();
@@ -239,7 +239,7 @@ mod tests {
             0xA9u8, 0xff, // LDA #$ff
             0xAA, // TAX
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // LDA #$0a
         cpu.step(); // TAX
@@ -271,7 +271,7 @@ mod tests {
             0xA9u8, 0xff, // LDA #$ff
             0xA8, // TAY
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // LDA #$0a
         cpu.step(); // TAY
@@ -303,7 +303,7 @@ mod tests {
             0xA2, 0xff, // LDX #$ff
             0x8a, // TXA
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // LDX #$0a
         cpu.step(); // TXA
@@ -335,7 +335,7 @@ mod tests {
             0xA0, 0xff, // LDY #$ff
             0x98, // TYA
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // LDY #$0a
         cpu.step(); // TYA
@@ -364,7 +364,7 @@ mod tests {
         let implied_rom = [
             0xBA, // TSX
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // TSX {x = #$FD}
         assert_eq!(cpu.sp, cpu.x);
@@ -384,7 +384,7 @@ mod tests {
             0x9a, // TXS
         ];
 
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // LDX #$0a
         cpu.step(); // TXS
@@ -414,7 +414,7 @@ mod tests {
             0xA9u8, 0xff, // LDA #$ff
             0x48, // PHA
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // LDA #$aa
         cpu.step(); // PHA
@@ -441,7 +441,7 @@ mod tests {
             0x68, // PLA {A=#$ff, Z=0, N=1}
             0x68, // PLA {A=#$0a, Z=0, N=0}
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // LDA #$0a
         cpu.step(); // PHA
@@ -482,7 +482,7 @@ mod tests {
             0xA9, 0xff,  // LDA #$ff
             0x8u8, // PHP
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         // check
         //   1. sp
@@ -520,7 +520,7 @@ mod tests {
             0x48, // PHA
             0x28, // PLP
         ];
-        cpu.load_rom_from_memory(&implied_rom);
+        cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // LDA #$ff
         cpu.step(); // PHA

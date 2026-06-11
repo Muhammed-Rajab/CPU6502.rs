@@ -9,7 +9,7 @@ fn main() {
         0xa9, 0x05, // LDA #5
         0xa9, 0x00, // LDA #0
     ];
-    cpu.load_rom_from_memory(&rom);
+    cpu.load_program_from_memory(&rom);
 
     cpu.step(); // to stop all those fucking warnings.
     cpu.hexdump(START_PC_ADDRESS, 0x00ff);

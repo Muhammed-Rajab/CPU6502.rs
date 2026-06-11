@@ -110,7 +110,7 @@ impl Cpu6502 {
 //-----------------------------------------------
 
 impl Cpu6502 {
-    pub fn load_rom_from_memory(&mut self, rom: &[u8]) {
+    pub fn load_program_from_memory(&mut self, rom: &[u8]) {
         let start = START_PC_ADDRESS as usize;
         let end = start + rom.len();
 
