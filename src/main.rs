@@ -1,7 +1,6 @@
 mod cpu;
 
 use cpu::Cpu6502;
-use cpu::START_PC_ADDRESS;
 
 fn main() {
     let mut cpu = Cpu6502::new();
@@ -12,7 +11,7 @@ fn main() {
     cpu.load_program_from_memory(&rom);
 
     cpu.step(); // to stop all those fucking warnings.
-    cpu.hexdump(START_PC_ADDRESS, 0x00ff);
+    cpu.hexdump(cpu::START_PC_ADDRESS, 0x00ff);
 
     // test byte construction
     let low = 0b11111111u16;
