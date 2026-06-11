@@ -209,6 +209,15 @@ impl Cpu6502 {
                 self.iny();
             }
 
+            //------
+            // DEX |
+            //------
+
+            // Implied
+            0xCA => {
+                self.dex();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
