@@ -154,4 +154,13 @@ impl Cpu6502 {
         self.x = self.x.wrapping_add(1);
         self.update_zn(self.x);
     }
+
+    /*
+     * Adds one to Y register
+     * Sets Z and N flags appropriately.
+     */
+    pub(super) fn iny(&mut self) {
+        self.y = self.y.wrapping_add(1);
+        self.update_zn(self.y);
+    }
 }
