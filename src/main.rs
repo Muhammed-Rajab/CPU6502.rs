@@ -1,6 +1,7 @@
 mod cpu;
 
 use cpu::Cpu6502;
+use cpu::START_PC_ADDRESS;
 
 fn main() {
     let mut cpu = Cpu6502::new();
@@ -23,6 +24,6 @@ fn main() {
     println!("res : {:#018b}", combined);
 
     // stack address forming
-    let sp = 0x0100u16 | (cpu.sp as u16);
-    println!("sp: ${:04X}", sp);
+    // let sp = 0x0100u16 | (cpu.sp as u16);
+    // println!("sp: ${:04X}", sp);
 }

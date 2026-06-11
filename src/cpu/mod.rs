@@ -67,7 +67,7 @@
  * For debugging purposes, our PC starts at $0600.
  * */
 
-const START_PC_ADDRESS: u16 = 0x0600;
+pub const START_PC_ADDRESS: u16 = 0x0600;
 
 pub struct Cpu6502 {
     a: u8,               // A ccumulator
@@ -97,7 +97,7 @@ enum Flag {
 //-----------------------------------------------
 
 impl Cpu6502 {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             a: 0,
             x: 0,
@@ -326,7 +326,7 @@ impl Cpu6502 {
 //-----------------------------------------------
 
 impl Cpu6502 {
-    fn step(&mut self) {
+    pub fn step(&mut self) {
         let opcode = self.fetch_byte();
 
         println!("PC=${:04X}, OPCODE=${:02X}", self.pc, opcode);
@@ -523,7 +523,7 @@ impl Cpu6502 {
 //-----------------------------------------------
 
 impl Cpu6502 {
-    fn load_rom_from_memory(&mut self, rom: &[u8]) {
+    pub fn load_rom_from_memory(&mut self, rom: &[u8]) {
         let start = START_PC_ADDRESS as usize;
         let end = start + rom.len();
 
@@ -540,7 +540,7 @@ impl Cpu6502 {
 //-----------------------------------------------
 
 impl Cpu6502 {
-    fn hexdump(&self, start: u16, len: u16) {
+    pub fn hexdump(&self, start: u16, len: u16) {
         /*
          * given,
          *      start = 0x1000
