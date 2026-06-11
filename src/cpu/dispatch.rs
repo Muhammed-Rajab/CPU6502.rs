@@ -191,6 +191,15 @@ impl Cpu6502 {
                 self.plp();
             }
 
+            //------
+            // INX |
+            //------
+
+            // Implied
+            0xE8 => {
+                self.inx();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
