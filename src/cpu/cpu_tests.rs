@@ -527,4 +527,38 @@ mod tests {
         cpu.step(); // PLP
         assert_eq!(cpu.status, 0xFF);
     }
+
+    #[test]
+    fn inx_test() {
+        let mut cpu = Cpu6502::new();
+
+        let implied_rom = [
+            0xA2u8, 0x00, // LDX #$00
+            0xE8, // INX {X=#$01, Z=0, N=0}
+            0xA2, 0x7F, // LDX #$7F
+            0xE8, // INX {X=#$80, Z=0, N=1}
+            0xA2, 0xFF, // LDX #$FF
+            0xE8, // INX {X=#$00, Z=1, N=0}
+        ];
+
+        cpu.load_program_from_memory(&implied_rom);
+
+        cpu.step(); // LDX #$00
+        cpu.step(); // INX
+        assert_eq!(cpu.x, 0x01);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // LDX #$7F
+        cpu.step(); // INX
+        assert_eq!(cpu.x, 0x80);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+
+        cpu.step(); // LDX #$FF
+        cpu.step(); // INX
+        assert_eq!(cpu.x, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+    }
 }

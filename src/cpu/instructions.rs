@@ -151,7 +151,7 @@ impl Cpu6502 {
      * Sets Z and N flags appropriately.
      */
     pub(super) fn inx(&mut self) {
-        self.x = self.x + 1;
+        self.x = self.x.wrapping_add(1);
         self.update_zn(self.x);
     }
 }
