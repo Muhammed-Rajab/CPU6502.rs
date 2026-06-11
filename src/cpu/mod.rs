@@ -67,14 +67,13 @@
  * For debugging purposes, our PC starts at $0600.
  * */
 
+// DECLARATION
 mod cpu_tests;
 mod debug;
 mod dispatch;
 mod flags;
 mod instructions;
 mod memory;
-
-use flags::Flag;
 
 pub const START_PC_ADDRESS: u16 = 0x0600;
 
@@ -94,10 +93,10 @@ impl Cpu6502 {
             a: 0,
             x: 0,
             y: 0,
-            sp: 0xFF,                   // Reset value of SP
-            pc: START_PC_ADDRESS,       // Should be loaded from Reset Vector
-            status: Flag::Unused as u8, // By default, it's on.
-            memory: [0; 65536],         // Zero initialised array
+            sp: 0xFF,                          // Reset value of SP
+            pc: START_PC_ADDRESS,              // Should be loaded from Reset Vector
+            status: flags::Flag::Unused as u8, // By default, it's on.
+            memory: [0; 65536],                // Zero initialised array
         }
     }
 }
