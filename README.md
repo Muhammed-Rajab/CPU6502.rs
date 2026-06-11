@@ -26,7 +26,7 @@ and learn the basics of assembly by writing programs for it.
     - PLP           [X]
     - INX           [X]
     - INY           [X]
-    - DEX           [ ]
+    - DEX           [X]
     - DEY           [ ]
     - CLC           [ ]
     - SEC           [ ]
