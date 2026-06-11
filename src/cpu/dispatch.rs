@@ -218,6 +218,15 @@ impl Cpu6502 {
                 self.dex();
             }
 
+            //------
+            // DEY |
+            //------
+
+            // Implied
+            0x88 => {
+                self.dey();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
