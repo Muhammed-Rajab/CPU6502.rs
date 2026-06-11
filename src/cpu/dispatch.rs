@@ -236,6 +236,15 @@ impl Cpu6502 {
                 self.clc();
             }
 
+            //------
+            // SEC |
+            //------
+
+            // Implied
+            0x38 => {
+                self.sec();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
