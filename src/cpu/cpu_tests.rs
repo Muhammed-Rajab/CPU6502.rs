@@ -595,4 +595,38 @@ mod tests {
         assert_eq!(cpu.get_flag(Flag::Zero), true);
         assert_eq!(cpu.get_flag(Flag::Negative), false);
     }
+
+    #[test]
+    fn dex_test() {
+        let mut cpu = Cpu6502::new();
+
+        let implied_rom = [
+            0xA2u8, 0x02, // LDX #$02
+            0xCA, // DEX {X=#$01, Z=0, N=0}
+            0xA2, 0x01, // LDX #$01
+            0xCA, // DEX {X=#$00, Z=1, N=0}
+            0xA2, 0x00, // LDX #$00
+            0xCA, // DEX {X=#$FF, Z=0, N=1}
+        ];
+
+        cpu.load_program_from_memory(&implied_rom);
+
+        cpu.step(); // LDX #$02
+        cpu.step(); // DEX
+        assert_eq!(cpu.x, 0x01);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // LDX #$01
+        cpu.step(); // DEX
+        assert_eq!(cpu.x, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // LDX #$00
+        cpu.step(); // DEX
+        assert_eq!(cpu.x, 0xFF);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+    }
 }
