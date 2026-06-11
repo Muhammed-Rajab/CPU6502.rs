@@ -163,4 +163,13 @@ impl Cpu6502 {
         self.y = self.y.wrapping_add(1);
         self.update_zn(self.y);
     }
+
+    /*
+     * Subs one from X register
+     * Sets Z and N flags appropriately.
+     */
+    pub(super) fn dex(&mut self) {
+        self.x = self.x.wrapping_sub(1);
+        self.update_zn(self.x);
+    }
 }
