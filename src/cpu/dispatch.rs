@@ -227,6 +227,15 @@ impl Cpu6502 {
                 self.dey();
             }
 
+            //------
+            // CLC |
+            //------
+
+            // Implied
+            0x18 => {
+                self.clc();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
