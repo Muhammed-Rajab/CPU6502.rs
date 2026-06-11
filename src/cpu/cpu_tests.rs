@@ -1,0 +1,530 @@
+//-----------------------------------------------
+// TESTS                                        |
+//-----------------------------------------------
+
+#[cfg(test)]
+mod tests {
+
+    use super::super::Cpu6502;
+    use super::super::flags::Flag;
+
+    #[test]
+    fn flag_set_clear_test() {
+        let mut cpu = Cpu6502::new();
+
+        // by default, unused flag must be set
+        assert!(cpu.get_flag(Flag::Unused));
+
+        cpu.set_flag(Flag::Carry, true);
+        cpu.set_flag(Flag::Zero, true);
+        cpu.set_flag(Flag::Interrupt, true);
+        cpu.set_flag(Flag::Decimal, true);
+        cpu.set_flag(Flag::Break, true);
+        cpu.set_flag(Flag::Overflow, true);
+        cpu.set_flag(Flag::Negative, true);
+
+        // all flags are set now
+        assert_eq!(cpu.status, 0xFF);
+
+        cpu.set_flag(Flag::Carry, false);
+        cpu.set_flag(Flag::Zero, false);
+        cpu.set_flag(Flag::Interrupt, false);
+        cpu.set_flag(Flag::Decimal, false);
+        cpu.set_flag(Flag::Break, false);
+        cpu.set_flag(Flag::Unused, false); // has no effect
+        cpu.set_flag(Flag::Overflow, false);
+        cpu.set_flag(Flag::Negative, false);
+
+        // all flags are cleared except unused
+        assert_eq!(cpu.status, 0x20);
+    }
+
+    #[test]
+    fn lda_test() {
+        let mut cpu = Cpu6502::new();
+
+        // Immediate Mode
+        let immediate_rom = [
+            0xA9u8, 0x10, // LDA #$10
+            0xA9, 0x00, // LDA #$00
+            0xA9, 0xFF, // LDA #$FF
+        ];
+
+        cpu.load_rom_from_memory(&immediate_rom);
+
+        // 1st LDA
+        cpu.step();
+        assert_eq!(0x10, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        // 2nd LDA
+        cpu.step();
+        assert_eq!(0x00, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        // 3rd LDA
+        cpu.step();
+        assert_eq!(0xFF, cpu.a);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn ldx_test() {
+        let mut cpu = Cpu6502::new();
+
+        // Immediate Mode
+        let immediate_rom = [
+            0xA2u8, 0x10, // LDX #$10
+            0xA2, 0x00, // LDX #$00
+            0xA2, 0xFF, // LDX #$FF
+        ];
+
+        cpu.load_rom_from_memory(&immediate_rom);
+
+        // 1st LDX
+        cpu.step();
+        assert_eq!(0x10, cpu.x);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        // 2nd LDX
+        cpu.step();
+        assert_eq!(0x00, cpu.x);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        // 3rd LDX
+        cpu.step();
+        assert_eq!(0xFF, cpu.x);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn ldy_test() {
+        let mut cpu = Cpu6502::new();
+
+        // Immediate Mode
+        let immediate_rom = [
+            0xA0u8, 0x10, // LDY #$10
+            0xA0, 0x00, // LDY #$00
+            0xA0, 0xFF, // LDY #$FF
+        ];
+
+        cpu.load_rom_from_memory(&immediate_rom);
+
+        // 1st LDY
+        cpu.step();
+        assert_eq!(0x10, cpu.y);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        // 2nd LDY
+        cpu.step();
+        assert_eq!(0x00, cpu.y);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        // 3rd LDY
+        cpu.step();
+        assert_eq!(0xFF, cpu.y);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn sta_test() {
+        // Absolute Mode
+        let mut cpu = Cpu6502::new();
+        let absolute_rom = [
+            0xA9, 0x42, //  LDA #$42
+            0x8Du8, 0x34, 0x12, // STA $1234
+        ];
+
+        cpu.load_rom_from_memory(&absolute_rom);
+
+        // 1st STA
+        cpu.step();
+        cpu.step();
+        assert_eq!(cpu.read(0x1234), 0x42);
+
+        // Zero Page Mode
+        let mut cpu = Cpu6502::new();
+        let zero_page_rom = [
+            0xA9, 0x42, //  LDA #$42
+            0x85u8, 0xff, // STA $ff
+        ];
+
+        cpu.load_rom_from_memory(&zero_page_rom);
+
+        // 1st STA
+        cpu.step();
+        cpu.step();
+        assert_eq!(cpu.read(0xff), 0x42);
+    }
+
+    #[test]
+    fn stx_test() {
+        // Absolute Mode
+        let mut cpu = Cpu6502::new();
+        let absolute_rom = [
+            0xA2, 0x42, //  LDX #$42
+            0x8Eu8, 0x34, 0x12, // STX $1234
+        ];
+
+        cpu.load_rom_from_memory(&absolute_rom);
+
+        // 1st STX
+        cpu.step();
+        cpu.step();
+        assert_eq!(cpu.read(0x1234), 0x42);
+
+        // Zero Page Mode
+        let mut cpu = Cpu6502::new();
+        let zero_page_rom = [
+            0xA2, 0x42, //  LDX #$42
+            0x86u8, 0xff, // STX $ff
+        ];
+
+        cpu.load_rom_from_memory(&zero_page_rom);
+
+        // 1st STX
+        cpu.step();
+        cpu.step();
+        assert_eq!(cpu.read(0xff), 0x42);
+    }
+
+    #[test]
+    fn sty_test() {
+        // Absolute Mode
+        let mut cpu = Cpu6502::new();
+        let absolute_rom = [
+            0xA0, 0x42, //  LDY #$42
+            0x8Cu8, 0x34, 0x12, // STY $1234
+        ];
+
+        cpu.load_rom_from_memory(&absolute_rom);
+
+        // 1st STY
+        cpu.step();
+        cpu.step();
+        assert_eq!(cpu.read(0x1234), 0x42);
+
+        // Zero Page Mode
+        let mut cpu = Cpu6502::new();
+        let zero_page_rom = [
+            0xA0, 0x42, //  LDY #$42
+            0x84u8, 0xff, // STY $ff
+        ];
+
+        cpu.load_rom_from_memory(&zero_page_rom);
+
+        // 1st STX
+        cpu.step();
+        cpu.step();
+        assert_eq!(cpu.read(0xff), 0x42);
+    }
+
+    #[test]
+    fn tax_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA9u8, 0x0a, // LDA #$0a
+            0xAA, // TAX
+            0xA9u8, 0x00, // LDA #$00
+            0xAA, // TAX
+            0xA9u8, 0xff, // LDA #$ff
+            0xAA, // TAX
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$0a
+        cpu.step(); // TAX
+        assert_eq!(cpu.a, cpu.x);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDA #$00
+        cpu.step(); // TAX
+        assert_eq!(cpu.a, cpu.x);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDA #$ff
+        cpu.step(); // TAX
+        assert_eq!(cpu.a, cpu.x);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn tay_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA9u8, 0x0a, // LDA #$0a
+            0xA8, // TAY
+            0xA9u8, 0x00, // LDA #$00
+            0xA8, // TAY
+            0xA9u8, 0xff, // LDA #$ff
+            0xA8, // TAY
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$0a
+        cpu.step(); // TAY
+        assert_eq!(cpu.a, cpu.y);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDA #$00
+        cpu.step(); // TAY
+        assert_eq!(cpu.a, cpu.y);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDA #$ff
+        cpu.step(); // TAY
+        assert_eq!(cpu.a, cpu.y);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn txa_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA2, 0x0a, // LDX #$0a
+            0x8a, // TXA
+            0xA2, 0x00, // LDX #$00
+            0x8a, // TXA
+            0xA2, 0xff, // LDX #$ff
+            0x8a, // TXA
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDX #$0a
+        cpu.step(); // TXA
+        assert_eq!(cpu.x, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDX #$00
+        cpu.step(); // TXA
+        assert_eq!(cpu.x, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDX #$ff
+        cpu.step(); // TXA
+        assert_eq!(cpu.x, cpu.a);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn tya_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA0, 0x0a, // LDY #$0a
+            0x98, // TYA
+            0xA0, 0x00, // LDY #$00
+            0x98, // TYA
+            0xA0, 0xff, // LDY #$ff
+            0x98, // TYA
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDY #$0a
+        cpu.step(); // TYA
+        assert_eq!(cpu.y, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDY #$00
+        cpu.step(); // TYA
+        assert_eq!(cpu.y, cpu.a);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDY #$ff
+        cpu.step(); // TYA
+        assert_eq!(cpu.y, cpu.a);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn tsx_test() {
+        let mut cpu = Cpu6502::new();
+
+        // WARN: needs more test
+        let implied_rom = [
+            0xBA, // TSX
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // TSX {x = #$FD}
+        assert_eq!(cpu.sp, cpu.x);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn txs_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA2, 0x0a, // LDX #$0a
+            0x9a, // TXS
+            0xA2, 0x00, // LDX #$00
+            0x9a, // TXS
+            0xA2, 0xff, // LDX #$ff
+            0x9a, // TXS
+        ];
+
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDX #$0a
+        cpu.step(); // TXS
+        assert_eq!(cpu.x, cpu.sp);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDX #$00
+        cpu.step(); // TXS
+        assert_eq!(cpu.x, cpu.sp);
+        assert_eq!(false, cpu.get_flag(Flag::Negative));
+        assert_eq!(true, cpu.get_flag(Flag::Zero));
+
+        cpu.step(); // LDX #$ff
+        cpu.step(); // TXS
+        assert_eq!(cpu.x, cpu.sp);
+        assert_eq!(true, cpu.get_flag(Flag::Negative));
+        assert_eq!(false, cpu.get_flag(Flag::Zero));
+    }
+
+    #[test]
+    fn pha_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA9u8, 0xaa, // LDA #$aa
+            0x48, // PHA
+            0xA9u8, 0xff, // LDA #$ff
+            0x48, // PHA
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$aa
+        cpu.step(); // PHA
+        assert_eq!(cpu.sp, 0xFE);
+        assert_eq!(cpu.peek_stack(), 0xaa);
+
+        cpu.step(); // LDA #$ff
+        cpu.step(); // PHA
+        assert_eq!(cpu.sp, 0xFD);
+        assert_eq!(cpu.peek_stack(), 0xff);
+    }
+
+    #[test]
+    fn pla_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA9u8, 0x0a, // LDA #$0a
+            0x48, // PHA
+            0xA9, 0xff, // LDA #$ff
+            0x48, // PHA
+            0xA9, 0x00, // LDA #$00
+            0x48, // PHA
+            0x68, // PLA {A=#$00, Z=1, N=0}
+            0x68, // PLA {A=#$ff, Z=0, N=1}
+            0x68, // PLA {A=#$0a, Z=0, N=0}
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$0a
+        cpu.step(); // PHA
+        cpu.step(); // LDA #$ff
+        cpu.step(); // PHA
+        cpu.step(); // LDA #$00
+        cpu.step(); // PHA
+
+        // SP at 0xFC now
+        assert_eq!(cpu.sp, 0xFC);
+
+        cpu.step(); // PLA {A=#$00, Z=1, N=0}
+        assert_eq!(cpu.sp, 0xFD);
+        assert_eq!(cpu.a, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // PLA {A=#$ff, Z=0, N=1}
+        assert_eq!(cpu.sp, 0xFE);
+        assert_eq!(cpu.a, 0xff);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+
+        cpu.step(); // PLA {A=#$0a, Z=0, N=0}
+        assert_eq!(cpu.sp, 0xFF);
+        assert_eq!(cpu.a, 0x0a);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+    }
+
+    #[test]
+    fn php_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0x8u8, // PHP
+            0xA9, 0x00,  // LDA #$00
+            0x8u8, // PHP
+            0xA9, 0xff,  // LDA #$ff
+            0x8u8, // PHP
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        // check
+        //   1. sp
+        //   2. peek stack
+
+        // Intial sp
+        assert_eq!(cpu.sp, 0xFF);
+
+        cpu.step(); // PHP
+        assert_eq!(cpu.sp, 0xFE);
+        assert_eq!(cpu.peek_stack(), (Flag::Unused as u8) | 0);
+
+        cpu.step(); // LDA #$00
+        cpu.step(); // PHP
+        assert_eq!(cpu.sp, 0xFD);
+        assert_eq!(
+            cpu.peek_stack(),
+            (Flag::Zero as u8) | (Flag::Unused as u8) | 0
+        );
+
+        cpu.step(); // LDA #$ff
+        cpu.step(); // PHP
+        assert_eq!(cpu.sp, 0xFC);
+        assert_eq!(
+            cpu.peek_stack(),
+            (Flag::Negative as u8) | (Flag::Unused as u8) | 0
+        );
+    }
+
+    #[test]
+    fn plp_test() {
+        let mut cpu = Cpu6502::new();
+        let implied_rom = [
+            0xA9u8, 0xff, // LDA #$ff
+            0x48, // PHA
+            0x28, // PLP
+        ];
+        cpu.load_rom_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$ff
+        cpu.step(); // PHA
+        cpu.step(); // PLP
+        assert_eq!(cpu.status, 0xFF);
+    }
+}
