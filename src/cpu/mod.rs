@@ -109,18 +109,7 @@ impl Cpu6502 {
 // LOAD                                         |
 //-----------------------------------------------
 
-impl Cpu6502 {
-    pub fn load_program_from_memory(&mut self, rom: &[u8]) {
-        let start = START_PC_ADDRESS as usize;
-        let end = start + rom.len();
-
-        if end > 65536 {
-            panic!("rom too big");
-        }
-
-        self.memory[start..end].copy_from_slice(rom);
-    }
-}
+impl Cpu6502 {}
 
 //-----------------------------------------------
 // DEBUG                                        |

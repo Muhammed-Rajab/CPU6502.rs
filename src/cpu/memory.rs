@@ -38,4 +38,15 @@ impl Cpu6502 {
         let addr = 0x0100u16 | top_sp as u16;
         self.read(addr)
     }
+
+    pub fn load_program_from_memory(&mut self, rom: &[u8]) {
+        let start = super::START_PC_ADDRESS as usize;
+        let end = start + rom.len();
+
+        if end > 65536 {
+            panic!("rom too big");
+        }
+
+        self.memory[start..end].copy_from_slice(rom);
+    }
 }
