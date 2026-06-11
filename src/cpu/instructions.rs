@@ -188,4 +188,11 @@ impl Cpu6502 {
     pub(super) fn clc(&mut self) {
         self.set_flag(super::flags::Flag::Carry, false);
     }
+
+    /*
+     * Set the carry flag to one.
+     */
+    pub(super) fn sec(&mut self) {
+        self.set_flag(super::flags::Flag::Carry, true);
+    }
 }
