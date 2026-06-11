@@ -35,6 +35,12 @@ impl Cpu6502 {
         self.set_flag(Flag::Negative, (value & 0x80) != 0);
     }
 
+    pub(super) fn update_czvn(&mut self, value: u8, overflow: bool) {
+        self.set_flag(Flag::Carry, overflow);
+        self.set_flag(Flag::Zero, value == 0);
+        self.set_flag(Flag::Negative, (value & 0x80) != 0);
+    }
+
     // PUBLIC
     pub fn get_flag(&self, flag: Flag) -> bool {
         (self.status & (flag as u8)) != 0
