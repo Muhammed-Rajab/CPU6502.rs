@@ -172,4 +172,13 @@ impl Cpu6502 {
         self.x = self.x.wrapping_sub(1);
         self.update_zn(self.x);
     }
+
+    /*
+     * Subs one from Y register
+     * Sets Z and N flags appropriately.
+     */
+    pub(super) fn dey(&mut self) {
+        self.y = self.y.wrapping_sub(1);
+        self.update_zn(self.y);
+    }
 }
