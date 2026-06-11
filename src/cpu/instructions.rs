@@ -145,4 +145,13 @@ impl Cpu6502 {
     pub(super) fn plp(&mut self) {
         self.status = self.pull_from_stack();
     }
+
+    /*
+     * Adds one to X register
+     * Sets Z and N flags appropriately.
+     */
+    pub(super) fn inx(&mut self) {
+        self.x = self.x + 1;
+        self.update_zn(self.x);
+    }
 }
