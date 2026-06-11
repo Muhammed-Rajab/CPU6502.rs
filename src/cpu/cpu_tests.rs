@@ -681,4 +681,54 @@ mod tests {
         cpu.step(); // CLC
         assert_eq!(cpu.get_flag(Flag::Carry), false);
     }
+
+    #[test]
+    fn adc_test() {
+        let mut cpu = Cpu6502::new();
+
+        let immediate_rom = [
+            0xA9u8, 0x05, // LDA #$05
+            0x69, 0x03, // ADC #$03 {A=#$08, C=0, Z=0, N=0, V=0}
+            0xA9, 0xFF, // LDA #$FF
+            0x69, 0x01, // ADC #$01 {A=#$00, C=1, Z=1, N=0, V=0}
+            0xA9, 0x7F, // LDA #$7F
+            0x69, 0x01, // ADC #$01 {A=#$80, C=0, Z=0, N=1, V=1}
+            0xA9, 0x80, // LDA #$80
+            0x69, 0x80, // ADC #$80 {A=#$00, C=1, Z=1, N=0, V=1}
+        ];
+
+        cpu.load_program_from_memory(&immediate_rom);
+
+        cpu.step(); // LDA #$05
+        cpu.step(); // ADC #$03
+        assert_eq!(cpu.a, 0x08);
+        assert_eq!(cpu.get_flag(Flag::Carry), false);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+        assert_eq!(cpu.get_flag(Flag::Overflow), false);
+
+        cpu.step(); // LDA #$FF
+        cpu.step(); // ADC #$01
+        assert_eq!(cpu.a, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Carry), true);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+        assert_eq!(cpu.get_flag(Flag::Overflow), false);
+
+        cpu.step(); // LDA #$7F
+        cpu.step(); // ADC #$01
+        assert_eq!(cpu.a, 0x80);
+        assert_eq!(cpu.get_flag(Flag::Carry), false);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+        assert_eq!(cpu.get_flag(Flag::Overflow), true);
+
+        cpu.step(); // LDA #$80
+        cpu.step(); // ADC #$80
+        assert_eq!(cpu.a, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Carry), true);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+        assert_eq!(cpu.get_flag(Flag::Overflow), true);
+    }
 }
