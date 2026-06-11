@@ -181,4 +181,11 @@ impl Cpu6502 {
         self.y = self.y.wrapping_sub(1);
         self.update_zn(self.y);
     }
+
+    /*
+     * Set the carry flag to zero.
+     */
+    pub(super) fn clc(&mut self) {
+        self.set_flag(super::flags::Flag::Carry, false);
+    }
 }
