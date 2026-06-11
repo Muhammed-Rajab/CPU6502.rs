@@ -105,32 +105,6 @@ impl Cpu6502 {
 }
 
 //-----------------------------------------------
-// FLAGS                                        |
-//-----------------------------------------------
-
-impl Cpu6502 {
-    fn set_flag(&mut self, flag: Flag, value: bool) {
-        if value {
-            self.status |= flag as u8;
-        } else {
-            self.status &= !(flag as u8);
-        }
-
-        // Always set
-        self.status |= Flag::Unused as u8;
-    }
-
-    fn get_flag(&self, flag: Flag) -> bool {
-        (self.status & (flag as u8)) != 0
-    }
-
-    fn update_zn(&mut self, value: u8) {
-        self.set_flag(Flag::Zero, value == 0);
-        self.set_flag(Flag::Negative, (value & 0x80) != 0);
-    }
-}
-
-//-----------------------------------------------
 // INSTRUCTIONS                                 |
 //-----------------------------------------------
 
