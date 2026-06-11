@@ -200,6 +200,15 @@ impl Cpu6502 {
                 self.inx();
             }
 
+            //------
+            // INY |
+            //------
+
+            // Implied
+            0xC8 => {
+                self.iny();
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
