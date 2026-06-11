@@ -68,7 +68,6 @@
  * */
 
 mod cpu_tests;
-
 mod flags;
 mod instructions;
 mod memory;
