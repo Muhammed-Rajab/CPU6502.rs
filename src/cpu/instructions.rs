@@ -300,7 +300,7 @@ impl Cpu6502 {
     pub(super) fn beq(&mut self, offset: u8) {
         if self.get_flag(Flag::Zero) {
             // i16 -> signed
-            self.pc = self.pc.wrapping_add_signed(offset as i16);
+            self.pc = self.pc.wrapping_add_signed((offset as i8) as i16);
         }
     }
 
@@ -315,7 +315,7 @@ impl Cpu6502 {
     pub(super) fn bne(&mut self, offset: u8) {
         if !self.get_flag(Flag::Zero) {
             // i16 -> signed
-            self.pc = self.pc.wrapping_add_signed(offset as i16);
+            self.pc = self.pc.wrapping_add_signed((offset as i8) as i16);
         }
     }
 }
