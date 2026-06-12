@@ -315,6 +315,16 @@ impl Cpu6502 {
                 self.beq(val);
             }
 
+            //------
+            // BNE |
+            //------
+
+            // Relative
+            0xD0 => {
+                let val = self.fetch_byte();
+                self.bne(val);
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
