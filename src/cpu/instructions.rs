@@ -202,6 +202,8 @@ impl Cpu6502 {
     /*
      * Adds value to Accumulator.
      * Sets Z, N, and C flags appropriately.
+     *
+     * A = A + val + C
      */
     pub(super) fn adc(&mut self, val: u8) {
         let carry_in = if self.get_flag(Flag::Carry) { 1 } else { 0 };
