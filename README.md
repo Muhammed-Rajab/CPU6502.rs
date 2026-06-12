@@ -33,7 +33,7 @@ and learn the basics of assembly by writing programs for it.
     - ADC immediate [X]
     - SBC immediate [X]
     - AND immediate [X]
-    - ORA immediate [ ]
+    - ORA immediate [X]
     - EOR immediate [ ]
     - CMP immediate [ ]
     - BEQ           [ ]
