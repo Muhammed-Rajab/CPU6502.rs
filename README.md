@@ -31,7 +31,7 @@ and learn the basics of assembly by writing programs for it.
     - CLC           [X]
     - SEC           [X]
     - ADC immediate [X]
-    - SBC immediate [ ]
+    - SBC immediate [X]
     - AND immediate [ ]
     - ORA immediate [ ]
     - EOR immediate [ ]
