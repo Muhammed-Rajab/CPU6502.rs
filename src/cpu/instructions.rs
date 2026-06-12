@@ -200,11 +200,5 @@ impl Cpu6502 {
      * Adds value to Accumulator.
      * Sets Z, N, and C flags appropriately.
      */
-    pub(super) fn adc(&mut self, val: u8) {
-        let (result, flag) = self.a.overflowing_add(val);
-
-        self.a = result;
-        self.update_zn(self.a);
-        self.set_flag(super::flags::Flag::Carry, flag);
-    }
+    pub(super) fn adc(&mut self, val: u8) {}
 }
