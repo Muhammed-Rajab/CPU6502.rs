@@ -36,7 +36,7 @@ and learn the basics of assembly by writing programs for it.
     - ORA immediate [X]
     - EOR immediate [X]
     - CMP immediate [X]
-    - BEQ           [ ]
+    - BEQ           [X]
     - BNE           [ ]
     - JMP absolute  [ ]
     - LDA/STA with zero page + absolute indexed modes [ ]
