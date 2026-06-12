@@ -799,4 +799,38 @@ mod tests {
         assert_eq!(cpu.get_flag(Flag::Negative), true);
         assert_eq!(cpu.get_flag(Flag::Overflow), true);
     }
+
+    #[test]
+    fn and_test() {
+        let mut cpu = Cpu6502::new();
+
+        let implied_rom = [
+            0xA9u8, 0xFF, // LDA #$FF
+            0x29, 0x0F, // AND #$0F {A=#$0F, Z=0, N=0}
+            0xA9, 0x80, // LDA #$80
+            0x29, 0x80, // AND #$80 {A=#$80, Z=0, N=1}
+            0xA9, 0x55, // LDA #$55
+            0x29, 0xAA, // AND #$AA {A=#$00, Z=1, N=0}
+        ];
+
+        cpu.load_program_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$FF
+        cpu.step(); // AND #$0F
+        assert_eq!(cpu.a, 0x0F);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // LDA #$80
+        cpu.step(); // AND #$80
+        assert_eq!(cpu.a, 0x80);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+
+        cpu.step(); // LDA #$55
+        cpu.step(); // AND #$AA
+        assert_eq!(cpu.a, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+    }
 }
