@@ -224,4 +224,15 @@ impl Cpu6502 {
 
         self.update_czvn(result, carry, overflow);
     }
+
+    /*
+     * A = A - val - (1 - Carry)
+     * Sets Z, N, and C flags appropriately.
+     *
+     * NOTE: check out the math behind it. it's fascinating. explains a lot why
+     * we only had a 16-bit adder in NAND2Tetris
+     */
+    pub(super) fn sbc(&mut self, val: u8) {
+        self.adc(!val);
+    }
 }
