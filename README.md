@@ -35,7 +35,7 @@ and learn the basics of assembly by writing programs for it.
     - AND immediate [X]
     - ORA immediate [X]
     - EOR immediate [X]
-    - CMP immediate [ ]
+    - CMP immediate [X]
     - BEQ           [ ]
     - BNE           [ ]
     - JMP absolute  [ ]
