@@ -288,4 +288,19 @@ impl Cpu6502 {
         self.set_flag(Flag::Zero, result == 0);
         self.set_flag(Flag::Negative, (result & 0x80) != 0);
     }
+
+    /*
+     * Adds relative displacement to the PC
+     * if Z flag is set, causing a branch to a new location.
+     *
+     * BEQ +5
+     *
+     * BEQ -3
+     */
+    pub(super) fn beq(&mut self, offset: u8) {
+        if self.get_flag(Flag::Zero) {
+            // i16 -> signed
+            self.pc = self.pc.wrapping_add_signed(offset as i16);
+        }
+    }
 }
