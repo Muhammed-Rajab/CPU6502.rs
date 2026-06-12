@@ -204,6 +204,11 @@ impl Cpu6502 {
      * Sets Z, N, and C flags appropriately.
      *
      * A = A + val + C
+     *
+     *Overflow if:
+     *  (A and M have same sign)
+     *  AND
+     *  (A and Result have different sign)
      */
     pub(super) fn adc(&mut self, val: u8) {
         let carry_in = if self.get_flag(Flag::Carry) { 1 } else { 0 };
@@ -231,6 +236,11 @@ impl Cpu6502 {
      *
      * NOTE: check out the math behind it. it's fascinating. explains a lot why
      * we only had a 16-bit adder in NAND2Tetris
+     *
+     *Overflow if:
+     *  (A and M have different signs)
+     *  AND
+     *  (A and Result have different sign)
      */
     pub(super) fn sbc(&mut self, val: u8) {
         self.adc(!val);
