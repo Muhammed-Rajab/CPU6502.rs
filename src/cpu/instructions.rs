@@ -2,8 +2,6 @@
 // INSTRUCTIONS                                 |
 //-----------------------------------------------
 
-use std::io::ErrorKind::StaleNetworkFileHandle;
-
 use super::Cpu6502;
 use super::flags::Flag;
 
