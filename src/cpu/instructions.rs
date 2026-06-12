@@ -252,4 +252,13 @@ impl Cpu6502 {
         self.a = self.a & val;
         self.update_zn(self.a);
     }
+
+    /*
+     * A logical inclusive OR is performed bit by bit on A.
+     * Sets Z and N appropriately.
+     */
+    pub(super) fn ora(&mut self, val: u8) {
+        self.a = self.a | val;
+        self.update_zn(self.a);
+    }
 }
