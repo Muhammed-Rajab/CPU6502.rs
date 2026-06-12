@@ -303,4 +303,19 @@ impl Cpu6502 {
             self.pc = self.pc.wrapping_add_signed(offset as i16);
         }
     }
+
+    /*
+     * Adds relative displacement to the PC
+     * if Z flag is clear, causing a branch to a new location.
+     *
+     * BNE +5
+     *
+     * BNE -3
+     */
+    pub(super) fn bne(&mut self, offset: u8) {
+        if !self.get_flag(Flag::Zero) {
+            // i16 -> signed
+            self.pc = self.pc.wrapping_add_signed(offset as i16);
+        }
+    }
 }
