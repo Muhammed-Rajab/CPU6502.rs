@@ -32,7 +32,7 @@ and learn the basics of assembly by writing programs for it.
     - SEC           [X]
     - ADC immediate [X]
     - SBC immediate [X]
-    - AND immediate [ ]
+    - AND immediate [X]
     - ORA immediate [ ]
     - EOR immediate [ ]
     - CMP immediate [ ]
