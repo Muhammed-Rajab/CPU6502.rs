@@ -261,4 +261,13 @@ impl Cpu6502 {
         self.a = self.a | val;
         self.update_zn(self.a);
     }
+
+    /*
+     * An exclusive OR is performed bit by bit on A.
+     * Sets Z and N appropriately.
+     */
+    pub(super) fn eor(&mut self, val: u8) {
+        self.a = self.a ^ val;
+        self.update_zn(self.a);
+    }
 }
