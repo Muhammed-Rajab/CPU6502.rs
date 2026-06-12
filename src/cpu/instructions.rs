@@ -282,8 +282,10 @@ impl Cpu6502 {
      * N -> set if bit 7 of the result is set
      */
     pub(super) fn cmp(&mut self, val: u8) {
+        let result = self.a.wrapping_sub(val);
+
         self.set_flag(Flag::Carry, self.a >= val);
-        self.set_flag(Flag::Zero, self.a == val);
-        self.set_flag(Flag::Negative, (self.a.wrapping_sub(val) & 0x80) != 0);
+        self.set_flag(Flag::Zero, result == 0);
+        self.set_flag(Flag::Negative, (result & 0x80) != 0);
     }
 }
