@@ -295,6 +295,16 @@ impl Cpu6502 {
                 self.eor(val);
             }
 
+            //------
+            // CMP |
+            //------
+
+            // Immediate
+            0xC9 => {
+                let val = self.fetch_byte();
+                self.cmp(val);
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
