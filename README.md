@@ -30,7 +30,7 @@ and learn the basics of assembly by writing programs for it.
     - DEY           [X]
     - CLC           [X]
     - SEC           [X]
-    - ADC immediate [ ]
+    - ADC immediate [X]
     - SBC immediate [ ]
     - AND immediate [ ]
     - ORA immediate [ ]
