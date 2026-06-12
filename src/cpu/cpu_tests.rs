@@ -867,4 +867,38 @@ mod tests {
         assert_eq!(cpu.get_flag(Flag::Zero), true);
         assert_eq!(cpu.get_flag(Flag::Negative), false);
     }
+
+    #[test]
+    fn eor_test() {
+        let mut cpu = Cpu6502::new();
+
+        let implied_rom = [
+            0xA9u8, 0xFF, // LDA #$FF
+            0x49, 0xFF, // EOR #$FF {A=#$00, Z=1, N=0}
+            0xA9, 0x00, // LDA #$00
+            0x49, 0x80, // EOR #$80 {A=#$80, Z=0, N=1}
+            0xA9, 0x55, // LDA #$55
+            0x49, 0x0F, // EOR #$0F {A=#$5A, Z=0, N=0}
+        ];
+
+        cpu.load_program_from_memory(&implied_rom);
+
+        cpu.step(); // LDA #$FF
+        cpu.step(); // EOR #$FF
+        assert_eq!(cpu.a, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        cpu.step(); // LDA #$00
+        cpu.step(); // EOR #$80
+        assert_eq!(cpu.a, 0x80);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+
+        cpu.step(); // LDA #$55
+        cpu.step(); // EOR #$0F
+        assert_eq!(cpu.a, 0x5A);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+    }
 }
