@@ -275,6 +275,16 @@ impl Cpu6502 {
                 self.and(val);
             }
 
+            //------
+            // ORA |
+            //------
+
+            // Immediate
+            0x09 => {
+                let val = self.fetch_byte();
+                self.ora(val);
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
