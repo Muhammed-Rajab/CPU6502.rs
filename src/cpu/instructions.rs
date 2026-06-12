@@ -217,6 +217,9 @@ impl Cpu6502 {
         let res_neg = result & 0x80;
         let overflow = (a_neg == val_neg) && (a_neg != res_neg);
 
+        // set a
+        self.a = result;
+
         self.update_czvn(result, carry, overflow);
     }
 }

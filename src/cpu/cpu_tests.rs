@@ -692,7 +692,8 @@ mod tests {
             0xA9, 0xFF, // LDA #$FF
             0x69, 0x01, // ADC #$01 {A=#$00, C=1, Z=1, N=0, V=0}
             0xA9, 0x7F, // LDA #$7F
-            0x69, 0x01, // ADC #$01 {A=#$80, C=0, Z=0, N=1, V=1}
+            0x69,
+            0x01, // ADC #$01 {A=#$81, C=0, Z=0, N=1, V=1} {carry bit of prev wasn't cleared}
             0xA9, 0x80, // LDA #$80
             0x69, 0x80, // ADC #$80 {A=#$00, C=1, Z=1, N=0, V=1}
         ];
@@ -716,8 +717,8 @@ mod tests {
         assert_eq!(cpu.get_flag(Flag::Overflow), false);
 
         cpu.step(); // LDA #$7F
-        cpu.step(); // ADC #$01
-        assert_eq!(cpu.a, 0x80);
+        cpu.step(); // ADC #$01 {carry is set by prev adc}
+        assert_eq!(cpu.a, 0x81);
         assert_eq!(cpu.get_flag(Flag::Carry), false);
         assert_eq!(cpu.get_flag(Flag::Zero), false);
         assert_eq!(cpu.get_flag(Flag::Negative), true);
