@@ -255,6 +255,16 @@ impl Cpu6502 {
                 self.adc(val);
             }
 
+            //------
+            // SBC |
+            //------
+
+            // Immediate
+            0xE9 => {
+                let val = self.fetch_byte();
+                self.sbc(val);
+            }
+
             // Default
             _ => panic!("unknown opcode: {:02x}", opcode),
         };
