@@ -2,7 +2,10 @@
 // INSTRUCTIONS                                 |
 //-----------------------------------------------
 
+use std::io::ErrorKind::StaleNetworkFileHandle;
+
 use super::Cpu6502;
+use super::flags::Flag;
 
 impl Cpu6502 {
     /*
@@ -200,5 +203,20 @@ impl Cpu6502 {
      * Adds value to Accumulator.
      * Sets Z, N, and C flags appropriately.
      */
-    pub(super) fn adc(&mut self, val: u8) {}
+    pub(super) fn adc(&mut self, val: u8) {
+        let carry_in = if self.get_flag(Flag::Carry) { 1 } else { 0 };
+        let sum = self.a as u16 + val as u16 + carry_in as u16;
+        let result = sum as u8;
+
+        // carry check
+        let carry = sum > 0xFF;
+
+        // overflow check
+        let a_neg = self.a & 0x80;
+        let val_neg = val & 0x80;
+        let res_neg = result & 0x80;
+        let overflow = (a_neg == val_neg) && (a_neg != res_neg);
+
+        self.update_czvn(result, carry, overflow);
+    }
 }
