@@ -127,6 +127,9 @@ impl Cpu6502 {
 
     fn execute(&mut self, instruction: &Instruction) {
         match instruction.operation {
+            //-------
+            // LOAD |
+            //-------
             Operation::LDA => {
                 let value = self.fetch_value(instruction.mode);
                 self.lda(value);
@@ -142,6 +145,9 @@ impl Cpu6502 {
                 self.ldy(value);
             }
 
+            //--------
+            // STORE |
+            //--------
             Operation::STA => {
                 // get address
                 let addr = self.fetch_addr(instruction.mode);
