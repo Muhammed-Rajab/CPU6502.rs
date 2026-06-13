@@ -178,8 +178,10 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     //--------
 
     // CLC
+    table[0x18] = instr("CLC", Operation::CLC, AddressingMode::Implied, 1, 4);
 
     // SEC
+    table[0x38] = instr("SEC", Operation::SEC, AddressingMode::Implied, 1, 4);
 
     table
 });
