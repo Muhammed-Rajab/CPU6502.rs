@@ -43,14 +43,14 @@ mod tests {
         cpu.x = 0x05;
 
         // base address = 0xFE, + X = 0x03 (wraps in zero page)
-        cpu.memory[0x0003] = 0x42;
+        cpu.write(0x0003, 0x42);
 
         let program = [
             0xB5, 0xFE, // LDA $FE,X
         ];
 
         cpu.load_program_from_memory(&program);
-        cpu.step();
+        cpu.step(); // LDA $FE,X
 
         assert_eq!(cpu.a, 0x42);
         assert_eq!(cpu.get_flag(Flag::Zero), false);
