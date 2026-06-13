@@ -328,4 +328,50 @@ mod tests {
 
         assert_eq!(cpu.read(0x2000 + 0x10), 0x55);
     }
+
+    #[test]
+    fn sta_indexed_indirect_x_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0xAA;
+        cpu.x = 0x04;
+
+        // (0x20 + X) = 0x24 → pointer in zero page
+        cpu.write(0x0024, 0x00); // low byte
+        cpu.write(0x0025, 0x80); // high byte → address = 0x8000
+
+        let program = [
+            0x81u8, 0x20, // STA ($20,X)
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x8000), 0xAA);
+    }
+
+    #[test]
+    fn sta_indexed_indirect_x_wraps_zero_page_pointer() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x99;
+        cpu.x = 0xff;
+
+        println!("X: 0x{:02X}", cpu.x);
+
+        // base = 0x70, (0x70 + 0xff) = 0x6f (wrap)
+        cpu.write(0x006f, 0x34); // low byte
+        cpu.write(0x0070, 0x12); // high byte (wrap in zero page)
+
+        cpu.hexdump(0x0000, 0x100);
+
+        let program = [
+            0x81u8, 0x70, // STA ($70,X)
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x1234), 0x99);
+    }
 }
