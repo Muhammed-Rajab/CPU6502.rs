@@ -3,12 +3,21 @@
 //-----------------------------------------------
 
 use super::Cpu6502;
+use super::addressing_modes::AddressingMode;
 
 #[derive(Clone, Copy)]
 enum Operation {
     LDA,
     STA,
     // TODO: add the others
+}
+
+struct Instruction {
+    mnemonic: &'static str,
+    operation: Operation,
+    mode: AddressingMode,
+    bytes: u8,
+    cycles: u8,
 }
 
 impl Cpu6502 {
