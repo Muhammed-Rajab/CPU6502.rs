@@ -406,8 +406,8 @@ impl Cpu6502 {
             }
 
             Operation::BEQ => {
-                let val = self.fetch_value(instruction.mode);
-                self.beq(val);
+                let offset = self.fetch_value(instruction.mode) as i8;
+                self.beq(offset);
             }
 
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
