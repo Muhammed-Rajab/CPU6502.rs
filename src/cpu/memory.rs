@@ -78,6 +78,19 @@ impl Cpu6502 {
                 self.read(addr)
             }
 
+            AddressingMode::IndirectIndexed => {
+                let base = self.fetch_byte();
+
+                let low = self.read(base as u16) as u16;
+                let high = self.read(base.wrapping_add(1) as u16) as u16;
+
+                let pointer = (high << 8) | low;
+
+                let addr = pointer.wrapping_add(self.y as u16);
+
+                self.read(addr)
+            }
+
             AddressingMode::Relative => self.fetch_byte(),
 
             _ => panic!("invalid addressingmode in fetch_value"),
