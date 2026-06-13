@@ -996,4 +996,74 @@ mod tests {
     //-----------------------------------------------------------------
     // A L L  M O D E  T E S T
     //-----------------------------------------------------------------
+
+    #[test]
+    fn ldx_all_addressing_modes_basic_behavior() {
+        // ------------------------
+        // Immediate
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xA2u8, 0x00, // LDX #$00
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.x, 0x00);
+        assert_eq!(cpu.get_flag(Flag::Zero), true);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+
+        // ------------------------
+        // Zero Page
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        cpu.write(0x0042, 0x7F);
+
+        let program = [
+            0xA6u8, 0x42, // LDX $42
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.x, 0x7F);
+
+        // ------------------------
+        // Absolute
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        cpu.write(0x1234, 0x80);
+
+        let program = [
+            0xAEu8, 0x34, 0x12, // LDX $1234
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.x, 0x80);
+        assert_eq!(cpu.get_flag(Flag::Negative), true);
+
+        // ------------------------
+        // Absolute Y
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        cpu.y = 0x10;
+        cpu.write(0x2000 + 0x10, 0x01);
+
+        let program = [
+            0xBEu8, 0x00, 0x20, // LDX $2000,Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.x, 0x01);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+    }
 }
