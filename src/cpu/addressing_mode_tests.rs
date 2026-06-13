@@ -246,6 +246,22 @@ mod tests {
     //
 
     #[test]
+    fn sta_zeropage_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x99;
+
+        let program = [
+            0x85, 0x80, // STA $80
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x0080), 0x99);
+    }
+
+    #[test]
     fn sta_zeropage_x_wraps_and_stores() {
         let mut cpu = Cpu6502::new();
 
