@@ -115,6 +115,12 @@ impl Cpu6502 {
                 addr
             }
 
+            AddressingMode::AbsoluteY => {
+                let base = self.fetch_word();
+                let addr = base + self.y as u16;
+                addr
+            }
+
             _ => panic!("invalid addressingmode in fetch_addr"),
         }
     }
