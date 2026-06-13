@@ -297,10 +297,10 @@ impl Cpu6502 {
      *
      * BEQ -3
      */
-    pub(super) fn beq(&mut self, offset: u8) {
+    pub(super) fn beq(&mut self, offset: i8) {
         if self.get_flag(Flag::Zero) {
-            // i16 -> signed
-            self.pc = self.pc.wrapping_add_signed((offset as i8) as i16);
+            // i16 -> sign extension
+            self.pc = self.pc.wrapping_add_signed(offset as i16);
         }
     }
 
