@@ -4,6 +4,13 @@
 
 use super::Cpu6502;
 
+#[derive(Clone, Copy)]
+enum Operation {
+    LDA,
+    STA,
+    // TODO: add the others
+}
+
 impl Cpu6502 {
     pub fn step(&mut self) {
         let opcode = self.fetch_byte();
