@@ -47,6 +47,12 @@ impl Cpu6502 {
                 self.read(addr)
             }
 
+            AddressingMode::ZeroPageY => {
+                let base = self.fetch_byte();
+                let addr = base.wrapping_add(self.y) as u16;
+                self.read(addr)
+            }
+
             AddressingMode::Absolute => {
                 let addr = self.fetch_word();
                 self.read(addr)
