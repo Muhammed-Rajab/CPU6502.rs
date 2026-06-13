@@ -192,6 +192,14 @@ impl Cpu6502 {
                 self.sty(addr);
             }
 
+            //-----------
+            // TRANSFER |
+            //-----------
+            Operation::TAX => {
+                // only implied
+                self.tax();
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
