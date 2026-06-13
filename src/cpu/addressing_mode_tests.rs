@@ -70,4 +70,40 @@ mod tests {
         cpu.step(); // LDA #$77
         assert_eq!(cpu.a, 0x77);
     }
+
+    #[test]
+    fn absolute_x_addressing_loads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0x10;
+
+        cpu.write(0x1234 + 0x10, 0x42);
+
+        let program = [
+            0xBD, 0x34, 0x12, // LDA $1234,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $1234,X
+        assert_eq!(cpu.a, 0x42);
+    }
+
+    #[test]
+    fn absolute_x_cross_page_reads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0x05;
+
+        cpu.write(0x10FF + 0x05, 0x99);
+
+        let program = [
+            0xBD, 0xFF, 0x10, // LDA $10FF,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $10FF,X
+        assert_eq!(cpu.a, 0x99);
+    }
 }
