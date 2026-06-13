@@ -193,6 +193,16 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // SBC
     table[0xE9] = instr("SBC", Operation::SBC, AddressingMode::Immediate, 1, 4);
 
+    //----------
+    // LOGICAL |
+    //----------
+
+    // AND
+
+    // ORA
+
+    // EOR
+
     table
 });
 
@@ -351,6 +361,24 @@ impl Cpu6502 {
             Operation::SBC => {
                 let val = self.fetch_value(instruction.mode);
                 self.sbc(val);
+            }
+
+            //----------
+            // LOGICAL |
+            //----------
+            Operation::AND => {
+                let val = self.fetch_value(instruction.mode);
+                self.and(val);
+            }
+
+            Operation::ORA => {
+                let val = self.fetch_value(instruction.mode);
+                self.ora(val);
+            }
+
+            Operation::EOR => {
+                let val = self.fetch_value(instruction.mode);
+                self.eor(val);
             }
 
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
