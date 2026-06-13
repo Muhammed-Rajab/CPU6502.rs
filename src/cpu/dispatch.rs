@@ -2,6 +2,8 @@
 // OPERATION                                    |
 //-----------------------------------------------
 
+use std::sync::LazyLock;
+
 use super::Cpu6502;
 use super::addressing_modes::AddressingMode;
 
@@ -9,7 +11,7 @@ use super::addressing_modes::AddressingMode;
 enum Operation {
     LDA,
     STA,
-    // TODO: add the others
+    Invalid, // TODO: add the others
 }
 
 struct Instruction {
@@ -19,6 +21,20 @@ struct Instruction {
     bytes: u8,
     cycles: u8,
 }
+
+const INVALID: Instruction = Instruction {
+    mnemonic: "???",
+    operation: Operation::Invalid,
+    mode: AddressingMode::Implied,
+    bytes: 1,
+    cycles: 0,
+};
+
+const OPTABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
+    let mut table = [INVALID; 256];
+
+    table
+});
 
 impl Cpu6502 {
     pub fn step(&mut self) {
