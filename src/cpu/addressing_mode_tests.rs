@@ -280,6 +280,22 @@ mod tests {
     }
 
     #[test]
+    fn sta_absolute_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x42;
+
+        let program = [
+            0x8D, 0x34, 0x12, // STA $1234
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x1234), 0x42);
+    }
+
+    #[test]
     fn sta_absolute_x_stores_correct_address() {
         let mut cpu = Cpu6502::new();
 
