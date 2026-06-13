@@ -19,4 +19,20 @@ mod tests {
         cpu.step(); // LDA $1234
         assert_eq!(cpu.a, 0x42);
     }
+
+    #[test]
+    fn zeropage_reads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.memory[0x00AA] = 0x99;
+
+        let program = [
+            0xA5, 0xAA, // LDA $AA
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x99);
+    }
 }
