@@ -281,6 +281,19 @@ impl Cpu6502 {
                 self.plp();
             }
 
+            //----------------------
+            // INCREMENT/DECREMENT |
+            //----------------------
+            Operation::INX => {
+                // only implied
+                self.inx();
+            }
+
+            Operation::INY => {
+                // only implied
+                self.iny();
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
