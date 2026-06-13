@@ -311,4 +311,21 @@ mod tests {
 
         assert_eq!(cpu.read(0x1005), 0xAB);
     }
+
+    #[test]
+    fn sta_absolute_y_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x55;
+        cpu.y = 0x10;
+
+        let program = [
+            0x99u8, 0x00, 0x20, // STA $2000,Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x2000 + 0x10), 0x55);
+    }
 }
