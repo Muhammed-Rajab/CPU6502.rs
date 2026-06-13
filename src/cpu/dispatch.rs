@@ -22,13 +22,23 @@ struct Instruction {
     cycles: u8,
 }
 
-const INVALID: Instruction = Instruction {
-    mnemonic: "???",
-    operation: Operation::Invalid,
-    mode: AddressingMode::Implied,
-    bytes: 1,
-    cycles: 0,
-};
+const fn instr(
+    mnemonic: &'static str,
+    operation: Operation,
+    mode: AddressingMode,
+    bytes: u8,
+    cycles: u8,
+) -> Instruction {
+    Instruction {
+        mnemonic,
+        operation,
+        mode,
+        bytes,
+        cycles,
+    }
+}
+
+const INVALID: Instruction = instr("???", Operation::Invalid, AddressingMode::Implied, 1, 0);
 
 static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     let mut table = [INVALID; 256];
