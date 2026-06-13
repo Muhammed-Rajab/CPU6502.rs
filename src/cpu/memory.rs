@@ -10,11 +10,11 @@ impl Cpu6502 {
     pub(super) fn push_to_stack(&mut self, value: u8) {
         let addr = 0x0100u16 | (self.sp as u16);
         self.write(addr, value);
-        self.sp -= 1;
+        self.sp = self.sp.wrapping_sub(1);
     }
 
     pub(super) fn pull_from_stack(&mut self) -> u8 {
-        self.sp += 1;
+        self.sp = self.sp.wrapping_add(1);
         let addr = 0x0100u16 | (self.sp as u16);
         self.read(addr)
     }
