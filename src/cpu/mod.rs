@@ -69,6 +69,7 @@
 
 // DECLARATION
 mod addressing_modes;
+mod adressing_mode_tests;
 mod cpu_tests;
 mod debug;
 mod dispatch;
