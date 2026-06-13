@@ -101,6 +101,12 @@ impl Cpu6502 {
         match mode {
             AddressingMode::ZeroPage => self.fetch_byte() as u16,
 
+            AddressingMode::ZeroPageX => {
+                let base = self.fetch_byte();
+                let addr = base.wrapping_add(self.x) as u16;
+                addr
+            }
+
             AddressingMode::Absolute => self.fetch_word(),
 
             _ => panic!("invalid addressingmode in fetch_addr"),
