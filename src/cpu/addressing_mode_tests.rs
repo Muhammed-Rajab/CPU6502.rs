@@ -35,4 +35,18 @@ mod tests {
         cpu.step(); // LDA $AA
         assert_eq!(cpu.a, 0x99);
     }
+
+    #[test]
+    fn immediate_loads_direct_value() {
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xA9, 0x77, // LDA #$77
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA #$77
+        assert_eq!(cpu.a, 0x77);
+    }
 }
