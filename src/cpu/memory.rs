@@ -34,7 +34,15 @@ impl Cpu6502 {
                 self.read(addr)
             }
 
-            _ => panic!("invalid addressingmode"),
+            _ => panic!("invalid addressingmode in fetch_value"),
+        }
+    }
+
+    pub(super) fn fetch_addr(&mut self, mode: AddressingMode) -> u16 {
+        match mode {
+            AddressingMode::ZeroPage => self.fetch_byte() as u16,
+
+            _ => panic!("invalid addressingmode in fetch_addr"),
         }
     }
 
