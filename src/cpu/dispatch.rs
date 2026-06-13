@@ -60,6 +60,11 @@ impl Cpu6502 {
 
     fn execute(&mut self, instruction: &Instruction) {
         match instruction.operation {
+            Operation::LDA => {
+                let value = self.fetch_value(instruction.mode);
+                self.lda(value);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
