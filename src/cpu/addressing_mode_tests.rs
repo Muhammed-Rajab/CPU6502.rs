@@ -106,4 +106,40 @@ mod tests {
         cpu.step(); // LDA $10FF,X
         assert_eq!(cpu.a, 0x99);
     }
+
+    #[test]
+    fn absolute_y_addressing_loads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.y = 0x10;
+
+        cpu.write(0x1234 + 0x10, 0x42);
+
+        let program = [
+            0xB9u8, 0x34, 0x12, // LDA $1234,Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $1234,Y
+        assert_eq!(cpu.a, 0x42);
+    }
+
+    #[test]
+    fn absolute_y_cross_page_reads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.y = 0x05;
+
+        cpu.write(0x10FF + 0x05, 0x99);
+
+        let program = [
+            0xB9u8, 0xFF, 0x10, // LDA $10FF,Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $10FF,Y
+        assert_eq!(cpu.a, 0x99);
+    }
 }

@@ -60,7 +60,7 @@ impl Cpu6502 {
 
             AddressingMode::AbsoluteY => {
                 let base = self.fetch_word();
-                let addr = base + self.x as u16;
+                let addr = base + self.y as u16;
                 self.read(addr)
             }
 
