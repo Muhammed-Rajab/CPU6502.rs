@@ -236,4 +236,47 @@ mod tests {
 
         assert_eq!(cpu.a, 0x99);
     }
+
+    //
+    //
+    //
+    // ADDRESS
+    //
+    //
+    //
+
+    #[test]
+    fn sta_zeropage_x_wraps_and_stores() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x11;
+        cpu.x = 0x10;
+
+        // 0xF0 + 0x10 = 0x00 (wrap in zero page)
+        let program = [
+            0x95, 0xF0, // STA $F0,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x0000), 0x11);
+    }
+
+    #[test]
+    fn sta_absolute_x_stores_correct_address() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0xAB;
+        cpu.x = 0x05;
+
+        let program = [
+            0x9Du8, 0x00, 0x10, // STA $1000,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x1005), 0xAB);
+    }
 }
