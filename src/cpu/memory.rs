@@ -113,6 +113,12 @@ impl Cpu6502 {
                 addr
             }
 
+            AddressingMode::ZeroPageY => {
+                let base = self.fetch_byte();
+                let addr = base.wrapping_add(self.y) as u16;
+                addr
+            }
+
             AddressingMode::Absolute => self.fetch_word(),
 
             AddressingMode::AbsoluteX => {
