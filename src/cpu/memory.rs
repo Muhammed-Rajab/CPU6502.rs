@@ -135,6 +135,19 @@ impl Cpu6502 {
                 addr
             }
 
+            AddressingMode::IndirectIndexed => {
+                let base = self.fetch_byte();
+
+                let low = self.read(base as u16) as u16;
+                let high = self.read(base.wrapping_add(1) as u16) as u16;
+
+                let pointer = (high << 8) | low;
+
+                let addr = pointer.wrapping_add(self.y as u16);
+
+                addr
+            }
+
             _ => panic!("invalid addressingmode in fetch_addr"),
         }
     }
