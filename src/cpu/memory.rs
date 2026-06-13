@@ -52,6 +52,12 @@ impl Cpu6502 {
                 self.read(addr)
             }
 
+            AddressingMode::AbsoluteX => {
+                let base = self.fetch_word();
+                let addr = base + self.x as u16;
+                self.read(addr)
+            }
+
             AddressingMode::Relative => self.fetch_byte(),
 
             _ => panic!("invalid addressingmode in fetch_value"),
