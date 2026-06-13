@@ -246,6 +246,19 @@ impl Cpu6502 {
                 self.txs();
             }
 
+            //--------
+            // STACK |
+            //--------
+            Operation::PHA => {
+                // only implied
+                self.pha();
+            }
+
+            Operation::PLA => {
+                // only implied
+                self.pla();
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
