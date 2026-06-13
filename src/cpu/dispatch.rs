@@ -148,6 +148,12 @@ impl Cpu6502 {
                 self.sta(addr);
             }
 
+            Operation::STX => {
+                // get address
+                let addr = self.fetch_addr(instruction.mode);
+                self.stx(addr);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
