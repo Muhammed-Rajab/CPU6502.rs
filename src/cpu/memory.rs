@@ -51,12 +51,7 @@ impl Cpu6502 {
         match mode {
             AddressingMode::ZeroPage => self.fetch_byte() as u16,
 
-            AddressingMode::Absolute => {
-                let low = self.fetch_byte() as u16;
-                let high = self.fetch_byte() as u16;
-                let addr = (high << 8) | low;
-                addr
-            }
+            AddressingMode::Absolute => self.fetch_word(),
 
             _ => panic!("invalid addressingmode in fetch_addr"),
         }
