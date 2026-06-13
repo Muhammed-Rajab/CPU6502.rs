@@ -90,6 +90,10 @@ const INVALID: Instruction = instr("???", Operation::Invalid, AddressingMode::Im
 static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     let mut table = [INVALID; 256];
 
+    //-------
+    // LOAD |
+    //-------
+
     // LDA
     table[0xA9] = instr("LDA", Operation::LDA, AddressingMode::Immediate, 2, 2);
 
@@ -98,6 +102,10 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
 
     // LDY
     table[0xA0] = instr("LDY", Operation::LDY, AddressingMode::Immediate, 2, 2);
+
+    //--------
+    // STORE |
+    //--------
 
     // STA
     table[0x8D] = instr("STA", Operation::STA, AddressingMode::Absolute, 3, 4);
@@ -111,6 +119,24 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0x8C] = instr("STY", Operation::STY, AddressingMode::Absolute, 3, 4);
     table[0x84] = instr("STY", Operation::STY, AddressingMode::ZeroPage, 2, 3);
 
+    //-----------
+    // TRANSFER |
+    //-----------
+
+    // TAX
+    table[0xAA] = instr("TAX", Operation::TAX, AddressingMode::Implied, 1, 2);
+
+    //--------
+    // STACK |
+    //--------
+
+    //----------------------
+    // INCREMENT/DECREMENT |
+    //----------------------
+
+    //--------
+    // STACK |
+    //--------
     table
 });
 
