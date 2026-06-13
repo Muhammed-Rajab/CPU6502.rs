@@ -174,8 +174,13 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0x88] = instr("DEY", Operation::DEY, AddressingMode::Implied, 1, 4);
 
     //--------
-    // STACK |
+    // FLAGS |
     //--------
+
+    // CLC
+
+    // SEC
+
     table
 });
 
@@ -308,6 +313,19 @@ impl Cpu6502 {
             Operation::DEY => {
                 // only implied
                 self.dey();
+            }
+
+            //--------
+            // FLAGS |
+            //--------
+            Operation::CLC => {
+                // only implied
+                self.clc();
+            }
+
+            Operation::SEC => {
+                // only implied
+                self.sec();
             }
 
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
