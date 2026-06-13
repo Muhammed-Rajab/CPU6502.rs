@@ -183,6 +183,15 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // SEC
     table[0x38] = instr("SEC", Operation::SEC, AddressingMode::Implied, 1, 4);
 
+    //-------------
+    // ARITHMETIC |
+    //-------------
+
+    // ADC
+    table[0x69] = instr("ADC", Operation::ADC, AddressingMode::Immediate, 1, 4);
+
+    // SBC
+
     table
 });
 
