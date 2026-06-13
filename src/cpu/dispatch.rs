@@ -30,7 +30,7 @@ const INVALID: Instruction = Instruction {
     cycles: 0,
 };
 
-static OPTABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
+static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     let mut table = [INVALID; 256];
 
     table
