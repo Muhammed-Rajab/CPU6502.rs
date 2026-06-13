@@ -200,6 +200,31 @@ impl Cpu6502 {
                 self.tax();
             }
 
+            Operation::TAY => {
+                // only implied
+                self.tay();
+            }
+
+            Operation::TXA => {
+                // only implied
+                self.txa();
+            }
+
+            Operation::TYA => {
+                // only implied
+                self.tya();
+            }
+
+            Operation::TSX => {
+                // only implied
+                self.tsx();
+            }
+
+            Operation::TXS => {
+                // only implied
+                self.tsx();
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
