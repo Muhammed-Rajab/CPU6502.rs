@@ -142,4 +142,48 @@ mod tests {
         cpu.step(); // LDA $10FF,Y
         assert_eq!(cpu.a, 0x99);
     }
+
+    #[test]
+    fn indexed_indirect_x_fetches_correct_value() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0x04;
+
+        // base = 0x20, (0x20 + X) = 0x24 → pointer stored in zero page
+        cpu.write(0x0024, 0x00); // low byte
+        cpu.write(0x0025, 0x80); // high byte → address = 0x8000
+
+        cpu.write(0x8000, 0x42);
+
+        let program = [
+            0xA1u8, 0x20, // LDA ($20,X)
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x42);
+    }
+
+    #[test]
+    fn indexed_indirect_x_wraps_zero_page_pointer() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0xFF;
+
+        // base = 0x80, (0x80 + 0xFF) = 0x7F (wrap)
+        cpu.write(0x007F, 0x34); // low byte
+        cpu.write(0x0000, 0x12); // high byte (wrap in zero page)
+
+        cpu.write(0x1234, 0x99);
+
+        let program = [
+            0xA1u8, 0x80, // LDA ($80,X)
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x99);
+    }
 }
