@@ -410,6 +410,11 @@ impl Cpu6502 {
                 self.beq(offset);
             }
 
+            Operation::BNE => {
+                let offset = self.fetch_value(instruction.mode) as i8;
+                self.bne(offset);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
