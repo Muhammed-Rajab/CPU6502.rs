@@ -102,6 +102,7 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0xBD] = instr("LDA", Operation::LDA, AddressingMode::AbsoluteX, 3, 4);
     table[0xB9] = instr("LDA", Operation::LDA, AddressingMode::AbsoluteY, 3, 4);
     table[0xA1] = instr("LDA", Operation::LDA, AddressingMode::IndexedIndirect, 2, 6);
+    table[0xB1] = instr("LDA", Operation::LDA, AddressingMode::IndirectIndexed, 2, 5);
 
     // LDX
     table[0xA2] = instr("LDX", Operation::LDX, AddressingMode::Immediate, 2, 2);
