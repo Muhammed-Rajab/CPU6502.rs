@@ -243,6 +243,13 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
 
     // ORA
     table[0x09] = instr("ORA", Operation::ORA, AddressingMode::Immediate, 1, 4);
+    table[0x05] = instr("ORA", Operation::ORA, AddressingMode::ZeroPage, 1, 4);
+    table[0x15] = instr("ORA", Operation::ORA, AddressingMode::ZeroPageX, 1, 4);
+    table[0x0D] = instr("ORA", Operation::ORA, AddressingMode::Absolute, 1, 4);
+    table[0x1D] = instr("ORA", Operation::ORA, AddressingMode::AbsoluteX, 1, 4);
+    table[0x19] = instr("ORA", Operation::ORA, AddressingMode::AbsoluteY, 1, 4);
+    table[0x01] = instr("ORA", Operation::ORA, AddressingMode::IndexedIndirect, 1, 4);
+    table[0x11] = instr("ORA", Operation::ORA, AddressingMode::IndirectIndexed, 1, 4);
 
     // EOR
     table[0x49] = instr("EOR", Operation::EOR, AddressingMode::Immediate, 1, 4);
