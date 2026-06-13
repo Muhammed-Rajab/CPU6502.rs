@@ -42,8 +42,8 @@ impl Cpu6502 {
             }
 
             AddressingMode::ZeroPageX => {
-                let low = self.fetch_byte().wrapping_add(self.x);
-                let addr = low as u16;
+                let base = self.fetch_byte();
+                let addr = base.wrapping_add(self.x) as u16;
                 self.read(addr)
             }
 
