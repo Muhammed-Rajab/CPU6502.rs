@@ -37,6 +37,27 @@ mod tests {
     }
 
     #[test]
+    fn zeropage_x_addressing_wraps_and_loads_correct_value() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0x05;
+
+        // base address = 0xFE, + X = 0x03 (wraps in zero page)
+        cpu.memory[0x0003] = 0x42;
+
+        let program = [
+            0xB5, 0xFE, // LDA $FE,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x42);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+    }
+
+    #[test]
     fn immediate_loads_direct_value() {
         let mut cpu = Cpu6502::new();
 
