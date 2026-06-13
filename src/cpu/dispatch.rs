@@ -56,6 +56,8 @@ impl Cpu6502 {
         println!("PC=${:04X}, OPCODE=${:02X}", self.pc, opcode);
 
         let instruction = &OPCODE_TABLE[opcode as usize];
+
+        self.execute(instruction);
     }
 
     fn execute(&mut self, instruction: &Instruction) {
