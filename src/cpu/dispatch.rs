@@ -142,6 +142,12 @@ impl Cpu6502 {
                 self.ldy(value);
             }
 
+            Operation::STA => {
+                // get address
+                let addr = self.fetch_addr(instruction.mode);
+                self.sta(addr);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
