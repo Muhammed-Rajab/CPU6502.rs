@@ -154,6 +154,12 @@ impl Cpu6502 {
                 self.stx(addr);
             }
 
+            Operation::STY => {
+                // get address
+                let addr = self.fetch_addr(instruction.mode);
+                self.sty(addr);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
