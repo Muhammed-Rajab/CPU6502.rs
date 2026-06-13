@@ -5,6 +5,7 @@ pub enum AddressingMode {
     ZeroPageX,
     Absolute,
     AbsoluteX,
+    AbsoluteY,
     Relative,
     Implied,
 }
