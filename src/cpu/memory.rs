@@ -129,7 +129,7 @@ impl Cpu6502 {
                 let high_addr = zp_addr.wrapping_add(1);
 
                 let low = self.read(low_addr as u16) as u16;
-                let high = self.read(high_addr as u8 as u16) as u16;
+                let high = self.read(high_addr as u16) as u16;
                 let addr = (high << 8) | low;
 
                 addr
