@@ -265,6 +265,16 @@ impl Cpu6502 {
                 self.pla();
             }
 
+            Operation::PHP => {
+                // only implied
+                self.php();
+            }
+
+            Operation::PLP => {
+                // only implied
+                self.plp();
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
