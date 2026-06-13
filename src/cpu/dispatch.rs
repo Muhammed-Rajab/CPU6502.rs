@@ -145,6 +145,12 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // STACK |
     //--------
 
+    // PHA
+    table[0x48] = instr("PHA", Operation::PHA, AddressingMode::Implied, 1, 3);
+
+    // PLA
+    table[0x48] = instr("PLA", Operation::PLA, AddressingMode::Implied, 1, 4);
+
     //----------------------
     // INCREMENT/DECREMENT |
     //----------------------
