@@ -6,12 +6,6 @@ use super::Cpu6502;
 
 impl Cpu6502 {
     // PUBLIC (SUPER)
-    pub(super) fn fetch_byte(&mut self) -> u8 {
-        let byte = self.read(self.pc);
-        self.pc += 1;
-        byte
-    }
-
     pub(super) fn push_to_stack(&mut self, value: u8) {
         let addr = 0x0100u16 | (self.sp as u16);
         self.write(addr, value);
@@ -22,6 +16,12 @@ impl Cpu6502 {
         self.sp += 1;
         let addr = 0x0100u16 | (self.sp as u16);
         self.read(addr)
+    }
+
+    pub(super) fn fetch_byte(&mut self) -> u8 {
+        let byte = self.read(self.pc);
+        self.pc += 1;
+        byte
     }
 
     // PUBLIC
