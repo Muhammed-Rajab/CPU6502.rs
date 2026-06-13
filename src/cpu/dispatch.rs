@@ -300,6 +300,16 @@ impl Cpu6502 {
                 self.iny();
             }
 
+            Operation::DEX => {
+                // only implied
+                self.dex();
+            }
+
+            Operation::DEY => {
+                // only implied
+                self.dey();
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
