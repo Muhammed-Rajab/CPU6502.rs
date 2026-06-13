@@ -206,6 +206,16 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // EOR
     table[0x49] = instr("EOR", Operation::EOR, AddressingMode::Immediate, 1, 4);
 
+    //-----------------------
+    // BRANCHING/COMPARISON |
+    //-----------------------
+
+    // CMP
+    table[0xC9] = instr("CMP", Operation::CMP, AddressingMode::Immediate, 1, 4);
+
+    // BEQ
+    // BNE
+
     table
 });
 
@@ -382,6 +392,14 @@ impl Cpu6502 {
             Operation::EOR => {
                 let val = self.fetch_value(instruction.mode);
                 self.eor(val);
+            }
+
+            //-----------------------
+            // BRANCHING/COMPARISON |
+            //-----------------------
+            Operation::CMP => {
+                let val = self.fetch_value(instruction.mode);
+                self.cmp(val);
             }
 
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
