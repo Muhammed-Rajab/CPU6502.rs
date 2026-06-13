@@ -68,8 +68,11 @@ impl Cpu6502 {
                 let base = self.fetch_byte();
                 let zp_addr = base.wrapping_add(self.x);
 
+                let low_addr = zp_addr;
+                let high_addr = zp_addr.wrapping_add(1);
+
                 let low = self.read(zp_addr as u16) as u16;
-                let high = self.read(zp_addr.wrapping_add(1) as u16) as u16;
+                let high = self.read(zp_addr.wrapping_add(1) as u8 as u16) as u16;
                 let addr = (high << 8) | low;
 
                 self.read(addr)

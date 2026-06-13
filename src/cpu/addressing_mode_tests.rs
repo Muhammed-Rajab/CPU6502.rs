@@ -169,16 +169,20 @@ mod tests {
     fn indexed_indirect_x_wraps_zero_page_pointer() {
         let mut cpu = Cpu6502::new();
 
-        cpu.x = 0xFF;
+        cpu.x = 0xff;
 
-        // base = 0x80, (0x80 + 0xFF) = 0x7F (wrap)
-        cpu.write(0x007F, 0x34); // low byte
-        cpu.write(0x0000, 0x12); // high byte (wrap in zero page)
+        println!("X: 0x{:02X}", cpu.x);
+
+        // base = 0x70, (0x70 + 0xff) = 0x6f (wrap)
+        cpu.write(0x006f, 0x34); // low byte
+        cpu.write(0x0070, 0x12); // high byte (wrap in zero page)
+
+        cpu.hexdump(0x0000, 0x100);
 
         cpu.write(0x1234, 0x99);
 
         let program = [
-            0xA1u8, 0x80, // LDA ($80,X)
+            0xA1u8, 0x70, // LDA ($70,X)
         ];
 
         cpu.load_program_from_memory(&program);
