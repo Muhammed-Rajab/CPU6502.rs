@@ -167,6 +167,12 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // INY
     table[0xC8] = instr("INY", Operation::INY, AddressingMode::Implied, 1, 4);
 
+    // DEX
+    table[0xCA] = instr("DEX", Operation::DEX, AddressingMode::Implied, 1, 4);
+
+    // DEY
+    table[0x88] = instr("DEY", Operation::DEY, AddressingMode::Implied, 1, 4);
+
     //--------
     // STACK |
     //--------
