@@ -3,6 +3,7 @@
 //-----------------------------------------------
 
 use super::Cpu6502;
+use super::addressing_modes::AddressingMode;
 
 impl Cpu6502 {
     // PUBLIC (SUPER)
@@ -22,6 +23,19 @@ impl Cpu6502 {
         let byte = self.read(self.pc);
         self.pc += 1;
         byte
+    }
+
+    pub(super) fn fetch_value(&mut self, mode: AddressingMode) -> u8 {
+        match mode {
+            AddressingMode::Immediate => self.fetch_byte(),
+
+            AddressingMode::ZeroPage => {
+                let addr = self.fetch_byte() as u16;
+                self.read(addr)
+            }
+
+            _ => panic!("invalid addressingmode"),
+        }
     }
 
     // PUBLIC
