@@ -237,7 +237,7 @@ impl Cpu6502 {
 
             Operation::TXS => {
                 // only implied
-                self.tsx();
+                self.txs();
             }
 
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
