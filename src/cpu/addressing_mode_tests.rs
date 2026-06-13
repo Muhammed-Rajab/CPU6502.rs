@@ -24,15 +24,15 @@ mod tests {
     fn zeropage_reads_correct_memory() {
         let mut cpu = Cpu6502::new();
 
-        cpu.memory[0x00AA] = 0x99;
-
         let program = [
             0xA5, 0xAA, // LDA $AA
         ];
 
-        cpu.load_program_from_memory(&program);
-        cpu.step();
+        cpu.write(0x00AA, 0x99);
 
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $AA
         assert_eq!(cpu.a, 0x99);
     }
 }
