@@ -43,6 +43,9 @@ const INVALID: Instruction = instr("???", Operation::Invalid, AddressingMode::Im
 static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     let mut table = [INVALID; 256];
 
+    // LDA
+    table[0xA9] = instr("LDA", Operation::LDA, AddressingMode::Immediate, 2, 2);
+
     table
 });
 
