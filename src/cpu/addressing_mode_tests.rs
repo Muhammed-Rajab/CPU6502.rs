@@ -374,4 +374,48 @@ mod tests {
 
         assert_eq!(cpu.read(0x1234), 0x99);
     }
+
+    #[test]
+    fn sta_indirect_indexed_y_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x77;
+        cpu.y = 0x10;
+
+        // pointer in zero page at $0020/$0021 = 0x2000
+        cpu.write(0x0020, 0x00); // low byte
+        cpu.write(0x0021, 0x20); // high byte
+
+        // final address = 0x2000 + 0x10 = 0x2010
+        let program = [
+            0x91u8, 0x20, // STA ($20),Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x2010), 0x77);
+    }
+
+    #[test]
+    fn sta_indirect_indexed_y_cross_page() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0xAB;
+        cpu.y = 0x05;
+
+        // pointer = 0x10FF
+        cpu.write(0x00AA, 0xFF); // low
+        cpu.write(0x00AB, 0x10); // high
+
+        // 0x10FF + 0x05 = 0x1104
+        let program = [
+            0x91u8, 0xAA, // STA ($AA),Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x1104), 0xAB);
+    }
 }
