@@ -339,6 +339,14 @@ impl Cpu6502 {
                 self.sec();
             }
 
+            //-------------
+            // ARITHMETIC |
+            //-------------
+            Operation::ADC => {
+                let val = self.fetch_value(instruction.mode);
+                self.adc(val);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
