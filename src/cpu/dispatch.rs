@@ -9,9 +9,55 @@ use super::addressing_modes::AddressingMode;
 
 #[derive(Clone, Copy)]
 enum Operation {
+    // LOAD
     LDA,
+    LDX,
+    LDY,
+
+    // STORE
     STA,
-    Invalid, // TODO: add the others
+    STX,
+    STY,
+
+    // TRANSFER
+    TAX,
+    TAY,
+    TXA,
+    TYA,
+    TSX,
+    TXS,
+
+    // STACK
+    PHA,
+    PLA,
+    PHP,
+    PLP,
+
+    // INCREMENT/DECREMENT
+    INX,
+    INY,
+    DEX,
+    DEY,
+
+    // FLAGS
+    CLC,
+    SEC,
+
+    // ARITHMETIC
+    ADC,
+    SBC,
+
+    // LOGICAL
+    AND,
+    ORA,
+    EOR,
+
+    // BRANCHING/COMPARISON
+    CMP,
+    BEQ,
+    BNE,
+
+    Invalid, // special case
 }
 
 struct Instruction {
