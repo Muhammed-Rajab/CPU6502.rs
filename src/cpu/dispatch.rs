@@ -161,6 +161,12 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // INCREMENT/DECREMENT |
     //----------------------
 
+    // INX
+    table[0xE8] = instr("INX", Operation::INX, AddressingMode::Implied, 1, 4);
+
+    // INY
+    table[0xC8] = instr("INY", Operation::INY, AddressingMode::Implied, 1, 4);
+
     //--------
     // STACK |
     //--------
