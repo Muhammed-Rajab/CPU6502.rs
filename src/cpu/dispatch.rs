@@ -405,6 +405,11 @@ impl Cpu6502 {
                 self.cmp(val);
             }
 
+            Operation::BEQ => {
+                let val = self.fetch_value(instruction.mode);
+                self.beq(val);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
