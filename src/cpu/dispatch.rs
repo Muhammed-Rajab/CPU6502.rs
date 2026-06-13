@@ -209,6 +209,13 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
 
     // ADC
     table[0x69] = instr("ADC", Operation::ADC, AddressingMode::Immediate, 1, 4);
+    table[0x65] = instr("ADC", Operation::ADC, AddressingMode::ZeroPage, 1, 4);
+    table[0x75] = instr("ADC", Operation::ADC, AddressingMode::ZeroPageX, 1, 4);
+    table[0x6D] = instr("ADC", Operation::ADC, AddressingMode::Absolute, 1, 4);
+    table[0x7D] = instr("ADC", Operation::ADC, AddressingMode::AbsoluteX, 1, 4);
+    table[0x79] = instr("ADC", Operation::ADC, AddressingMode::AbsoluteY, 1, 4);
+    table[0x61] = instr("ADC", Operation::ADC, AddressingMode::IndexedIndirect, 1, 4);
+    table[0x71] = instr("ADC", Operation::ADC, AddressingMode::IndirectIndexed, 1, 4);
 
     // SBC
     table[0xE9] = instr("SBC", Operation::SBC, AddressingMode::Immediate, 1, 4);
