@@ -132,6 +132,11 @@ impl Cpu6502 {
                 self.lda(value);
             }
 
+            Operation::LDX => {
+                let value = self.fetch_value(instruction.mode);
+                self.ldx(value);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
