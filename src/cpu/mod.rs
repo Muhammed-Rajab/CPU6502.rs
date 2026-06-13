@@ -68,8 +68,8 @@
  * */
 
 // DECLARATION
+mod addressing_mode_tests;
 mod addressing_modes;
-mod adressing_mode_tests;
 mod cpu_tests;
 mod debug;
 mod dispatch;
