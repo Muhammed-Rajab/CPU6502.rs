@@ -3,7 +3,8 @@ pub enum AddressingMode {
     Immediate,
     ZeroPage,
     ZeroPageX,
-    Relative,
     Absolute,
+    AbsoluteX,
+    Relative,
     Implied,
 }
