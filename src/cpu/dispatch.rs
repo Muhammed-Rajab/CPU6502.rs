@@ -191,6 +191,7 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0x69] = instr("ADC", Operation::ADC, AddressingMode::Immediate, 1, 4);
 
     // SBC
+    table[0xE9] = instr("SBC", Operation::SBC, AddressingMode::Immediate, 1, 4);
 
     table
 });
@@ -345,6 +346,11 @@ impl Cpu6502 {
             Operation::ADC => {
                 let val = self.fetch_value(instruction.mode);
                 self.adc(val);
+            }
+
+            Operation::SBC => {
+                let val = self.fetch_value(instruction.mode);
+                self.sbc(val);
             }
 
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
