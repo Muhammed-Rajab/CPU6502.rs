@@ -25,6 +25,13 @@ impl Cpu6502 {
         byte
     }
 
+    pub(super) fn fetch_word(&mut self) -> u16 {
+        let low = self.fetch_byte() as u16;
+        let high = self.fetch_byte() as u16;
+        let addr = (high << 8) | low;
+        addr
+    }
+
     pub(super) fn fetch_value(&mut self, mode: AddressingMode) -> u8 {
         match mode {
             AddressingMode::Immediate => self.fetch_byte(),
