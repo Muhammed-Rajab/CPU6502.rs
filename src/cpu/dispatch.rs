@@ -57,7 +57,8 @@ enum Operation {
     BEQ,
     BNE,
 
-    Invalid, // special case
+    // SPECIAL CASES
+    Invalid,
 }
 
 struct Instruction {
