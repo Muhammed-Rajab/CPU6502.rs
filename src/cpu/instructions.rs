@@ -308,6 +308,16 @@ impl Cpu6502 {
         self.set_flag(Flag::Negative, n);
     }
 
+    pub(super) fn asl_accumulator(&mut self) {
+        let c = (self.a & 0x80) != 0;
+        self.a = self.a.wrapping_shl(1);
+
+        self.set_flag(Flag::Carry, c);
+        self.update_zn(self.a);
+    }
+
+    pub(super) fn asl_memory(&mut self, addr: u16) {}
+
     /*
      * Compares A with val.
      * Sets Z, C, and N flags appropriately.
