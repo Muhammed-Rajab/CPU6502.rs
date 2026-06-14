@@ -4,6 +4,8 @@
 
 use std::sync::LazyLock;
 
+use crate::cpu::addressing_modes::AddressingMode::Accumulator;
+
 use super::Cpu6502;
 use super::addressing_modes::AddressingMode;
 
@@ -538,6 +540,22 @@ impl Cpu6502 {
             Operation::BIT => {
                 let val = self.fetch_value(instruction.mode);
                 self.bit(val);
+            }
+
+            /*
+             * A bit different since ASL works on both memory
+             * and Register.
+             */
+            Operation::ASL => {
+                match instruction.mode {
+                    Accumulator => self.asl_accumulator(),
+
+                    _ => {
+                        // fetch addr
+                        let addr = self.fetch_addr(instruction.mode);
+                        self.asl_memory(addr);
+                    }
+                }
             }
 
             //-----------------------
