@@ -54,6 +54,8 @@ enum Operation {
     ORA,
     EOR,
     BIT,
+    ASL,
+    LSR,
 
     // BRANCHING/COMPARISON
     CMP,
