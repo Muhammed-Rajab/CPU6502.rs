@@ -127,4 +127,18 @@ mod tests {
 
         assert_eq!(cpu.a, 0x0F);
     }
+
+    #[test]
+    fn asl_accumulator_sets_carry_and_zero() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x80;
+
+        cpu.asl_accumulator();
+
+        assert_eq!(cpu.a, 0x00);
+        assert!(cpu.get_flag(Flag::Carry));
+        assert!(cpu.get_flag(Flag::Zero));
+        assert!(!cpu.get_flag(Flag::Negative));
+    }
 }
