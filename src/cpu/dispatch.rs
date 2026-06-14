@@ -242,6 +242,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // CLV
     table[0xB8] = instr("CLV", Operation::CLV, AddressingMode::Implied, 1, 4);
 
+    // CLI
+    table[0x58] = instr("CLI", Operation::CLI, AddressingMode::Implied, 1, 4);
+
     //-------------
     // ARITHMETIC |
     //-------------
