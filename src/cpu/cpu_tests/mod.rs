@@ -1,4 +1,4 @@
-mod addressing_mode;
+mod addressing_modes;
 mod arithmetic;
 mod branch;
 mod compare;
