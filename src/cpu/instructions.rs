@@ -316,7 +316,17 @@ impl Cpu6502 {
         self.update_zn(self.a);
     }
 
-    pub(super) fn asl_memory(&mut self, addr: u16) {}
+    pub(super) fn asl_memory(&mut self, addr: u16) {
+        let mut val = self.read(addr);
+
+        let c = (val & 0x80) != 0;
+
+        val = val.wrapping_shl(1);
+        self.write(addr, val);
+
+        self.set_flag(Flag::Carry, c);
+        self.update_zn(val);
+    }
 
     /*
      * Compares A with val.
