@@ -308,6 +308,24 @@ impl Cpu6502 {
     }
 
     /*
+     * Compares Y with val.
+     * Sets Z, C, and N flags appropriately.
+     *
+     * Operation performed: Y - M
+     *
+     * C -> set if Y >= M
+     * Z -> set if Y = M
+     * N -> set if bit 7 of the result is set
+     */
+    pub(super) fn cpy(&mut self, val: u8) {
+        let result = self.y.wrapping_sub(val);
+
+        self.set_flag(Flag::Carry, self.y >= val);
+        self.set_flag(Flag::Zero, result == 0);
+        self.set_flag(Flag::Negative, (result & 0x80) != 0);
+    }
+
+    /*
      * Adds relative displacement to the PC
      * if Z flag is set, causing a branch to a new location.
      *
