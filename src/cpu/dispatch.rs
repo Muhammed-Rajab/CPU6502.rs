@@ -292,6 +292,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // BCC
     table[0x90] = instr("BCC", Operation::BCC, AddressingMode::Relative, 1, 4);
 
+    // BCS
+    table[0xB0] = instr("BCS", Operation::BCS, AddressingMode::Relative, 1, 4);
+
     table
 });
 
