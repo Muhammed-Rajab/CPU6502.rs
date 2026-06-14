@@ -380,6 +380,20 @@ impl Cpu6502 {
         self.update_zn(val);
     }
 
+    pub(super) fn ror_accumulator(&mut self) {
+        let old_c = self.get_flag(Flag::Carry);
+        let old_bit_0 = self.a & 0x01;
+
+        self.a = self.a >> 1;
+
+        if old_c {
+            self.a = self.a | 0x80;
+        }
+
+        self.set_flag(Flag::Carry, old_bit_0 != 0);
+        self.update_zn(self.a);
+    }
+
     /*
      * Compares A with val.
      * Sets Z, C, and N flags appropriately.
