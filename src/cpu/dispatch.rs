@@ -56,6 +56,7 @@ enum Operation {
     CMP,
     BEQ,
     BNE,
+    BCC,
 
     // SPECIAL CASES
     Invalid,
@@ -282,6 +283,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
 
     // BNE
     table[0xD0] = instr("BNE", Operation::BNE, AddressingMode::Relative, 1, 4);
+
+    // BCC
+    table[0x90] = instr("BCC", Operation::BCC, AddressingMode::Relative, 1, 4);
 
     table
 });
