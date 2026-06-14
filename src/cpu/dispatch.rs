@@ -549,6 +549,11 @@ impl Cpu6502 {
                 self.sec();
             }
 
+            Operation::CLV => {
+                // only implied
+                self.clv();
+            }
+
             //-------------
             // ARITHMETIC |
             //-------------
