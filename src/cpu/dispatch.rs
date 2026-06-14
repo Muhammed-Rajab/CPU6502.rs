@@ -57,6 +57,11 @@ enum Operation {
     BEQ,
     BNE,
     BCC,
+    BCS,
+    BMI,
+    BPL,
+    BVC,
+    BVS,
 
     // SPECIAL CASES
     Invalid,
