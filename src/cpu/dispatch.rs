@@ -565,6 +565,22 @@ impl Cpu6502 {
                 }
             }
 
+            /*
+             * A bit different since LSR works on both memory
+             * and Register.
+             */
+            Operation::LSR => {
+                match instruction.mode {
+                    Accumulator => self.lsr_accumulator(),
+
+                    _ => {
+                        // fetch addr
+                        let addr = self.fetch_addr(instruction.mode);
+                        self.lsr_memory(addr);
+                    }
+                }
+            }
+
             //-----------------------
             // BRANCHING/COMPARISON |
             //-----------------------
