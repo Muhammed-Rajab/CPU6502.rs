@@ -1,0 +1,421 @@
+#[cfg(test)]
+mod tests {
+
+    use super::super::super::Cpu6502;
+    use super::super::super::flags::Flag;
+
+    #[test]
+    fn absolute_mode_reads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xADu8, 0x34, 0x12, // LDA $1234
+        ];
+
+        cpu.write(0x1234, 0x42);
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $1234
+        assert_eq!(cpu.a, 0x42);
+    }
+
+    #[test]
+    fn zeropage_reads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xA5, 0xAA, // LDA $AA
+        ];
+
+        cpu.write(0x00AA, 0x99);
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $AA
+        assert_eq!(cpu.a, 0x99);
+    }
+
+    #[test]
+    fn zeropage_x_addressing_wraps_and_loads_correct_value() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0x05;
+
+        // base address = 0xFE, + X = 0x03 (wraps in zero page)
+        cpu.write(0x0003, 0x42);
+
+        let program = [
+            0xB5, 0xFE, // LDA $FE,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step(); // LDA $FE,X
+
+        assert_eq!(cpu.a, 0x42);
+        assert_eq!(cpu.get_flag(Flag::Zero), false);
+        assert_eq!(cpu.get_flag(Flag::Negative), false);
+    }
+
+    #[test]
+    fn immediate_loads_direct_value() {
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xA9, 0x77, // LDA #$77
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA #$77
+        assert_eq!(cpu.a, 0x77);
+    }
+
+    #[test]
+    fn absolute_x_addressing_loads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0x10;
+
+        cpu.write(0x1234 + 0x10, 0x42);
+
+        let program = [
+            0xBD, 0x34, 0x12, // LDA $1234,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $1234,X
+        assert_eq!(cpu.a, 0x42);
+    }
+
+    #[test]
+    fn absolute_x_cross_page_reads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0x05;
+
+        cpu.write(0x10FF + 0x05, 0x99);
+
+        let program = [
+            0xBD, 0xFF, 0x10, // LDA $10FF,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $10FF,X
+        assert_eq!(cpu.a, 0x99);
+    }
+
+    #[test]
+    fn absolute_y_addressing_loads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.y = 0x10;
+
+        cpu.write(0x1234 + 0x10, 0x42);
+
+        let program = [
+            0xB9u8, 0x34, 0x12, // LDA $1234,Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $1234,Y
+        assert_eq!(cpu.a, 0x42);
+    }
+
+    #[test]
+    fn absolute_y_cross_page_reads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.y = 0x05;
+
+        cpu.write(0x10FF + 0x05, 0x99);
+
+        let program = [
+            0xB9u8, 0xFF, 0x10, // LDA $10FF,Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA $10FF,Y
+        assert_eq!(cpu.a, 0x99);
+    }
+
+    #[test]
+    fn indexed_indirect_x_fetches_correct_value() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0x04;
+
+        // base = 0x20, (0x20 + X) = 0x24 → pointer stored in zero page
+        cpu.write(0x0024, 0x00); // low byte
+        cpu.write(0x0025, 0x80); // high byte → address = 0x8000
+
+        cpu.write(0x8000, 0x42);
+
+        let program = [
+            0xA1u8, 0x20, // LDA ($20,X)
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x42);
+    }
+
+    #[test]
+    fn indexed_indirect_x_wraps_zero_page_pointer() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.x = 0xff;
+
+        println!("X: 0x{:02X}", cpu.x);
+
+        // base = 0x70, (0x70 + 0xff) = 0x6f (wrap)
+        cpu.write(0x006f, 0x34); // low byte
+        cpu.write(0x0070, 0x12); // high byte (wrap in zero page)
+
+        cpu.hexdump(0x0000, 0x100);
+
+        cpu.write(0x1234, 0x99);
+
+        let program = [
+            0xA1u8, 0x70, // LDA ($70,X)
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x99);
+    }
+
+    #[test]
+    fn indirect_indexed_y_addressing_loads_correct_memory() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.y = 0x10;
+
+        // pointer stored in zero page at $0034/$0035
+        cpu.write(0x0034, 0x00); // low byte
+        cpu.write(0x0035, 0x80); // high byte → pointer = 0x8000
+
+        // final address = 0x8000 + 0x10 = 0x8010
+        cpu.write(0x8010, 0x42);
+
+        let program = [
+            0xB1u8, 0x34, // LDA ($34),Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x42);
+    }
+
+    #[test]
+    fn indirect_indexed_y_cross_page() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.y = 0x05;
+
+        // pointer = 0x10FF
+        cpu.write(0x00AA, 0xFF); // low
+        cpu.write(0x00AB, 0x10); // high
+
+        // 0x10FF + 0x05 = 0x1104
+        cpu.write(0x1104, 0x99);
+
+        let program = [
+            0xB1u8, 0xAA, // LDA ($AA),Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x99);
+    }
+
+    //
+    //
+    //
+    // ADDRESS
+    //
+    //
+    //
+
+    #[test]
+    fn sta_zeropage_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x99;
+
+        let program = [
+            0x85, 0x80, // STA $80
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x0080), 0x99);
+    }
+
+    #[test]
+    fn sta_zeropage_x_wraps_and_stores() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x11;
+        cpu.x = 0x10;
+
+        // 0xF0 + 0x10 = 0x00 (wrap in zero page)
+        let program = [
+            0x95, 0xF0, // STA $F0,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x0000), 0x11);
+    }
+
+    #[test]
+    fn sta_absolute_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x42;
+
+        let program = [
+            0x8D, 0x34, 0x12, // STA $1234
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x1234), 0x42);
+    }
+
+    #[test]
+    fn sta_absolute_x_stores_correct_address() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0xAB;
+        cpu.x = 0x05;
+
+        let program = [
+            0x9Du8, 0x00, 0x10, // STA $1000,X
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x1005), 0xAB);
+    }
+
+    #[test]
+    fn sta_absolute_y_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x55;
+        cpu.y = 0x10;
+
+        let program = [
+            0x99u8, 0x00, 0x20, // STA $2000,Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x2000 + 0x10), 0x55);
+    }
+
+    #[test]
+    fn sta_indexed_indirect_x_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0xAA;
+        cpu.x = 0x04;
+
+        // (0x20 + X) = 0x24 → pointer in zero page
+        cpu.write(0x0024, 0x00); // low byte
+        cpu.write(0x0025, 0x80); // high byte → address = 0x8000
+
+        let program = [
+            0x81u8, 0x20, // STA ($20,X)
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x8000), 0xAA);
+    }
+
+    #[test]
+    fn sta_indexed_indirect_x_wraps_zero_page_pointer() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x99;
+        cpu.x = 0xff;
+
+        println!("X: 0x{:02X}", cpu.x);
+
+        // base = 0x70, (0x70 + 0xff) = 0x6f (wrap)
+        cpu.write(0x006f, 0x34); // low byte
+        cpu.write(0x0070, 0x12); // high byte (wrap in zero page)
+
+        cpu.hexdump(0x0000, 0x100);
+
+        let program = [
+            0x81u8, 0x70, // STA ($70,X)
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x1234), 0x99);
+    }
+
+    #[test]
+    fn sta_indirect_indexed_y_stores_accumulator() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x77;
+        cpu.y = 0x10;
+
+        // pointer in zero page at $0020/$0021 = 0x2000
+        cpu.write(0x0020, 0x00); // low byte
+        cpu.write(0x0021, 0x20); // high byte
+
+        // final address = 0x2000 + 0x10 = 0x2010
+        let program = [
+            0x91u8, 0x20, // STA ($20),Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x2010), 0x77);
+    }
+
+    #[test]
+    fn sta_indirect_indexed_y_cross_page() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0xAB;
+        cpu.y = 0x05;
+
+        // pointer = 0x10FF
+        cpu.write(0x00AA, 0xFF); // low
+        cpu.write(0x00AB, 0x10); // high
+
+        // 0x10FF + 0x05 = 0x1104
+        let program = [
+            0x91u8, 0xAA, // STA ($AA),Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x1104), 0xAB);
+    }
+}
