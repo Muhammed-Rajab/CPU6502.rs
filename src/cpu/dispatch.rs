@@ -53,6 +53,7 @@ enum Operation {
     AND,
     ORA,
     EOR,
+    BIT,
 
     // BRANCHING/COMPARISON
     CMP,
