@@ -523,6 +523,11 @@ impl Cpu6502 {
                 self.bpl(offset);
             }
 
+            Operation::BVC => {
+                let offset = self.fetch_value(instruction.mode) as i8;
+                self.bvc(offset);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
