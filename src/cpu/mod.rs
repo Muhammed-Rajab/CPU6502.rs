@@ -76,6 +76,7 @@ mod cpu_tests;
 mod debug;
 mod dispatch;
 mod flags;
+mod increment_decrement_tests;
 mod instructions;
 mod memory;
 
