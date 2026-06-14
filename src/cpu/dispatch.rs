@@ -590,6 +590,22 @@ impl Cpu6502 {
                 }
             }
 
+            /*
+             * A bit different since ROL works on both memory
+             * and Register.
+             */
+            Operation::ROL => {
+                match instruction.mode {
+                    Accumulator => self.rol_accumulator(),
+
+                    _ => {
+                        // fetch addr
+                        let addr = self.fetch_addr(instruction.mode);
+                        self.rol_memory(addr);
+                    }
+                }
+            }
+
             //-----------------------
             // BRANCHING/COMPARISON |
             //-----------------------
