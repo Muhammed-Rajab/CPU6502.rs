@@ -245,6 +245,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // CLI
     table[0x58] = instr("CLI", Operation::CLI, AddressingMode::Implied, 1, 4);
 
+    // SEI
+    table[0x78] = instr("SEI", Operation::SEI, AddressingMode::Implied, 1, 4);
+
     //-------------
     // ARITHMETIC |
     //-------------
