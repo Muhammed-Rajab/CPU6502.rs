@@ -295,6 +295,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // BCS
     table[0xB0] = instr("BCS", Operation::BCS, AddressingMode::Relative, 1, 4);
 
+    // BMI
+    table[0x30] = instr("BMI", Operation::BMI, AddressingMode::Relative, 1, 4);
+
     table
 });
 
