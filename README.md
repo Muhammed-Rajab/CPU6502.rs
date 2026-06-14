@@ -51,5 +51,45 @@ New todo:
     - BPL           []
     - BVS           []
     - BVC           []
+    - CPX           []
+    - CPY           []
+    - INC           []
+    - DEC           []
 
-Add other modes later
+BCC             []
+BCS             []
+BMI             []
+BPL             []
+BVC             []
+BVS             []
+
+CPX             []
+CPY             []
+
+INC             []
+DEC             []
+
+BIT             []
+
+ASL             []
+LSR             []
+
+ROL             []
+ROR             []
+
+CLV             []
+CLI             []
+SEI             []
+CLD             []
+SED             []
+
+JMP             []
+
+JSR             []
+RTS             []
+
+BRK             []
+RTI             []
+
+NOP             []
+
