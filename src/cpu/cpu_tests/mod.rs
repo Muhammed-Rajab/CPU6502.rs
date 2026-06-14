@@ -1,6 +1,3 @@
-mod branching_tests;
-mod comparison_tests;
-
 mod addressing_mode;
 mod arithmetic;
 mod branch;
