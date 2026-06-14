@@ -554,6 +554,26 @@ impl Cpu6502 {
                 self.clv();
             }
 
+            Operation::CLI => {
+                // only implied
+                self.cli();
+            }
+
+            Operation::SEI => {
+                // only implied
+                self.sei();
+            }
+
+            Operation::CLD => {
+                // only implied
+                self.cld();
+            }
+
+            Operation::SED => {
+                // only implied
+                self.sed();
+            }
+
             //-------------
             // ARITHMETIC |
             //-------------

@@ -218,6 +218,13 @@ impl Cpu6502 {
     }
 
     /*
+     * Set the overflow flag to zero.
+     */
+    pub(super) fn clv(&mut self) {
+        self.set_flag(super::flags::Flag::Overflow, false);
+    }
+
+    /*
      * Adds value to Accumulator.
      * Sets Z, N, and C flags appropriately.
      *
