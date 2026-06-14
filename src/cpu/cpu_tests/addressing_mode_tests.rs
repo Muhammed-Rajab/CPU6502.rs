@@ -237,6 +237,27 @@ mod tests {
         assert_eq!(cpu.a, 0x99);
     }
 
+    #[test]
+    fn indirect_indexed_wraps_zero_page_pointer() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.y = 0x00;
+
+        cpu.write(0x00FF, 0x34);
+        cpu.write(0x0000, 0x12);
+
+        cpu.write(0x1234, 0x99);
+
+        let program = [
+            0xB1, 0xFF, // LDA ($FF),Y
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.a, 0x99);
+    }
+
     //
     //
     //
