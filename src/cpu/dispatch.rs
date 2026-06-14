@@ -54,6 +54,8 @@ enum Operation {
 
     // BRANCHING/COMPARISON
     CMP,
+    CPX,
+    CPY,
     BEQ,
     BNE,
     BCC,
@@ -282,6 +284,8 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0xD9] = instr("CMP", Operation::CMP, AddressingMode::AbsoluteY, 1, 4);
     table[0xC1] = instr("CMP", Operation::CMP, AddressingMode::IndexedIndirect, 1, 4);
     table[0xD1] = instr("CMP", Operation::CMP, AddressingMode::IndirectIndexed, 1, 4);
+
+    // CPX
 
     // BEQ
     table[0xF0] = instr("BEQ", Operation::BEQ, AddressingMode::Relative, 1, 4);
