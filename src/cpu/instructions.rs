@@ -351,12 +351,26 @@ impl Cpu6502 {
      * Adds relative displacement to the PC
      * if N flag is set, causing a branch to new location.
      *
-     * BCS +5
+     * BMI +5
      *
-     * BCS -3
+     * BMI -3
      */
     pub(super) fn bmi(&mut self, offset: i8) {
         if self.get_flag(Flag::Negative) {
+            self.pc = self.pc.wrapping_add_signed(offset as i16);
+        }
+    }
+
+    /*
+     * Adds relative displacement to the PC
+     * if N flag is clear, causing a branch to new location.
+     *
+     * BPL +5
+     *
+     * BPL -3
+     */
+    pub(super) fn bpl(&mut self, offset: i8) {
+        if !self.get_flag(Flag::Negative) {
             self.pc = self.pc.wrapping_add_signed(offset as i16);
         }
     }
