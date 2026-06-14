@@ -290,6 +290,24 @@ impl Cpu6502 {
     }
 
     /*
+     * Compares X with val.
+     * Sets Z, C, and N flags appropriately.
+     *
+     * Operation performed: X - M
+     *
+     * C -> set if X >= M
+     * Z -> set if X = M
+     * N -> set if bit 7 of the result is set
+     */
+    pub(super) fn cpx(&mut self, val: u8) {
+        let result = self.x.wrapping_sub(val);
+
+        self.set_flag(Flag::Carry, self.x >= val);
+        self.set_flag(Flag::Zero, result == 0);
+        self.set_flag(Flag::Negative, (result & 0x80) != 0);
+    }
+
+    /*
      * Adds relative displacement to the PC
      * if Z flag is set, causing a branch to a new location.
      *
