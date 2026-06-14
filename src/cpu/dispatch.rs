@@ -34,6 +34,8 @@ enum Operation {
     PLP,
 
     // INCREMENT/DECREMENT
+    INC,
+    DEC,
     INX,
     INY,
     DEX,
