@@ -500,6 +500,11 @@ impl Cpu6502 {
                 self.cmp(val);
             }
 
+            Operation::CPX => {
+                let val = self.fetch_value(instruction.mode);
+                self.cpx(val);
+            }
+
             Operation::BEQ => {
                 let offset = self.fetch_value(instruction.mode) as i8;
                 self.beq(offset);
