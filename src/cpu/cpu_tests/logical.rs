@@ -193,4 +193,60 @@ mod tests {
         assert!(cpu.get_flag(Flag::Zero));
         assert!(!cpu.get_flag(Flag::Negative));
     }
+
+    #[test]
+    fn rol_accumulator_sets_flags_and_uses_carry() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x80;
+        cpu.set_flag(Flag::Carry, true);
+
+        cpu.rol_accumulator();
+
+        assert_eq!(cpu.a, 0x01);
+        assert!(cpu.get_flag(Flag::Carry));
+        assert!(!cpu.get_flag(Flag::Zero));
+        assert!(!cpu.get_flag(Flag::Negative));
+
+        cpu.a = 0x40;
+        cpu.set_flag(Flag::Carry, false);
+
+        cpu.rol_accumulator();
+
+        assert_eq!(cpu.a, 0x80);
+        assert!(!cpu.get_flag(Flag::Carry));
+        assert!(!cpu.get_flag(Flag::Zero));
+        assert!(cpu.get_flag(Flag::Negative));
+    }
+
+    #[test]
+    fn rol_memory_sets_flags_and_uses_carry() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.write(0x0042, 0x80);
+        cpu.set_flag(Flag::Carry, true);
+
+        let program = [
+            0x26, 0x42, // ROL $42
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x0042), 0x01);
+        assert!(cpu.get_flag(Flag::Carry));
+        assert!(!cpu.get_flag(Flag::Zero));
+        assert!(!cpu.get_flag(Flag::Negative));
+
+        cpu.write(0x0042, 0x40);
+        cpu.set_flag(Flag::Carry, false);
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x0042), 0x80);
+        assert!(!cpu.get_flag(Flag::Carry));
+        assert!(!cpu.get_flag(Flag::Zero));
+        assert!(cpu.get_flag(Flag::Negative));
+    }
 }
