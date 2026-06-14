@@ -42,4 +42,14 @@ and learn the basics of assembly by writing programs for it.
     - LDA/STA with zero page + absolute indexed modes [ ]
     - BRK + interrupts  [ ]
 
+New todo:
+    - BCC           []
+    - BCS           []
+    - BEQ           []
+    - BMI           []
+    - BNE           []
+    - BPL           []
+    - BVS           []
+    - BVC           []
+
 Add other modes later
