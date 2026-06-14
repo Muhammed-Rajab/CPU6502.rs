@@ -46,6 +46,11 @@ enum Operation {
     // FLAGS
     CLC,
     SEC,
+    CLV,
+    CLI,
+    SEI,
+    CLD,
+    SED,
 
     // ARITHMETIC
     ADC,
