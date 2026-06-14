@@ -394,6 +394,24 @@ impl Cpu6502 {
         self.update_zn(self.a);
     }
 
+    pub(super) fn ror_memory(&mut self, addr: u16) {
+        let mut val = self.read(addr);
+
+        let old_c = self.get_flag(Flag::Carry);
+        let old_bit_0 = val & 0x01;
+
+        val = val >> 1;
+
+        if old_c {
+            val = val | 0x80;
+        }
+
+        self.write(addr, val);
+
+        self.set_flag(Flag::Carry, old_bit_0 != 0);
+        self.update_zn(val);
+    }
+
     /*
      * Compares A with val.
      * Sets Z, C, and N flags appropriately.
