@@ -441,6 +441,11 @@ impl Cpu6502 {
             //----------------------
             // INCREMENT/DECREMENT |
             //----------------------
+            Operation::INC => {
+                let addr = self.fetch_addr(instruction.mode);
+                self.inc(addr);
+            }
+
             Operation::INX => {
                 // only implied
                 self.inx();
