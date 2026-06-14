@@ -2,6 +2,8 @@
 // INSTRUCTIONS                                 |
 //-----------------------------------------------
 
+use std::intrinsics::offset;
+
 use super::Cpu6502;
 use super::flags::Flag;
 
@@ -315,6 +317,19 @@ impl Cpu6502 {
     pub(super) fn bne(&mut self, offset: i8) {
         if !self.get_flag(Flag::Zero) {
             // i16 -> signed extension
+            self.pc = self.pc.wrapping_add_signed(offset as i16);
+        }
+    }
+
+    /*
+     * Adds relative displacement to the PC
+     * if C flag is clear, causing a branch to new location.
+     *
+     * BCC +5
+     * BCC -3
+     */
+    pub(super) fn bcc(&mut self, offset: i8) {
+        if !self.get_flag(Flag::Carry) {
             self.pc = self.pc.wrapping_add_signed(offset as i16);
         }
     }
