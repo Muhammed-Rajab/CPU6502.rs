@@ -130,4 +130,47 @@ mod tests {
 
         assert_eq!(cpu.a, 0x11);
     }
+
+    #[test]
+    fn bpl_branches_only_when_negative_clear() {
+        // ------------------------
+        // Negative clear -> branch taken
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xA9, 0x01, // LDA #$01 (clears Negative)
+            0x10, 0x02, // BPL +2
+            0xA9, 0x11, // LDA #$11 (should be skipped)
+            0xA9, 0x22, // LDA #$22
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA #$01
+        cpu.step(); // BPL
+        cpu.step(); // LDA #$22
+
+        assert_eq!(cpu.a, 0x22);
+
+        // ------------------------
+        // Negative set -> branch not taken
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xA9, 0x80, // LDA #$80 (sets Negative)
+            0x10, 0x02, // BPL +2
+            0xA9, 0x11, // LDA #$11
+            0xA9, 0x22, // LDA #$22
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA #$80
+        cpu.step(); // BPL (not taken)
+        cpu.step(); // LDA #$11
+
+        assert_eq!(cpu.a, 0x11);
+    }
 }
