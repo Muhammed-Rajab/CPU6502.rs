@@ -292,6 +292,13 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0x24] = instr("BIT", Operation::BIT, AddressingMode::ZeroPage, 1, 4);
     table[0x2C] = instr("BIT", Operation::BIT, AddressingMode::Absolute, 1, 4);
 
+    // ASL
+    table[0x0A] = instr("ASL", Operation::ASL, AddressingMode::Accumulator, 1, 4);
+    table[0x06] = instr("ASL", Operation::ASL, AddressingMode::ZeroPage, 1, 4);
+    table[0x16] = instr("ASL", Operation::ASL, AddressingMode::ZeroPageX, 1, 4);
+    table[0x0E] = instr("ASL", Operation::ASL, AddressingMode::Absolute, 1, 4);
+    table[0x1E] = instr("ASL", Operation::ASL, AddressingMode::AbsoluteX, 1, 4);
+
     //-----------------------
     // BRANCHING/COMPARISON |
     //-----------------------
