@@ -238,4 +238,39 @@ mod tests {
         assert!(!cpu.get_flag(Flag::Zero));
         assert!(!cpu.get_flag(Flag::Negative));
     }
+
+    #[test]
+    fn ror_accumulator_rotates_through_carry() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x01;
+        cpu.set_flag(Flag::Carry, true);
+
+        cpu.ror_accumulator();
+
+        assert_eq!(cpu.a, 0x80);
+        assert!(cpu.get_flag(Flag::Carry));
+        assert!(!cpu.get_flag(Flag::Zero));
+        assert!(cpu.get_flag(Flag::Negative));
+    }
+
+    #[test]
+    fn ror_memory_rotates_through_carry() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.write(0x0042, 0x01);
+        cpu.set_flag(Flag::Carry, true);
+
+        let program = [
+            0x66, 0x42, // ROR $42
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x0042), 0x80);
+        assert!(cpu.get_flag(Flag::Carry));
+        assert!(!cpu.get_flag(Flag::Zero));
+        assert!(cpu.get_flag(Flag::Negative));
+    }
 }
