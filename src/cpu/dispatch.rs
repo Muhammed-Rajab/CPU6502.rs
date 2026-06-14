@@ -239,6 +239,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // SEC
     table[0x38] = instr("SEC", Operation::SEC, AddressingMode::Implied, 1, 4);
 
+    // CLV
+    table[0xB8] = instr("CLV", Operation::CLV, AddressingMode::Implied, 1, 4);
+
     //-------------
     // ARITHMETIC |
     //-------------
