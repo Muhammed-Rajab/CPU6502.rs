@@ -246,7 +246,7 @@ mod tests {
     //
 
     #[test]
-    fn sta_zeropage_stores_accumulator() {
+    fn zeropage_stores_accumulator_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0x99;
@@ -262,7 +262,7 @@ mod tests {
     }
 
     #[test]
-    fn sta_zeropage_x_wraps_and_stores() {
+    fn zeropage_x_wraps_and_stores_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0x11;
@@ -280,7 +280,7 @@ mod tests {
     }
 
     #[test]
-    fn sta_absolute_stores_accumulator() {
+    fn absolute_stores_accumulator_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0x42;
@@ -296,7 +296,7 @@ mod tests {
     }
 
     #[test]
-    fn sta_absolute_x_stores_correct_address() {
+    fn absolute_x_stores_correct_address_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0xAB;
@@ -313,7 +313,7 @@ mod tests {
     }
 
     #[test]
-    fn sta_absolute_y_stores_accumulator() {
+    fn absolute_y_stores_accumulator_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0x55;
@@ -330,7 +330,7 @@ mod tests {
     }
 
     #[test]
-    fn sta_indexed_indirect_x_stores_accumulator() {
+    fn indexed_indirect_x_stores_accumulator_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0xAA;
@@ -351,7 +351,7 @@ mod tests {
     }
 
     #[test]
-    fn sta_indexed_indirect_x_wraps_zero_page_pointer() {
+    fn indexed_indirect_x_wraps_zero_page_pointer_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0x99;
@@ -376,7 +376,7 @@ mod tests {
     }
 
     #[test]
-    fn sta_indirect_indexed_y_stores_accumulator() {
+    fn indirect_indexed_y_stores_accumulator_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0x77;
@@ -398,7 +398,7 @@ mod tests {
     }
 
     #[test]
-    fn sta_indirect_indexed_y_cross_page() {
+    fn indirect_indexed_y_cross_page_addr() {
         let mut cpu = Cpu6502::new();
 
         cpu.a = 0xAB;
