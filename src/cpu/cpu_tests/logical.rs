@@ -174,4 +174,23 @@ mod tests {
         assert!(cpu.get_flag(Flag::Zero));
         assert!(!cpu.get_flag(Flag::Negative));
     }
+
+    #[test]
+    fn lsr_memory_sets_carry_and_zero() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.write(0x0042, 0x01);
+
+        let program = [
+            0x46, 0x42, // LSR $42
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert_eq!(cpu.read(0x0042), 0x00);
+        assert!(cpu.get_flag(Flag::Carry));
+        assert!(cpu.get_flag(Flag::Zero));
+        assert!(!cpu.get_flag(Flag::Negative));
+    }
 }
