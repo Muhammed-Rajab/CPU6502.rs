@@ -225,6 +225,13 @@ impl Cpu6502 {
     }
 
     /*
+     * Clears the interrupt disable flag.
+     */
+    pub(super) fn cli(&mut self) {
+        self.set_flag(super::flags::Flag::Interrupt, false);
+    }
+
+    /*
      * Adds value to Accumulator.
      * Sets Z, N, and C flags appropriately.
      *
