@@ -148,6 +148,16 @@ impl Cpu6502 {
     }
 
     /*
+     * Adds one to value held at a specific memory location.
+     * Sets Z and N flags appropriately.
+     */
+    pub(super) fn inc(&mut self, addr: u16) {
+        let val = self.read(addr).wrapping_add(1);
+        self.write(addr, val);
+        self.update_zn(val);
+    }
+
+    /*
      * Adds one to X register
      * Sets Z and N flags appropriately.
      */
