@@ -376,10 +376,10 @@ impl Cpu6502 {
 
         let instruction = &OPCODE_TABLE[opcode as usize];
 
-        self.execute(instruction);
+        self.execute(instruction, opcode);
     }
 
-    fn execute(&mut self, instruction: &Instruction) {
+    fn execute(&mut self, instruction: &Instruction, opcode: u8) {
         match instruction.operation {
             //-------
             // LOAD |
@@ -664,7 +664,10 @@ impl Cpu6502 {
                 self.bvs(offset);
             }
 
-            _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
+            _ => panic!(
+                "'{}(0x{:02X})' instruction not implemented yet",
+                instruction.mnemonic, opcode
+            ),
         }
     }
 }
