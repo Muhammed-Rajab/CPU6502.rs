@@ -36,20 +36,42 @@ mod tests {
     }
 
     #[test]
-    fn sec_clc_test() {
+    fn status_flag_instructions_test() {
         let mut cpu = Cpu6502::new();
 
         let implied_rom = [
-            0x38u8, // SEC
-            0x18,   // CLC
+            0x38, // SEC
+            0x18, // CLC
+            0x78, // SEI
+            0x58, // CLI
+            0xF8, // SED
+            0xD8, // CLD
+            0xB8, // CLV
         ];
 
         cpu.load_program_from_memory(&implied_rom);
 
         cpu.step(); // SEC
-        assert_eq!(cpu.get_flag(Flag::Carry), true);
+        assert!(cpu.get_flag(Flag::Carry));
 
         cpu.step(); // CLC
-        assert_eq!(cpu.get_flag(Flag::Carry), false);
+        assert!(!cpu.get_flag(Flag::Carry));
+
+        cpu.step(); // SEI
+        assert!(cpu.get_flag(Flag::Interrupt));
+
+        cpu.step(); // CLI
+        assert!(!cpu.get_flag(Flag::Interrupt));
+
+        cpu.step(); // SED
+        assert!(cpu.get_flag(Flag::Decimal));
+
+        cpu.step(); // CLD
+        assert!(!cpu.get_flag(Flag::Decimal));
+
+        cpu.set_flag(Flag::Overflow, true);
+
+        cpu.step(); // CLV
+        assert!(!cpu.get_flag(Flag::Overflow));
     }
 }
