@@ -158,6 +158,16 @@ impl Cpu6502 {
     }
 
     /*
+     * Subtracts one from value held at a specific memory location.
+     * Sets Z and N flags appropriately.
+     */
+    pub(super) fn dec(&mut self, addr: u16) {
+        let val = self.read(addr).wrapping_sub(1);
+        self.write(addr, val);
+        self.update_zn(val);
+    }
+
+    /*
      * Adds one to X register
      * Sets Z and N flags appropriately.
      */
