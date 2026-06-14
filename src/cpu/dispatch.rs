@@ -285,6 +285,10 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0x41] = instr("EOR", Operation::EOR, AddressingMode::IndexedIndirect, 1, 4);
     table[0x51] = instr("EOR", Operation::EOR, AddressingMode::IndirectIndexed, 1, 4);
 
+    // BIT
+    table[0x24] = instr("BIT", Operation::BIT, AddressingMode::ZeroPage, 1, 4);
+    table[0x2C] = instr("BIT", Operation::BIT, AddressingMode::Absolute, 1, 4);
+
     //-----------------------
     // BRANCHING/COMPARISON |
     //-----------------------
