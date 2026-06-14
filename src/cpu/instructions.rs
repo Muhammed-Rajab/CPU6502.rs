@@ -292,13 +292,13 @@ impl Cpu6502 {
     }
 
     pub(super) fn bit(&mut self, val: u8) {
-        let Z = (self.a & val) == 0;
-        let V = (val & 0x40) != 0;
-        let N = (val & 0x80) != 0;
+        let z = (self.a & val) == 0;
+        let v = (val & 0x40) != 0;
+        let n = (val & 0x80) != 0;
 
-        self.set_flag(Flag::Zero, Z);
-        self.set_flag(Flag::Overflow, V);
-        self.set_flag(Flag::Negative, N);
+        self.set_flag(Flag::Zero, z);
+        self.set_flag(Flag::Overflow, v);
+        self.set_flag(Flag::Negative, n);
     }
 
     /*
