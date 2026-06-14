@@ -324,6 +324,7 @@ impl Cpu6502 {
      * if C flag is clear, causing a branch to new location.
      *
      * BCC +5
+     *
      * BCC -3
      */
     pub(super) fn bcc(&mut self, offset: i8) {
