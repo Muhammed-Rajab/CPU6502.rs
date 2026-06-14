@@ -58,6 +58,8 @@ enum Operation {
     BIT,
     ASL,
     LSR,
+    ROL,
+    ROR,
 
     // BRANCHING/COMPARISON
     CMP,
