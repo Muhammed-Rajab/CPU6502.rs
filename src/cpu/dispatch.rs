@@ -518,6 +518,11 @@ impl Cpu6502 {
                 self.bmi(offset);
             }
 
+            Operation::BPL => {
+                let offset = self.fetch_value(instruction.mode) as i8;
+                self.bpl(offset);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
