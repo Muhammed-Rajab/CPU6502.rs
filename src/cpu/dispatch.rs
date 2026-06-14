@@ -317,6 +317,13 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0x2E] = instr("ROL", Operation::ROL, AddressingMode::Absolute, 1, 4);
     table[0x3E] = instr("ROL", Operation::ROL, AddressingMode::AbsoluteX, 1, 4);
 
+    // ROR
+    table[0x6A] = instr("ROR", Operation::ROR, AddressingMode::Accumulator, 1, 4);
+    table[0x66] = instr("ROR", Operation::ROR, AddressingMode::ZeroPage, 1, 4);
+    table[0x76] = instr("ROR", Operation::ROR, AddressingMode::ZeroPageX, 1, 4);
+    table[0x6E] = instr("ROR", Operation::ROR, AddressingMode::Absolute, 1, 4);
+    table[0x7E] = instr("ROR", Operation::ROR, AddressingMode::AbsoluteX, 1, 4);
+
     //-----------------------
     // BRANCHING/COMPARISON |
     //-----------------------
