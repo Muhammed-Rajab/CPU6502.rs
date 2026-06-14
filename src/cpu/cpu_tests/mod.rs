@@ -5,6 +5,7 @@ mod cpu_tests;
 mod increment_decrement_tests;
 
 mod arithmetic;
+mod branch;
 mod compare;
 mod flags;
 mod increment_decrement;
