@@ -613,6 +613,22 @@ impl Cpu6502 {
                 }
             }
 
+            /*
+             * A bit different since ROR works on both memory
+             * and Register.
+             */
+            Operation::ROR => {
+                match instruction.mode {
+                    Accumulator => self.ror_accumulator(),
+
+                    _ => {
+                        // fetch addr
+                        let addr = self.fetch_addr(instruction.mode);
+                        self.ror_memory(addr);
+                    }
+                }
+            }
+
             //-----------------------
             // BRANCHING/COMPARISON |
             //-----------------------
