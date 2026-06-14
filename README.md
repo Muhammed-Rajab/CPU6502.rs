@@ -56,13 +56,13 @@ CPY             [X]
 INC             [X]
 DEC             [X]
 
-BIT             []
+BIT             [X]
 
-ASL             []
-LSR             []
+ASL             [X]
+LSR             [X]
 
-ROL             []
-ROR             []
+ROL             [X]
+ROR             [X]
 
 CLV             []
 CLI             []
