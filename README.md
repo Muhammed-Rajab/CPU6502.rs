@@ -53,8 +53,8 @@ BVS             [X]
 CPX             [X]
 CPY             [X]
 
-INC             []
-DEC             []
+INC             [X]
+DEC             [X]
 
 BIT             []
 
