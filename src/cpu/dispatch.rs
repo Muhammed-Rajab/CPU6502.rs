@@ -248,6 +248,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // SEI
     table[0x78] = instr("SEI", Operation::SEI, AddressingMode::Implied, 1, 4);
 
+    // CLD
+    table[0xD8] = instr("CLD", Operation::CLD, AddressingMode::Implied, 1, 4);
+
     //-------------
     // ARITHMETIC |
     //-------------
