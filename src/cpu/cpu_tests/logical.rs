@@ -105,4 +105,26 @@ mod tests {
         assert_eq!(cpu.get_flag(Flag::Zero), false);
         assert_eq!(cpu.get_flag(Flag::Negative), false);
     }
+
+    #[test]
+    fn bit_sets_zero_overflow_and_negative_flags() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.a = 0x0F;
+
+        cpu.write(0x0042, 0xC0); // 1100_0000
+
+        let program = [
+            0x24, 0x42, // BIT $42
+        ];
+
+        cpu.load_program_from_memory(&program);
+        cpu.step();
+
+        assert!(cpu.get_flag(Flag::Zero));
+        assert!(cpu.get_flag(Flag::Overflow));
+        assert!(cpu.get_flag(Flag::Negative));
+
+        assert_eq!(cpu.a, 0x0F);
+    }
 }
