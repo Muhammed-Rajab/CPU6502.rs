@@ -336,6 +336,18 @@ impl Cpu6502 {
         self.update_zn(self.a);
     }
 
+    pub(super) fn lsr_memory(&mut self, addr: u16) {
+        let mut val = self.read(addr);
+
+        let c = (val & 0x01) != 0;
+
+        val = val >> 1;
+        self.write(addr, val);
+
+        self.set_flag(Flag::Carry, c);
+        self.update_zn(val);
+    }
+
     /*
      * Compares A with val.
      * Sets Z, C, and N flags appropriately.
