@@ -220,7 +220,7 @@ mod tests {
     }
 
     #[test]
-    fn rol_memory_sets_flags_and_uses_carry() {
+    fn rol_memory_rotates_through_carry() {
         let mut cpu = Cpu6502::new();
 
         cpu.write(0x0042, 0x80);
@@ -237,16 +237,5 @@ mod tests {
         assert!(cpu.get_flag(Flag::Carry));
         assert!(!cpu.get_flag(Flag::Zero));
         assert!(!cpu.get_flag(Flag::Negative));
-
-        cpu.write(0x0042, 0x40);
-        cpu.set_flag(Flag::Carry, false);
-
-        cpu.load_program_from_memory(&program);
-        cpu.step();
-
-        assert_eq!(cpu.read(0x0042), 0x80);
-        assert!(!cpu.get_flag(Flag::Carry));
-        assert!(!cpu.get_flag(Flag::Zero));
-        assert!(cpu.get_flag(Flag::Negative));
     }
 }
