@@ -8,6 +8,7 @@ mod arithmetic;
 mod flags;
 mod increment_decrement;
 mod load;
+mod logical;
 mod stack;
 mod store;
 mod transfer;
