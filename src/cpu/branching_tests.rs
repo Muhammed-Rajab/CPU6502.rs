@@ -44,4 +44,47 @@ mod tests {
 
         assert_eq!(cpu.a, 0x11);
     }
+
+    #[test]
+    fn bcs_branches_only_when_carry_set() {
+        // ------------------------
+        // Carry set -> branch taken
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0x38, // SEC
+            0xB0, 0x02, // BCS +2
+            0xA9, 0x11, // LDA #$11 (should be skipped)
+            0xA9, 0x22, // LDA #$22
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // SEC
+        cpu.step(); // BCS
+        cpu.step(); // LDA #$22
+
+        assert_eq!(cpu.a, 0x22);
+
+        // ------------------------
+        // Carry clear -> branch not taken
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0x18, // CLC
+            0xB0, 0x02, // BCS +2
+            0xA9, 0x11, // LDA #$11
+            0xA9, 0x22, // LDA #$22
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // CLC
+        cpu.step(); // BCS (not taken)
+        cpu.step(); // LDA #$11
+
+        assert_eq!(cpu.a, 0x11);
+    }
 }
