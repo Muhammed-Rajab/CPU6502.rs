@@ -513,6 +513,11 @@ impl Cpu6502 {
                 self.bcs(offset);
             }
 
+            Operation::BMI => {
+                let offset = self.fetch_value(instruction.mode) as i8;
+                self.bmi(offset);
+            }
+
             _ => panic!("'{}' instruction not implemented yet", instruction.mnemonic),
         }
     }
