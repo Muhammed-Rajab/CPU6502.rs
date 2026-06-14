@@ -452,6 +452,11 @@ impl Cpu6502 {
                 self.inc(addr);
             }
 
+            Operation::DEC => {
+                let addr = self.fetch_addr(instruction.mode);
+                self.dec(addr);
+            }
+
             Operation::INX => {
                 // only implied
                 self.inx();
