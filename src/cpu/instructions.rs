@@ -328,6 +328,14 @@ impl Cpu6502 {
         self.update_zn(val);
     }
 
+    pub(super) fn lsr_accumulator(&mut self) {
+        let c = (self.a & 0x01) != 0;
+        self.a = self.a >> 1;
+
+        self.set_flag(Flag::Carry, c);
+        self.update_zn(self.a);
+    }
+
     /*
      * Compares A with val.
      * Sets Z, C, and N flags appropriately.
