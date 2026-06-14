@@ -374,4 +374,18 @@ impl Cpu6502 {
             self.pc = self.pc.wrapping_add_signed(offset as i16);
         }
     }
+
+    /*
+     * Adds relative displacement to the PC
+     * if V flag is clear, causing a branch to new location.
+     *
+     * BVC +5
+     *
+     * BVC -3
+     */
+    pub(super) fn bvc(&mut self, offset: i8) {
+        if !self.get_flag(Flag::Overflow) {
+            self.pc = self.pc.wrapping_add_signed(offset as i16);
+        }
+    }
 }
