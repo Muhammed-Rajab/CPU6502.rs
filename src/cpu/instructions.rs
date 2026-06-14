@@ -239,6 +239,20 @@ impl Cpu6502 {
     }
 
     /*
+     * Clears the decimal mode flag.
+     */
+    pub(super) fn cld(&mut self) {
+        self.set_flag(super::flags::Flag::Decimal, false);
+    }
+
+    /*
+     * Sets the decimal mode flag.
+     */
+    pub(super) fn sed(&mut self) {
+        self.set_flag(super::flags::Flag::Decimal, true);
+    }
+
+    /*
      * Adds value to Accumulator.
      * Sets Z, N, and C flags appropriately.
      *
