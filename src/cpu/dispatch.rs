@@ -526,6 +526,11 @@ impl Cpu6502 {
                 self.eor(val);
             }
 
+            Operation::BIT => {
+                let val = self.fetch_value(instruction.mode);
+                self.bit(val);
+            }
+
             //-----------------------
             // BRANCHING/COMPARISON |
             //-----------------------
