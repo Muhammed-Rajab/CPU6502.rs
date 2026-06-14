@@ -301,6 +301,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // BPL
     table[0x10] = instr("BPL", Operation::BPL, AddressingMode::Relative, 1, 4);
 
+    // BVC
+    table[0x50] = instr("BVC", Operation::BVC, AddressingMode::Relative, 1, 4);
+
     table
 });
 
