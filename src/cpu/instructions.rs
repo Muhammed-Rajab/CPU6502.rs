@@ -204,21 +204,21 @@ impl Cpu6502 {
     }
 
     /*
-     * Set the carry flag to zero.
+     * Clears the carry flag.
      */
     pub(super) fn clc(&mut self) {
         self.set_flag(super::flags::Flag::Carry, false);
     }
 
     /*
-     * Set the carry flag to one.
+     * Sets the carry flag.
      */
     pub(super) fn sec(&mut self) {
         self.set_flag(super::flags::Flag::Carry, true);
     }
 
     /*
-     * Set the overflow flag to zero.
+     * Clears the overflow flag.
      */
     pub(super) fn clv(&mut self) {
         self.set_flag(super::flags::Flag::Overflow, false);
