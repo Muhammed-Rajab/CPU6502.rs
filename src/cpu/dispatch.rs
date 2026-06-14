@@ -510,6 +510,11 @@ impl Cpu6502 {
                 self.cpx(val);
             }
 
+            Operation::CPY => {
+                let val = self.fetch_value(instruction.mode);
+                self.cpy(val);
+            }
+
             Operation::BEQ => {
                 let offset = self.fetch_value(instruction.mode) as i8;
                 self.beq(offset);
