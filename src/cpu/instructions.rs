@@ -291,6 +291,13 @@ impl Cpu6502 {
         self.update_zn(self.a);
     }
 
+    /*
+     * Tests if one or more bits are set in a target memory location.
+     *
+     * Z = A & M == 0
+     * V = bit 6 of M
+     * N = bit 7 of M
+     * */
     pub(super) fn bit(&mut self, val: u8) {
         let z = (self.a & val) == 0;
         let v = (val & 0x40) != 0;
