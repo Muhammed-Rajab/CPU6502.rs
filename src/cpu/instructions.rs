@@ -291,6 +291,16 @@ impl Cpu6502 {
         self.update_zn(self.a);
     }
 
+    pub(super) fn bit(&mut self, val: u8) {
+        let Z = (self.a & val) == 0;
+        let V = (val & 0x40) != 0;
+        let N = (val & 0x80) != 0;
+
+        self.set_flag(Flag::Zero, Z);
+        self.set_flag(Flag::Overflow, V);
+        self.set_flag(Flag::Negative, N);
+    }
+
     /*
      * Compares A with val.
      * Sets Z, C, and N flags appropriately.
