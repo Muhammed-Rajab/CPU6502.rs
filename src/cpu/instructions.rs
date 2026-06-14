@@ -232,6 +232,13 @@ impl Cpu6502 {
     }
 
     /*
+     * Sets the interrupt disable flag.
+     */
+    pub(super) fn sei(&mut self) {
+        self.set_flag(super::flags::Flag::Interrupt, true);
+    }
+
+    /*
      * Adds value to Accumulator.
      * Sets Z, N, and C flags appropriately.
      *
