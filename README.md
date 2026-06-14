@@ -64,11 +64,11 @@ LSR             [X]
 ROL             [X]
 ROR             [X]
 
-CLV             []
-CLI             []
-SEI             []
-CLD             []
-SED             []
+CLV             [X]
+CLI             [X]
+SEI             [X]
+CLD             [X]
+SED             [X]
 
 JMP             []
 
