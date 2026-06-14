@@ -6,3 +6,4 @@ mod increment_decrement_tests;
 
 mod load;
 mod store;
+mod transfer;
