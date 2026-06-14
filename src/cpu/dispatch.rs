@@ -290,6 +290,11 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0xE4] = instr("CPX", Operation::CPX, AddressingMode::ZeroPage, 1, 4);
     table[0xEC] = instr("CPX", Operation::CPX, AddressingMode::Absolute, 1, 4);
 
+    // CPY
+    table[0xC0] = instr("CPY", Operation::CPY, AddressingMode::Immediate, 1, 4);
+    table[0xC4] = instr("CPY", Operation::CPY, AddressingMode::ZeroPage, 1, 4);
+    table[0xCC] = instr("CPY", Operation::CPY, AddressingMode::Absolute, 1, 4);
+
     // BEQ
     table[0xF0] = instr("BEQ", Operation::BEQ, AddressingMode::Relative, 1, 4);
 
