@@ -251,6 +251,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // CLD
     table[0xD8] = instr("CLD", Operation::CLD, AddressingMode::Implied, 1, 4);
 
+    // SED
+    table[0xF8] = instr("SED", Operation::SED, AddressingMode::Implied, 1, 4);
+
     //-------------
     // ARITHMETIC |
     //-------------
