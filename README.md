@@ -46,12 +46,12 @@ New todo:
 BCC             [X]
 BCS             [X]
 BMI             [X]
-BPL             []
-BVC             []
-BVS             []
+BPL             [X]
+BVC             [X]
+BVS             [X]
 
-CPX             []
-CPY             []
+CPX             [X]
+CPY             [X]
 
 INC             []
 DEC             []
