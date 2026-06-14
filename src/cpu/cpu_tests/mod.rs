@@ -4,6 +4,7 @@ mod comparison_tests;
 mod cpu_tests;
 mod increment_decrement_tests;
 
+mod increment_decrement;
 mod load;
 mod stack;
 mod store;
