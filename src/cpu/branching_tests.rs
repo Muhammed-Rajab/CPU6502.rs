@@ -218,4 +218,49 @@ mod tests {
 
         assert_eq!(cpu.a, 0x11);
     }
+
+    #[test]
+    fn bvs_branches_only_when_overflow_set() {
+        // ------------------------
+        // Overflow set -> branch taken
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xA9, 0x7F, // LDA #$7F
+            0x69, 0x01, // ADC #$01 -> 0x80, sets Overflow
+            0x70, 0x02, // BVS +2
+            0xA9, 0x11, // LDA #$11 (should be skipped)
+            0xA9, 0x22, // LDA #$22
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA #$7F
+        cpu.step(); // ADC #$01
+        cpu.step(); // BVS
+        cpu.step(); // LDA #$22
+
+        assert_eq!(cpu.a, 0x22);
+
+        // ------------------------
+        // Overflow clear -> branch not taken
+        // ------------------------
+        let mut cpu = Cpu6502::new();
+
+        let program = [
+            0xA9, 0x01, // LDA #$01
+            0x70, 0x02, // BVS +2
+            0xA9, 0x11, // LDA #$11
+            0xA9, 0x22, // LDA #$22
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // LDA #$01
+        cpu.step(); // BVS (not taken)
+        cpu.step(); // LDA #$11
+
+        assert_eq!(cpu.a, 0x11);
+    }
 }
