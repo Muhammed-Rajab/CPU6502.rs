@@ -620,7 +620,7 @@ impl Cpu6502 {
     }
 
     pub(super) fn jsr(&mut self, addr: u16) {
-        let last_byte_addr = self.pc - 1;
+        let last_byte_addr = self.pc.wrapping_sub(1);
 
         let low = (last_byte_addr & 0x00FF) as u8;
         let high = ((last_byte_addr & 0xFF00) >> 8) as u8;
