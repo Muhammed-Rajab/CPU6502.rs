@@ -630,4 +630,13 @@ impl Cpu6502 {
 
         self.pc = addr;
     }
+
+    pub(super) fn rts(&mut self) {
+        let low = self.pull_from_stack() as u16;
+        let high = self.pull_from_stack() as u16;
+
+        let new_pc = ((high << 8) | low).wrapping_add(1);
+
+        self.pc = new_pc;
+    }
 }
