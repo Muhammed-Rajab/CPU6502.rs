@@ -657,5 +657,7 @@ impl Cpu6502 {
 
         // Load new PC from IRQ/BRK vector $FFFE/$FFFF
         let vector = self.fetch_irq_brk_vector();
+
+        self.pc = vector;
     }
 }
