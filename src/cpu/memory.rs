@@ -133,6 +133,25 @@ impl Cpu6502 {
                 addr
             }
 
+            /*
+             * Only used by JMP. Essentially simulates the bug in hardware.
+             */
+            AddressingMode::Indirect => {
+                let pointer = self.fetch_word();
+
+                let ends_with_ff = (pointer & 0x00FF) == 0xFF;
+
+                let low = self.read(pointer) as u16;
+                let high = (if ends_with_ff {
+                    self.read(pointer & 0xFF00)
+                } else {
+                    self.read(pointer.wrapping_add(1))
+                }) as u16;
+                let addr = (high << 8) | low;
+
+                addr
+            }
+
             AddressingMode::IndexedIndirect => {
                 let base = self.fetch_byte();
                 let zp_addr = base.wrapping_add(self.x);
