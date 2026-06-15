@@ -614,4 +614,8 @@ impl Cpu6502 {
             self.pc = self.pc.wrapping_add_signed(offset as i16);
         }
     }
+
+    pub(super) fn jmp(&mut self, addr: u16) {
+        self.pc = addr;
+    }
 }
