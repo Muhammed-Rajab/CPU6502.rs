@@ -418,6 +418,13 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // RTS
     table[0x60] = instr("RTS", Operation::RTS, AddressingMode::Implied, 3, 3);
 
+    //-------------
+    // INTERRUPTS |
+    //-------------
+
+    // BRK
+    table[0x00] = instr("BRK", Operation::BRK, AddressingMode::Implied, 3, 3);
+
     table
 });
 
