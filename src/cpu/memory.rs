@@ -8,7 +8,7 @@ use super::addressing_modes::AddressingMode;
 impl Cpu6502 {
     // PUBLIC (SUPER)
 
-    pub(super) fn fetch_irq_brk_vector(self) -> u16 {
+    pub(super) fn fetch_irq_brk_vector(&self) -> u16 {
         let low = self.read(0xFFFE) as u16;
         let high = self.read(0xFFFF) as u16;
         let vector = (high << 8) | low;

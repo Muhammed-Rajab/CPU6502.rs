@@ -656,5 +656,6 @@ impl Cpu6502 {
         self.set_flag(Flag::Interrupt, true);
 
         // Load new PC from IRQ/BRK vector $FFFE/$FFFF
+        let vector = self.fetch_irq_brk_vector();
     }
 }
