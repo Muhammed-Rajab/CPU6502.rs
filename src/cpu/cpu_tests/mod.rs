@@ -2,6 +2,7 @@ mod addressing_modes;
 mod arithmetic;
 mod branch;
 mod compare;
+mod control_flow;
 mod flags;
 mod increment_decrement;
 mod load;
