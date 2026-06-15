@@ -405,6 +405,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     table[0x4C] = instr("JMP", Operation::JMP, AddressingMode::Absolute, 3, 3);
     table[0x6C] = instr("JMP", Operation::JMP, AddressingMode::Indirect, 3, 3);
 
+    // JSR
+    table[0x20] = instr("JSR", Operation::JSR, AddressingMode::Absolute, 3, 3);
+
     table
 });
 
