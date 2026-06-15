@@ -44,10 +44,29 @@ mod tests {
         let mut cpu = Cpu6502::new();
 
         let program = [
-            0x20, 0x06, 0x80, // JSR $8006
-            0xEA, // NOP (return target)
+            0x20u8, 0x06, 0x06, // JSR $0606
+            0xA2, 0xFF, // LDX #$ff
+            0x00, // BRK
+            0xA9, 0x10, // LDA #$10
+            0x60, // RTS
         ];
 
         cpu.load_program_from_memory(&program);
+
+        assert_eq!(cpu.pc, 0x0600);
+        cpu.step(); // JSR $0606
+        assert_eq!(cpu.pc, 0x0606);
+
+        cpu.step(); // LDA #$10
+        cpu.step(); // RTS
+
+        assert_eq!(cpu.pc, 0x0600 + 3); // now at $0603
+
+        cpu.step(); // LDX #$ff
+
+        assert_eq!(cpu.a, 0x10);
+        assert_eq!(cpu.x, 0xff);
+
+        // cpu.step(); // BRK (error)
     }
 }
