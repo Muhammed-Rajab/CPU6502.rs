@@ -783,6 +783,14 @@ impl Cpu6502 {
                 self.rts();
             }
 
+            //-------------
+            // INTERRUPTS |
+            //-------------
+            Operation::BRK => {
+                // only implied
+                self.brk();
+            }
+
             _ => panic!(
                 "'{}(0x{:02X})' instruction not implemented yet",
                 instruction.mnemonic, opcode
