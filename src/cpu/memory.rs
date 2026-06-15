@@ -13,6 +13,13 @@ impl Cpu6502 {
         self.sp = self.sp.wrapping_sub(1);
     }
 
+    pub(super) fn push_word_to_stack(&mut self, word: u16) {
+        let low = (word & 0x00FF) as u8;
+        let high = ((word & 0xFF00) >> 8) as u8;
+        self.push_to_stack(high);
+        self.push_to_stack(low);
+    }
+
     pub(super) fn pull_from_stack(&mut self) -> u8 {
         self.sp = self.sp.wrapping_add(1);
         let addr = 0x0100u16 | (self.sp as u16);
