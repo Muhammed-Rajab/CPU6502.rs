@@ -643,12 +643,17 @@ impl Cpu6502 {
     }
 
     pub(super) fn brk(&mut self) {
-
         // push pc
+        self.push_word_to_stack(self.pc);
 
-        // push status register
+        // push status register with break flag on
+        let mut status = self.status;
+        status = status | 0x10;
+
+        self.push_to_stack(status);
 
         // set interrupt disable flag (I)
+        self.set_flag(Flag::Interrupt, true);
 
         // Load new PC from IRQ/BRK vector $FFFE/$FFFF
     }
