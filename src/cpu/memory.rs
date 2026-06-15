@@ -26,6 +26,13 @@ impl Cpu6502 {
         self.read(addr)
     }
 
+    pub(super) fn pull_word_from_stack(&mut self) -> u16 {
+        let low = self.pull_from_stack() as u16;
+        let high = self.pull_from_stack() as u16;
+        let word = (high << 8) | low;
+        word
+    }
+
     pub(super) fn fetch_byte(&mut self) -> u8 {
         let byte = self.read(self.pc);
         self.pc += 1;
