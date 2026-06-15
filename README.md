@@ -70,10 +70,10 @@ SEI             [X]
 CLD             [X]
 SED             [X]
 
-JMP             []
+JMP             [X]
 
-JSR             []
-RTS             []
+JSR             [X]
+RTS             [X]
 
 BRK             []
 RTI             []
