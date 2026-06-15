@@ -790,6 +790,7 @@ impl Cpu6502 {
             //-------------
             Operation::BRK => {
                 // only implied
+                let _ = self.fetch_byte(); // NOTE: PADDING BYTE IGNORED
                 self.brk();
             }
 
