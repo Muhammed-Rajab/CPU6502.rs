@@ -641,4 +641,15 @@ impl Cpu6502 {
 
         self.pc = new_pc;
     }
+
+    pub(super) fn brk(&mut self) {
+
+        // push pc
+
+        // push status register
+
+        // set interrupt disable flag (I)
+
+        // Load new PC from IRQ/BRK vector $FFFE/$FFFF
+    }
 }

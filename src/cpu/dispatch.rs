@@ -780,6 +780,8 @@ impl Cpu6502 {
 
             Operation::RTS => {
                 // implied only
+                let _ = self.fetch_byte(); // ignored byte
+
                 self.rts();
             }
 
