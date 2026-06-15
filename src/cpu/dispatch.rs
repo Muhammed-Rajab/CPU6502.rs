@@ -756,6 +756,11 @@ impl Cpu6502 {
                 self.jmp(addr);
             }
 
+            Operation::JSR => {
+                let addr = self.fetch_addr(instruction.mode);
+                self.jsr(addr);
+            }
+
             _ => panic!(
                 "'{}(0x{:02X})' instruction not implemented yet",
                 instruction.mnemonic, opcode
