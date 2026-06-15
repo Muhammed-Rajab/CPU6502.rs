@@ -54,18 +54,20 @@ mod tests {
         cpu.load_program_from_memory(&program);
 
         assert_eq!(cpu.pc, 0x0600);
+
         cpu.step(); // JSR $0606
         assert_eq!(cpu.pc, 0x0606);
 
         cpu.step(); // LDA #$10
-        cpu.step(); // RTS
+        assert_eq!(cpu.a, 0x10);
+        assert_eq!(cpu.pc, 0x0608);
 
+        cpu.step(); // RTS
         assert_eq!(cpu.pc, 0x0600 + 3); // now at $0603
 
         cpu.step(); // LDX #$ff
-
-        assert_eq!(cpu.a, 0x10);
         assert_eq!(cpu.x, 0xff);
+        assert_eq!(cpu.pc, 0x0605);
 
         // cpu.step(); // BRK (error)
     }
