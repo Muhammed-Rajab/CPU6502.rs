@@ -748,14 +748,10 @@ impl Cpu6502 {
             //---------------
             // CONTROL FLOW |
             //---------------
-            Operation::JMP => match instruction.mode {
-                Indirect => panic!("JMP indirect mode not implemented"),
-
-                _ => {
-                    let addr = self.fetch_addr(instruction.mode);
-                    self.jmp(addr);
-                }
-            },
+            Operation::JMP => {
+                let addr = self.fetch_addr(instruction.mode);
+                self.jmp(addr);
+            }
 
             _ => panic!(
                 "'{}(0x{:02X})' instruction not implemented yet",
