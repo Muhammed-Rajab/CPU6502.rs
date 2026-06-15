@@ -84,6 +84,13 @@ enum Operation {
     JSR,
     RTS,
 
+    // INTERRUPTS
+    BRK,
+    RTI,
+
+    // MISCELLANEOUS
+    NOP,
+
     // SPECIAL CASES
     Invalid,
 }
