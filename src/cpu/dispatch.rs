@@ -764,6 +764,11 @@ impl Cpu6502 {
                 self.jsr(addr);
             }
 
+            Operation::RTS => {
+                // implied only
+                self.rts();
+            }
+
             _ => panic!(
                 "'{}(0x{:02X})' instruction not implemented yet",
                 instruction.mnemonic, opcode
