@@ -408,6 +408,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // JSR
     table[0x20] = instr("JSR", Operation::JSR, AddressingMode::Absolute, 3, 3);
 
+    // RTS
+    table[0x60] = instr("RTS", Operation::RTS, AddressingMode::Implied, 3, 3);
+
     table
 });
 
