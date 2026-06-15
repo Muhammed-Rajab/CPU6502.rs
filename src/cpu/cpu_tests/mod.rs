@@ -5,6 +5,7 @@ mod compare;
 mod control_flow;
 mod flags;
 mod increment_decrement;
+mod interrupt;
 mod load;
 mod logical;
 mod stack;
