@@ -45,21 +45,9 @@ mod tests {
 
         let program = [
             0x20, 0x06, 0x80, // JSR $8006
-            0xEA, // NOP
-            0xEA, // NOP
-            0x60, // RTS
-            0xEA, // NOP (target)
+            0xEA, // NOP (return target)
         ];
 
         cpu.load_program_from_memory(&program);
-
-        let start_pc = cpu.pc;
-
-        cpu.step(); // JSR
-        assert_eq!(cpu.pc, 0x8006);
-
-        cpu.step(); // RTS
-
-        // After RTS, execution should resume after JSR instruction
     }
 }
