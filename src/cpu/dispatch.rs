@@ -4,7 +4,7 @@
 
 use std::sync::LazyLock;
 
-use crate::cpu::addressing_modes::AddressingMode::Accumulator;
+use crate::cpu::addressing_modes::AddressingMode::{Accumulator, Indirect};
 
 use super::Cpu6502;
 use super::addressing_modes::AddressingMode;
@@ -744,6 +744,18 @@ impl Cpu6502 {
                 let offset = self.fetch_value(instruction.mode) as i8;
                 self.bvs(offset);
             }
+
+            //---------------
+            // CONTROL FLOW |
+            //---------------
+            Operation::JMP => match instruction.mode {
+                Indirect => panic!("JMP indirect mode not implemented"),
+
+                _ => {
+                    let addr = self.fetch_addr(instruction.mode);
+                    self.jmp(addr);
+                }
+            },
 
             _ => panic!(
                 "'{}(0x{:02X})' instruction not implemented yet",
