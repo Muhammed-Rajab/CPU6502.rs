@@ -79,6 +79,11 @@ enum Operation {
     BVC,
     BVS,
 
+    // CONTROL FLOW
+    JMP,
+    JSR,
+    RTS,
+
     // SPECIAL CASES
     Invalid,
 }
@@ -391,6 +396,14 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
 
     // BVS
     table[0x70] = instr("BVS", Operation::BVS, AddressingMode::Relative, 1, 4);
+
+    //---------------
+    // CONTROL FLOW |
+    //---------------
+
+    // JMP
+    table[0x4C] = instr("JMP", Operation::JMP, AddressingMode::Absolute, 3, 3);
+    table[0x4C] = instr("JMP", Operation::JMP, AddressingMode::Absolute, 3, 3);
 
     table
 });
