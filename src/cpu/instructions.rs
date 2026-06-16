@@ -651,7 +651,7 @@ impl Cpu6502 {
 
         // push status register with break flag on
         let mut status = self.status;
-        status = status | 0x10;
+        status = status | 0x30;
 
         self.push_to_stack(status);
 
