@@ -11,3 +11,5 @@ mod logical;
 mod stack;
 mod store;
 mod transfer;
+
+mod final_boss;
