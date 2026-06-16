@@ -807,6 +807,11 @@ impl Cpu6502 {
                 self.rti();
             }
 
+            //----------------
+            // MISCELLANEOUS |
+            //----------------
+            Operation::NOP => {} // DOES NOTHING
+
             _ => panic!(
                 "'{}(0x{:02X})' instruction not implemented yet",
                 instruction.mnemonic, opcode
