@@ -45,4 +45,32 @@ mod tests {
         assert_eq!(cpu.read(0x01FE), 0x02); // PC low (assuming BRK at $0600)
         assert!(cpu.read(0x01FD) & 0x10 != 0); // Break flag
     }
+
+    #[test]
+    fn brk_rti_roundtrip() {
+        let mut cpu = Cpu6502::new();
+
+        cpu.write(0xFFFE, 0x06);
+        cpu.write(0xFFFF, 0x06); // IRQ/BRK vector -> $0606
+
+        let program = [
+            0x00, // $0600: BRK
+            0xEA, // $0601: BRK padding byte (ignored)
+            0xA9, 0x42, // $0602: LDA #$42 (should execute after RTI)
+            0xEA, // $0604
+            0xEA, // $0605
+            0x40, // $0606: RTI
+        ];
+
+        cpu.load_program_from_memory(&program);
+
+        cpu.step(); // BRK
+        assert_eq!(cpu.pc, 0x0606);
+
+        cpu.step(); // RTI
+        assert_eq!(cpu.pc, 0x0602);
+
+        cpu.step(); // LDA #$42
+        assert_eq!(cpu.a, 0x42);
+    }
 }
