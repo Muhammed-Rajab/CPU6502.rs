@@ -797,6 +797,11 @@ impl Cpu6502 {
                 self.brk();
             }
 
+            Operation::RTI => {
+                // only implied
+                self.rti();
+            }
+
             _ => panic!(
                 "'{}(0x{:02X})' instruction not implemented yet",
                 instruction.mnemonic, opcode
