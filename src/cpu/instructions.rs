@@ -660,4 +660,9 @@ impl Cpu6502 {
 
         self.pc = vector;
     }
+
+    pub(super) fn rti(&mut self) {
+        self.status = self.pull_from_stack();
+        self.pc = self.pull_word_from_stack();
+    }
 }
