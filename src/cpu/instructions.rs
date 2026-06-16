@@ -623,7 +623,7 @@ impl Cpu6502 {
     }
 
     pub(super) fn jsr(&mut self, addr: u16) {
-        println!("JSR PC = {:04X}", self.pc);
+        // println!("JSR PC = {:04X}", self.pc);
 
         let last_byte_addr = self.pc.wrapping_sub(1);
 

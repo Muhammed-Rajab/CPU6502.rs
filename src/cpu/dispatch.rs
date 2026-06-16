@@ -440,7 +440,7 @@ impl Cpu6502 {
     pub fn step(&mut self) {
         let opcode = self.fetch_byte();
 
-        println!("PC=${:04X}, OPCODE=${:02X}", self.pc, opcode);
+        // println!("PC=${:04X}, OPCODE=${:02X}", self.pc, opcode);
 
         let instruction = &OPCODE_TABLE[opcode as usize];
 

@@ -12,9 +12,7 @@ mod tests {
         cpu.load_program_from_memory(&program);
         cpu.pc = 0x0400;
 
-        cpu.hexdump(0x0660, 0xFF);
-
-        return;
+        // cpu.hexdump(0x0660, 0xFF);
 
         let mut last_pc = 0xFFFF;
 
