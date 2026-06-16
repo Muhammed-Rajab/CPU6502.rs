@@ -76,7 +76,7 @@ mod flags;
 mod instructions;
 mod memory;
 
-pub const START_PC_ADDRESS: u16 = 0x0600;
+pub const START_PC_ADDRESS: u16 = 0x0000;
 
 pub struct Cpu6502 {
     a: u8,               // A ccumulator
