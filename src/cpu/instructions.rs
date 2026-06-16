@@ -138,7 +138,6 @@ impl Cpu6502 {
         // on real NMOS 6502, PHP pushes a modified copy of the status register
         // where    bit 4(B, break) = 1
         //          bit 5 (unused) = 1
-
         self.push_to_stack(self.status | 0x30);
     }
 
