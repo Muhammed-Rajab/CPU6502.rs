@@ -11,5 +11,22 @@ mod tests {
 
         cpu.load_program_from_memory(&program);
         cpu.pc = 0x0400;
+
+        cpu.hexdump(0x0660, 0xFF);
+
+        return;
+
+        let mut last_pc = 0xFFFF;
+
+        loop {
+            cpu.step();
+
+            if cpu.pc == last_pc {
+                assert_eq!(cpu.pc, 0x3469);
+                break;
+            }
+
+            last_pc = cpu.pc;
+        }
     }
 }
