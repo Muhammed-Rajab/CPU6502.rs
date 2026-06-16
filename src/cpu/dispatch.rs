@@ -425,6 +425,9 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // BRK
     table[0x00] = instr("BRK", Operation::BRK, AddressingMode::Implied, 3, 3);
 
+    // RTI
+    table[0x40] = instr("RTI", Operation::RTI, AddressingMode::Implied, 3, 3);
+
     table
 });
 
