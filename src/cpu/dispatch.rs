@@ -428,6 +428,11 @@ static OPCODE_TABLE: LazyLock<[Instruction; 256]> = LazyLock::new(|| {
     // RTI
     table[0x40] = instr("RTI", Operation::RTI, AddressingMode::Implied, 3, 3);
 
+    //----------------
+    // MISCELLANEOUS |
+    //----------------
+    table[0xEA] = instr("NOP", Operation::NOP, AddressingMode::Implied, 3, 3);
+
     table
 });
 
