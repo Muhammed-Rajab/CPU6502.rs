@@ -341,8 +341,41 @@ impl Cpu6502 {
      *  AND
      *  (A and Result have different sign)
      */
-    pub(super) fn sbc(&mut self, val: u8) {
+    pub(super) fn sbc_binary(&mut self, val: u8) {
         self.adc(!val);
+    }
+
+    pub(super) fn sbc_bcd(&mut self, val: u8) {
+        let carry_in = if self.get_flag(Flag::Carry) { 1 } else { 0 };
+
+        let a = self.a;
+        let binary_diff = a as i16 - val as i16 - (1 - carry_in) as i16;
+        let binary_result = binary_diff as u8;
+
+        // N, Z, V come from binary subtraction
+        let overflow = ((a ^ binary_result) & (a ^ val) & 0x80) != 0;
+
+        self.set_flag(Flag::Zero, binary_result == 0);
+        self.set_flag(Flag::Negative, binary_result & 0x80 != 0);
+        self.set_flag(Flag::Overflow, overflow);
+
+        // Decimal correction
+        let mut result = binary_diff;
+
+        // Correct low digit borrow
+        if ((a & 0x0F) as i16 - (1 - carry_in) as i16) < (val & 0x0F) as i16 {
+            result -= 0x06;
+        }
+
+        // Correct high digit borrow
+        if result < 0 {
+            result -= 0x60;
+        }
+
+        // Carry means "no borrow"
+        self.set_flag(Flag::Carry, result >= 0);
+
+        self.a = result as u8;
     }
 
     /*
