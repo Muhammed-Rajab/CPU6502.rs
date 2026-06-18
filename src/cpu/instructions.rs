@@ -286,7 +286,40 @@ impl Cpu6502 {
         self.update_czvn(result, carry, overflow);
     }
 
-    pub(super) fn adc_bcd(&mut self, val: u8) {}
+    pub(super) fn adc_bcd(&mut self, val: u8) {
+        let carry_in = if self.get_flag(Flag::Carry) { 1 } else { 0 };
+
+        // binary addition
+        let binary_sum = self.a as u16 + val as u16 + carry_in as u16;
+        let binary_result = binary_sum as u8;
+
+        // overflow
+        let a_neg = self.a & 0x80;
+        let val_neg = val & 0x80;
+        let res_neg = binary_result & 0x80;
+
+        let overflow = (a_neg == val_neg) && (a_neg != res_neg);
+
+        // flag setting
+        self.set_flag(Flag::Zero, binary_result == 0);
+        self.set_flag(Flag::Negative, res_neg != 0);
+        self.set_flag(Flag::Overflow, overflow);
+
+        // bcd
+        let mut result = binary_sum;
+
+        if (result & 0x0F) > 9 {
+            result += 0x06;
+        }
+
+        if result > 0x99 {
+            result += 0x60;
+        }
+
+        self.set_flag(Flag::Carry, result > 0x99);
+
+        self.a = result as u8;
+    }
 
     /*
      * A = A - val - (1 - Carry)
