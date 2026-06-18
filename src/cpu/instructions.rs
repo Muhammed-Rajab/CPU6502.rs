@@ -342,7 +342,7 @@ impl Cpu6502 {
      *  (A and Result have different sign)
      */
     pub(super) fn sbc_binary(&mut self, val: u8) {
-        self.adc(!val);
+        self.adc_binary(!val);
     }
 
     pub(super) fn sbc_bcd(&mut self, val: u8) {
@@ -376,6 +376,14 @@ impl Cpu6502 {
         self.set_flag(Flag::Carry, result >= 0);
 
         self.a = result as u8;
+    }
+
+    pub(super) fn sbc(&mut self, val: u8) {
+        if self.get_flag(Flag::Decimal) {
+            self.sbc_bcd(val);
+        } else {
+            self.sbc_binary(val);
+        }
     }
 
     /*
