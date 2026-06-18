@@ -321,6 +321,14 @@ impl Cpu6502 {
         self.a = result as u8;
     }
 
+    pub(super) fn adc(&mut self, val: u8) {
+        if self.get_flag(Flag::Decimal) {
+            self.adc_bcd(val);
+        } else {
+            self.adc_binary(val);
+        }
+    }
+
     /*
      * A = A - val - (1 - Carry)
      * Sets Z, N, and C flags appropriately.
