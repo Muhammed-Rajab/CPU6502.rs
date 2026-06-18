@@ -266,7 +266,7 @@ impl Cpu6502 {
      *  AND
      *  (A and Result have different sign)
      */
-    pub(super) fn adc(&mut self, val: u8) {
+    pub(super) fn adc_binary(&mut self, val: u8) {
         let carry_in = if self.get_flag(Flag::Carry) { 1 } else { 0 };
         let sum = self.a as u16 + val as u16 + carry_in as u16;
         let result = sum as u8;
