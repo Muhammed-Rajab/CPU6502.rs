@@ -286,6 +286,8 @@ impl Cpu6502 {
         self.update_czvn(result, carry, overflow);
     }
 
+    pub(super) fn adc_bcd(&mut self, val: u8) {}
+
     /*
      * A = A - val - (1 - Carry)
      * Sets Z, N, and C flags appropriately.
