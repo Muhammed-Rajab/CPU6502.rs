@@ -76,7 +76,7 @@ mod flags;
 mod instructions;
 mod memory;
 
-pub const START_PC_ADDRESS: u16 = 0x0000;
+pub const START_PC_ADDRESS: u16 = 0x0600;
 
 pub struct Cpu6502 {
     a: u8,               // A ccumulator
@@ -96,6 +96,18 @@ impl Cpu6502 {
             y: 0,
             sp: 0xFF,                          // Reset value of SP
             pc: START_PC_ADDRESS,              // Should be loaded from Reset Vector
+            status: flags::Flag::Unused as u8, // By default, it's on.
+            memory: [0; 65536],                // Zero initialised array
+        }
+    }
+
+    pub fn new_with_pc(pc: u16) -> Self {
+        Self {
+            a: 0,
+            x: 0,
+            y: 0,
+            sp: 0xFF,                          // Reset value of SP
+            pc: pc,                            // Should be loaded from Reset Vector
             status: flags::Flag::Unused as u8, // By default, it's on.
             memory: [0; 65536],                // Zero initialised array
         }
