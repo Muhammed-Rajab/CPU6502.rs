@@ -74,40 +74,45 @@ mod tests {
     #[test]
     fn php_test() {
         let mut cpu = Cpu6502::new();
+
         let implied_rom = [
-            0x8u8, // PHP
-            0xA9, 0x00,  // LDA #$00
-            0x8u8, // PHP
-            0xA9, 0xff,  // LDA #$ff
-            0x8u8, // PHP
+            0x08, // PHP
+            0xA9, 0x00, // LDA #$00
+            0x08, // PHP
+            0xA9, 0xFF, // LDA #$FF
+            0x08, // PHP
         ];
+
         cpu.load_program_from_memory(&implied_rom);
 
-        // check
-        //   1. sp
-        //   2. peek stack
-
-        // Intial sp
+        // Initial SP
         assert_eq!(cpu.sp, 0xFF);
 
-        cpu.step(); // PHP
+        // PHP
+        cpu.step();
         assert_eq!(cpu.sp, 0xFE);
-        assert_eq!(cpu.peek_stack(), (Flag::Unused as u8) | 0);
+        assert_eq!(cpu.peek_stack(), (Flag::Break as u8) | (Flag::Unused as u8));
 
-        cpu.step(); // LDA #$00
-        cpu.step(); // PHP
+        // LDA #$00
+        cpu.step();
+
+        // PHP
+        cpu.step();
         assert_eq!(cpu.sp, 0xFD);
         assert_eq!(
             cpu.peek_stack(),
-            (Flag::Zero as u8) | (Flag::Unused as u8) | 0
+            (Flag::Zero as u8) | (Flag::Break as u8) | (Flag::Unused as u8)
         );
 
-        cpu.step(); // LDA #$ff
-        cpu.step(); // PHP
+        // LDA #$FF
+        cpu.step();
+
+        // PHP
+        cpu.step();
         assert_eq!(cpu.sp, 0xFC);
         assert_eq!(
             cpu.peek_stack(),
-            (Flag::Negative as u8) | (Flag::Unused as u8) | 0
+            (Flag::Negative as u8) | (Flag::Break as u8) | (Flag::Unused as u8)
         );
     }
 
