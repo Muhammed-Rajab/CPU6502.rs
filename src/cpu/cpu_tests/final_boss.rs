@@ -6,11 +6,11 @@ mod tests {
 
     #[test]
     fn klaus_functional_test() {
-        let mut cpu = Cpu6502::new();
+        let mut cpu = Cpu6502::new_with_pc(0x0000);
 
         let program = std::fs::read("test_binaries/6502_functional_test.bin").unwrap();
 
-        cpu.load_program_from_memory(&program);
+        cpu.load_program_from_memory_from(0x0000, &program);
         cpu.pc = 0x0400;
 
         let mut last_pc = 0xFFFF;
