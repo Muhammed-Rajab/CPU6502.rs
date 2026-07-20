@@ -289,37 +289,69 @@ impl Cpu6502 {
     pub(super) fn adc_bcd(&mut self, val: u8) {
         let carry_in = if self.get_flag(Flag::Carry) { 1 } else { 0 };
 
-        // binary addition
+        // ----- Binary sum (used for the V flag) -----
         let binary_sum = self.a as u16 + val as u16 + carry_in as u16;
         let binary_result = binary_sum as u8;
 
-        // overflow
-        let a_neg = self.a & 0x80;
-        let val_neg = val & 0x80;
-        let res_neg = binary_result & 0x80;
+        let overflow = (!(self.a ^ val) & (self.a ^ binary_result) & 0x80) != 0;
 
-        let overflow = (a_neg == val_neg) && (a_neg != res_neg);
+        // ----- Decimal addition -----
+        let mut lo = (self.a & 0x0F) + (val & 0x0F) + carry_in;
+        let mut hi = (self.a >> 4) + (val >> 4);
 
-        // flag setting
-        self.set_flag(Flag::Zero, binary_result == 0);
-        self.set_flag(Flag::Negative, res_neg != 0);
+        if lo > 9 {
+            lo += 6;
+            hi += 1;
+        }
+
+        if hi > 9 {
+            hi += 6;
+        }
+
+        let result = ((hi << 4) | (lo & 0x0F)) as u8;
+
+        self.a = result;
+
+        self.set_flag(Flag::Carry, hi > 0x0F);
+        self.set_flag(Flag::Zero, result == 0);
+        self.set_flag(Flag::Negative, (result & 0x80) != 0);
         self.set_flag(Flag::Overflow, overflow);
-
-        // bcd
-        let mut result = binary_sum;
-
-        if (result & 0x0F) > 9 {
-            result += 0x06;
-        }
-
-        if result > 0x99 {
-            result += 0x60;
-        }
-
-        self.set_flag(Flag::Carry, result > 0x99);
-
-        self.a = result as u8;
     }
+
+    // pub(super) fn adc_bcd(&mut self, val: u8) {
+    //     let carry_in = if self.get_flag(Flag::Carry) { 1 } else { 0 };
+    //
+    //     // binary addition
+    //     let binary_sum = self.a as u16 + val as u16 + carry_in as u16;
+    //     let binary_result = binary_sum as u8;
+    //
+    //     // overflow
+    //     let a_neg = self.a & 0x80;
+    //     let val_neg = val & 0x80;
+    //     let res_neg = binary_result & 0x80;
+    //
+    //     let overflow = (a_neg == val_neg) && (a_neg != res_neg);
+    //
+    //     // flag setting
+    //     self.set_flag(Flag::Zero, binary_result == 0);
+    //     self.set_flag(Flag::Negative, res_neg != 0);
+    //     self.set_flag(Flag::Overflow, overflow);
+    //
+    //     // bcd
+    //     let mut result = binary_sum;
+    //
+    //     if (result & 0x0F) > 9 {
+    //         result += 0x06;
+    //     }
+    //
+    //     if result > 0x99 {
+    //         result += 0x60;
+    //     }
+    //
+    //     self.set_flag(Flag::Carry, result > 0x99);
+    //
+    //     self.a = result as u8;
+    // }
 
     pub(super) fn adc(&mut self, val: u8) {
         if self.get_flag(Flag::Decimal) {
