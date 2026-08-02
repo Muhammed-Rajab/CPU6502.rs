@@ -12,17 +12,4 @@ fn main() {
 
     cpu.step(); // to stop all those fucking warnings.
     cpu.hexdump(cpu::START_PC_ADDRESS, 0x00ff);
-
-    // test byte construction
-    let low = 0b11111111u16;
-    let high = 0b10001001u16;
-    let combined = (high << 8) | low;
-
-    println!("low : {:#018b}", low);
-    println!("high: {:#018b}", high);
-    println!("res : {:#018b}", combined);
-
-    // stack address forming
-    // let sp = 0x0100u16 | (cpu.sp as u16);
-    // println!("sp: ${:04X}", sp);
 }
